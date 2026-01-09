@@ -43,6 +43,18 @@ const config: Config = {
         },
         brand: {
           black: "#000000",
+          red: {
+            DEFAULT: "#DC2626", // Primary red accent from logo
+            900: "#991B1B",
+            800: "#B91C1C",
+            700: "#DC2626",
+            600: "#EF4444",
+            500: "#F87171",
+            400: "#FCA5A5",
+            300: "#FECACA",
+            200: "#FEE2E2",
+            100: "#FEF2F2",
+          },
           gray: {
             900: "#0a0a0a",
             800: "#1a1a1a",

@@ -38,8 +38,10 @@ export default function ServiceCard({ title, description, href }: ServiceCardPro
         </Link>
       </div>
       
-      {/* Bottom gradient line */}
+      {/* Bottom gradient line with subtle red */}
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      {/* Subtle red accent line on hover */}
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
     </div>
   );
 }

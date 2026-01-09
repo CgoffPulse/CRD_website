@@ -10,51 +10,69 @@ interface ServiceCardProps {
 
 function ServiceCard({ title, description, features, href, mutedLine }: ServiceCardProps) {
   return (
-    <div className="flex flex-col h-full bg-white border border-gray-200 p-8">
-      {/* Service Title */}
-      <h3 className="text-2xl font-semibold text-black mb-4">
-        {title}
-      </h3>
+    <div className="group flex flex-col h-full bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-8 md:p-10 relative overflow-hidden">
+      {/* Hover effect background */}
+      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+      
+      {/* Corner accents with subtle red */}
+      <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
+      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
+      <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
+      <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
+      {/* Subtle red accent line on hover */}
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+      
+      <div className="relative z-10">
+        {/* Service Title */}
+        <h3 className="text-2xl md:text-3xl font-bold text-black mb-6 group-hover:text-gray-800 transition-colors duration-300">
+          {title}
+        </h3>
 
-      {/* Paragraph */}
-      <p className="text-gray-700 leading-relaxed mb-6 text-base">
-        {description}
-      </p>
+        {/* Divider with red accent for text splitter */}
+        <div className="w-16 h-1 bg-black mb-6 group-hover:w-24 transition-all duration-300 relative overflow-hidden">
+          <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
+        </div>
 
-      {/* Bullet Points */}
-      <ul className="space-y-3 mb-8 flex-grow">
-        {features.map((feature, idx) => (
-          <li key={idx} className="flex items-start gap-3">
-            <svg className="w-5 h-5 text-black flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-            <span className="text-gray-700 text-sm">{feature}</span>
-          </li>
-        ))}
-      </ul>
+        {/* Paragraph */}
+        <p className="text-gray-700 leading-relaxed mb-8 text-base md:text-lg">
+          {description}
+        </p>
 
-      {/* CTA Button */}
-      <div className="mb-4">
-        <Link
-          href={href}
-          className="btn-primary inline-flex items-center justify-center w-full px-6 py-3 rounded-none text-white font-semibold uppercase tracking-wider transition-all duration-200 group/cta text-sm"
-        >
-          <span>Explore {title}</span>
-          <svg 
-            className="w-4 h-4 ml-2 transform group-hover/cta:translate-x-1 transition-transform duration-200" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
+        {/* Bullet Points */}
+        <ul className="space-y-4 mb-8 flex-grow">
+          {features.map((feature, idx) => (
+            <li key={idx} className="flex items-start gap-3 group/item">
+              <svg className="w-6 h-6 text-black flex-shrink-0 mt-0.5 group-hover/item:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span className="text-gray-700 text-base md:text-lg leading-relaxed">{feature}</span>
+            </li>
+          ))}
+        </ul>
+
+        {/* CTA Button */}
+        <div className="mb-6">
+          <Link
+            href={href}
+            className="btn-primary inline-flex items-center justify-center w-full px-6 py-4 rounded-none text-white font-semibold uppercase tracking-wider transition-all duration-300 group/cta text-base hover:scale-[1.02]"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </Link>
-      </div>
+            <span>Explore {title}</span>
+            <svg 
+              className="w-5 h-5 ml-2 transform group-hover/cta:translate-x-2 transition-transform duration-300" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </div>
 
-      {/* Muted Line */}
-      <p className="text-gray-500 text-xs italic mt-auto">
-        {mutedLine}
-      </p>
+        {/* Muted Line */}
+        <p className="text-gray-500 text-sm italic mt-auto border-t border-gray-200 pt-4">
+          {mutedLine}
+        </p>
+      </div>
     </div>
   );
 }
@@ -103,25 +121,45 @@ export default function WorkWithCRD() {
   ];
 
   return (
-    <section className="relative py-20 bg-gray-50 overflow-hidden">
+    <section className="relative py-24 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+      {/* Decorative background pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, black 10px, black 11px)'
+        }}></div>
+      </div>
+      
       <div className="container mx-auto px-6 relative z-10">
         {/* Eyebrow Label */}
-        <div className="text-center mb-4">
-          <span className="text-gray-600 text-xs font-semibold uppercase tracking-widest">
+        <div className="text-center mb-6">
+          <span className="inline-block text-gray-600 text-xs md:text-sm font-semibold uppercase tracking-widest border-b-2 border-black pb-2">
             OUR SERVICES
           </span>
         </div>
 
         {/* Section Headline */}
-        <div className="text-center mb-4">
-          <h2 className="text-4xl md:text-5xl font-bold text-black">
+        <div className="text-center mb-6">
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-black">
             Work with CRD
           </h2>
         </div>
 
+        {/* Decorative divider with subtle red */}
+        <div className="flex items-center justify-center mb-8">
+          <div className="w-24 h-1 bg-black relative">
+            <div className="absolute inset-0 bg-brand-red-700 opacity-20"></div>
+          </div>
+          <div className="w-2 h-2 bg-black mx-2 relative">
+            <div className="absolute inset-0 bg-brand-red-700 opacity-30"></div>
+          </div>
+          <div className="w-24 h-1 bg-black relative">
+            <div className="absolute inset-0 bg-brand-red-700 opacity-20"></div>
+          </div>
+        </div>
+
         {/* Subheadline */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <p className="text-lg text-gray-700">
+        <div className="text-center mb-20 max-w-5xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-700 leading-relaxed">
             Three distinct specialties. One team. Ownership-level expertise across Northwest Arkansas.
           </p>
         </div>

@@ -36,7 +36,9 @@ export default function ServiceGrid() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-4 uppercase tracking-wider">
             WORK with CRD
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-gray-500 to-transparent mx-auto"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-gray-500 to-transparent mx-auto relative">
+            <div className="absolute inset-0 bg-brand-red-700 opacity-20"></div>
+          </div>
         </div>
         
         {/* Cards Grid */}

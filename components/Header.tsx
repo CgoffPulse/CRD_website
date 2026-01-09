@@ -47,7 +47,7 @@ export default function Header() {
         <div className="flex items-center justify-between py-4 relative">
           <Link
             href="/"
-            className="text-white text-2xl md:text-3xl font-bold tracking-wide hover:opacity-80 transition-opacity duration-200"
+            className="text-white text-3xl md:text-4xl font-bold tracking-wide hover:opacity-80 transition-opacity duration-200"
           >
             CRD
           </Link>
