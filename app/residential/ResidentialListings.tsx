@@ -569,6 +569,104 @@ export default function ResidentialListings() {
 
   const listings: Listing[] = [
     {
+      id: "1316127",
+      title: "Cozy Lake Cabin – Lost Bridge Village",
+      price: "$160,000",
+      location: "21548 Walnut St, Garfield, AR 72732",
+      imageSrc: "/images/21548_walnut_st_garfield_ar_72732.webp",
+      description: "Enjoy the lake life and charm of Lost Bridge Village! You will love this cozy, updated cabin that is being sold fully furnished. Park your boat out front, unload your bikes & lake toys, and make yourself at home as you enjoy the peace and nostalgia of Lost Bridge Village. This adorable cabin features an open kitchen and living area with a dining nook & island seating. Relax in the bright and open living room after a day on the water. There are two bedrooms and a large (newly added) bunkroom for sleeping. Enjoy dinners outside in the screened-in porch as you watch the sun set and deer graze. Stroll down to the park, pool, & community center and enjoy the lake from there or the shoreline behind the community center. Play pickleball or tennis on our brand-new courts! Got a plane? Fly in and land on the LBV airstrip. Only 3 miles to Lost Bridge Marina. Short drive to Rogers, Pea Ridge, & Eureka Springs. Don't miss this great opportunity- they don't come around very often at this price!",
+      bullets: [
+        "3 bedrooms / 1 bathroom",
+        "850 sq ft",
+        "Manufactured Home, Single Family Residence",
+        "Built in 1970",
+        "5,662.8 sq ft lot",
+        "Lost Bridge Village community",
+        "Fully furnished",
+        "Screened-in porch",
+        "Community pool, park, and recreation center",
+        "Pickleball and tennis courts",
+        "Near Beaver Lake",
+        "MLS#: 1316127",
+        "$188/sqft",
+        "HOA: $160 annually",
+      ],
+      href: "/residential/listings/1316127",
+      mlsNumber: "1316127",
+      agents: [
+        { name: "Jenna Gill", email: "jgill@crdred.com" },
+      ],
+      office: "CRD Real Estate & Development",
+      officePhone: "479-445-4501",
+      galleryImages: [
+        "/images/21548_walnut_st_garfield_ar_72732.webp",
+        "/images/21548_walnut_st_garfield_ar_living_room.webp",
+        "/images/21548_walnut_st_living_room_tv.webp",
+        "/images/21548_walnut_st_garfield_ar_dining_room.webp",
+        "/images/21548_walnut_st_garfield_ar_72732_bedroom.webp",
+        "/images/21548_walnut_st_garflied_ar_72732_bunk_beds_kids_room.webp",
+        "/images/21548_walnut_st_garfield_ar_72732_spare_bathroom.webp",
+        "/images/21548_walnut_st_garfield_ar_72732_Closed_In_Deck.webp",
+        "/images/21548_walnut_st_garfield_ar_72732_washing_room.webp",
+        "/images/21548_walnut_st_garfield_ar_72732_In_house_Gym.webp",
+        "/images/21548_walnut_st_garfield_Pool.webp",
+        "/images/21548_walnut_st_garfield_ar_72732_Pool_Lake_view.webp",
+        "/images/21548_walnut_st_garfield_aerial.webp",
+      ],
+      propertyDetails: {
+        interior: {
+          heating: "Ductless",
+          cooling: "Ductless",
+          appliances: "Included: Dryer, Electric Range, Electric Water Heater, Disposal, Refrigerator, Washer",
+          flooring: "Laminate",
+          hasBasement: "Crawl Space",
+          totalStructureArea: "850",
+          totalInteriorLivableArea: "850 sqft",
+        },
+        property: {
+          parking: {
+            totalSpaces: "1",
+            parkingFeatures: "Attached Carport",
+            coveredSpaces: "1",
+          },
+          levels: "One",
+          stories: "1",
+          exteriorFeatures: "Gravel Driveway, Covered, Patio",
+          fencing: "None",
+        },
+        lot: {
+          size: "5,662.8 Square Feet",
+          features: "Near Park, Sloped",
+        },
+        details: {
+          parcelNumber: "1505163000",
+          specialConditions: "None",
+        },
+        construction: {
+          homeType: "MobileManufactured",
+          propertySubtype: "Manufactured Home, Single Family Residence",
+          materials: "Wood Siding",
+          foundation: "Crawlspace",
+          roof: "Architectural, Shingle",
+          newConstruction: "No",
+          yearBuilt: "1970",
+        },
+        community: {
+          features: "Clubhouse, Fitness, Playground, Recreation Area, Tennis Court(s), Lake, Near State Park, Park, Pool",
+          security: "Security System",
+          subdivision: "Forest Hills Sub Lost Bridge Village",
+        },
+        location: {
+          region: "Garfield",
+        },
+        financial: {
+          pricePerSquareFoot: "$188/sqft",
+          annualTaxAmount: "$535",
+          dateOnMarket: "7/28/2025",
+        },
+      },
+    },
+    {
       id: "1326751",
       title: "4-Plex Multi-Family Investment – Rogers",
       price: "$625,000",
@@ -650,51 +748,6 @@ export default function ResidentialListings() {
         },
       },
     },
-    {
-      id: "example-property-1",
-      title: "Example Property – Bentonville",
-      price: "$XXX,XXX",
-      location: "Bentonville, AR",
-      imageSrc: null,
-      summary: "A well-located residential property offering strong livability and long-term value in one of Northwest Arkansas's most desirable areas.",
-      bullets: [
-        "X bedrooms / X bathrooms",
-        "Approx. XXXX sq ft",
-        "Residential neighborhood",
-        "Convenient access to schools, amenities, and major corridors",
-      ],
-      href: "/residential/listings/example-property-1",
-    },
-    {
-      id: "example-property-2",
-      title: "Example Property – Rogers",
-      price: "$XXX,XXX",
-      location: "Rogers, AR",
-      imageSrc: null,
-      summary: "A thoughtfully positioned home offering comfort, functionality, and proximity to key destinations throughout the region.",
-      bullets: [
-        "X bedrooms / X bathrooms",
-        "Approx. XXXX sq ft",
-        "Established neighborhood",
-        "Easy access to Downtown Rogers",
-      ],
-      href: "/residential/listings/example-property-2",
-    },
-    {
-      id: "example-property-3",
-      title: "Example Property – Fayetteville",
-      price: "$XXX,XXX",
-      location: "Fayetteville, AR",
-      imageSrc: null,
-      summary: "A residential opportunity well-suited for buyers seeking location, character, and long-term value.",
-      bullets: [
-        "X bedrooms / X bathrooms",
-        "Approx. XXXX sq ft",
-        "Residential zoning",
-        "Close to dining, shopping, and local amenities",
-      ],
-      href: "/residential/listings/example-property-3",
-    },
   ];
 
   const handleListingClick = (listing: Listing, e: React.MouseEvent) => {
@@ -763,16 +816,16 @@ export default function ResidentialListings() {
             {/* Content */}
             <div className="p-6 md:p-8 flex flex-col flex-grow relative z-10">
               <div className="mb-6">
-                <h3 className="text-2xl md:text-3xl font-bold text-black mb-4">
+                <h3 className="text-xl md:text-2xl font-bold text-black mb-4">
                   {listing.title}
                 </h3>
                 <div className="w-12 h-1 bg-black mb-4 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-brand-red-700 to-navy-700 opacity-40"></div>
                 </div>
-                <p className="text-3xl md:text-4xl font-bold text-black mb-4">
+                <p className="text-2xl md:text-3xl font-bold text-black mb-4">
                   {listing.price}
                 </p>
-                <p className="text-gray-600 text-base md:text-lg font-medium border-l-4 border-black pl-4">
+                <p className="text-gray-600 text-sm md:text-base font-medium border-l-4 border-black pl-4">
                   {listing.location}
                 </p>
               </div>
@@ -780,7 +833,7 @@ export default function ResidentialListings() {
                 {listing.bullets.map((bullet, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2 text-base md:text-lg text-gray-700"
+                    className="flex items-start gap-2 text-sm md:text-base text-gray-700"
                   >
                     <span className="text-black font-semibold">•</span>
                     <span>{bullet}</span>

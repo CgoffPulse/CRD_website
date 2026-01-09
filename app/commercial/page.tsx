@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import Image from "next/image";
+import CommercialListings from "./CommercialListings";
 
 export const metadata = {
   title: "Commercial Real Estate in Northwest Arkansas | CRD Real Estate & Development",
@@ -12,189 +13,59 @@ export default function CommercialPage() {
   // NOTE: The Buy listings below are placeholder listings and will be replaced with live MLS or CMS-driven data in the future.
   const buyListings = [
     {
-      id: "buy-example-property-1",
-      title: "Example Property – Office | Bentonville",
-      price: "$X,XXX,XXX",
-      location: "Bentonville, AR",
-      imageSrc: null, // Replace with actual image path when available
-      summary: "A well-located commercial property offering strong visibility and long-term investment potential.",
+      id: "201-e-walnut-st-11",
+      title: "Development Lot – Downtown Rogers",
+      price: "$1",
+      location: "201 E Walnut St #11, Rogers, AR 72756",
+      imageSrc: "/images/201_e_Walnut_St_11_View.webp",
+      summary: "Prime hard corner development lot in rapidly growing and thriving Downtown Rogers. T5.2 zoning allows for high density development with multiple uses. Positioned in the middle of several active and future development projects, this site provides unlimited investment opportunities. Accepting offers: proof of funds and intended use required with offer submitted.",
       bullets: [
-        "Approx. XXXX sq ft",
-        "Office / Commercial use",
-        "Zoned for commercial use",
-        "Proximity to major corridors",
+        "6,969.6 sq ft lot",
+        "Unimproved Land",
+        "T5.2 zoning - High density development",
+        "Multiple uses allowed",
+        "Hard corner development lot",
+        "Central Business District location",
+        "MLS#: 1301467",
+        "Annual tax: $693",
       ],
-      href: "/commercial/buy/example-property-1",
-    },
-    {
-      id: "buy-example-property-2",
-      title: "Example Property – Industrial | Rogers",
-      price: "$X,XXX,XXX",
-      location: "Rogers, AR",
-      imageSrc: null, // Replace with actual image path when available
-      summary: "An industrial property positioned for operational efficiency and regional access.",
-      bullets: [
-        "Approx. XXXX sq ft",
-        "Industrial / Warehouse use",
-        "Easy highway access",
-        "Suitable for owner-users or investors",
+      href: "/commercial/buy/201-e-walnut-st-11",
+      galleryImages: [
+        "/images/201_e_Walnut_St_11_View.webp",
+        "/images/201_E_Walnut_St_11_Commercial_Lot_In_Rogers_For_Sale.webp",
+        "/images/201_e_walnut_st_11_Zoomed_out_map.webp",
+        "/images/201_e_walnut_st_land_lot.webp",
       ],
-      href: "/commercial/buy/example-property-2",
-    },
-    {
-      id: "buy-example-property-3",
-      title: "Example Property – Warehouse | Springdale",
-      price: "$X,XXX,XXX",
-      location: "Springdale, AR",
-      imageSrc: null, // Replace with actual image path when available
-      summary: "A warehouse facility offering functional space and strategic location for distribution or storage operations.",
-      bullets: [
-        "Approx. XXXX sq ft",
-        "Warehouse / Distribution use",
-        "Loading docks available",
-        "Ideal for logistics or manufacturing",
-      ],
-      href: "/commercial/buy/example-property-3",
+      mlsNumber: "1301467",
+      propertyDetails: {
+        lot: {
+          size: "6,969.6 Square Feet",
+          features: "Central Business District, City Lot, Level, Other, See Remarks",
+        },
+        property: {
+          fencing: "Partial",
+          exteriorFeatures: "Cleared",
+        },
+        details: {
+          parcelNumber: "0202198000",
+        },
+        construction: {
+          homeType: "Unimproved Land",
+        },
+        location: {
+          region: "Rogers",
+        },
+        financial: {
+          annualTaxAmount: "$693",
+          dateOnMarket: "3/17/2025",
+        },
+      },
     },
   ];
 
   // NOTE: The Lease listings below are placeholder listings and will be replaced with live MLS or CMS-driven data in the future.
-  const leaseListings = [
-    {
-      id: "lease-example-property-1",
-      title: "Example Space – Retail | Downtown Rogers",
-      leaseRate: "$XX / SF",
-      location: "Rogers, AR",
-      imageSrc: null, // Replace with actual image path when available
-      summary: "A commercial lease opportunity in a high-traffic area ideal for retail or service-based businesses.",
-      bullets: [
-        "Approx. XXXX sq ft",
-        "Retail / Commercial use",
-        "Downtown location",
-        "Strong visibility and access",
-      ],
-      href: "/commercial/lease/example-property-1",
-    },
-    {
-      id: "lease-example-property-2",
-      title: "Example Space – Medical / Office | Fayetteville",
-      leaseRate: "$XX / SF",
-      location: "Fayetteville, AR",
-      imageSrc: null, // Replace with actual image path when available
-      summary: "A flexible office or medical space suited for professional or healthcare users.",
-      bullets: [
-        "Approx. XXXX sq ft",
-        "Medical / Office use",
-        "Parking available",
-        "Convenient access to amenities",
-      ],
-      href: "/commercial/lease/example-property-2",
-    },
-    {
-      id: "lease-example-property-3",
-      title: "Example Space – Office | Bentonville",
-      leaseRate: "$XX / SF",
-      location: "Bentonville, AR",
-      imageSrc: null, // Replace with actual image path when available
-      summary: "A modern office space in a growing commercial district, ideal for professional services or corporate offices.",
-      bullets: [
-        "Approx. XXXX sq ft",
-        "Office / Professional use",
-        "Modern amenities and finishes",
-        "Located in established business district",
-      ],
-      href: "/commercial/lease/example-property-3",
-    },
-  ];
+  const leaseListings: any[] = [];
 
-  // Shared listing card component for Buy and Lease listings
-  const ListingCard = ({ listing, isLease = false }: { listing: any; isLease?: boolean }) => (
-    <Link
-      href={listing.href}
-      className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col h-full overflow-hidden relative"
-    >
-      {/* Subtle red accent line on hover */}
-      <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-10"></div>
-      {/* Cover Image */}
-      <div className="w-full h-64 bg-gray-200 relative overflow-hidden">
-        {listing.imageSrc ? (
-          <Image
-            src={listing.imageSrc}
-            alt={listing.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-200">
-            <svg
-              className="w-16 h-16 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="p-6 flex flex-col flex-grow">
-        <div className="mb-4">
-                <h3 className="text-2xl md:text-3xl font-bold text-black mb-3">
-                  {listing.title}
-                </h3>
-          {isLease ? (
-            <p className="text-3xl md:text-4xl font-bold text-black mb-3">
-              {listing.leaseRate}
-            </p>
-          ) : (
-            <p className="text-3xl md:text-4xl font-bold text-black mb-3">
-              {listing.price}
-            </p>
-          )}
-          <p className="text-gray-600 text-base md:text-lg font-medium">
-            {listing.location}
-          </p>
-        </div>
-        <p className="text-gray-700 leading-relaxed mb-8 flex-grow text-base md:text-lg">
-          {listing.summary}
-        </p>
-        <ul className="space-y-3 mb-8">
-          {listing.bullets.map((bullet: string, idx: number) => (
-            <li key={idx} className="flex items-start gap-2 text-base md:text-lg text-gray-700">
-              <span className="text-black font-semibold">•</span>
-              <span>{bullet}</span>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-auto">
-          <span className="text-black font-semibold text-sm uppercase tracking-wide inline-flex items-center gap-2 group-hover:gap-3 transition-all">
-            {isLease ? "View Space" : "View Property"}
-            <svg 
-              className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
 
   return (
     <>
@@ -260,67 +131,8 @@ export default function CommercialPage() {
           </div>
         </section>
 
-        {/* Buy Commercial Properties Section */}
-        <section id="buy-listings" className="py-16 md:py-20">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6">
-                Buy Commercial Property
-              </h2>
-              {/* Divider with red accent */}
-              <div className="flex items-center justify-center mb-6">
-                <div className="w-24 h-1 bg-black relative">
-                  <div className="absolute inset-0 bg-brand-red-700 opacity-30"></div>
-                </div>
-                <div className="w-2 h-2 bg-black mx-2 relative">
-                  <div className="absolute inset-0 bg-brand-red-700 opacity-40"></div>
-                </div>
-                <div className="w-24 h-1 bg-black relative">
-                  <div className="absolute inset-0 bg-brand-red-700 opacity-30"></div>
-                </div>
-              </div>
-              <p className="text-base md:text-lg text-gray-600 uppercase tracking-wider">
-                Explore available commercial properties for purchase across Northwest Arkansas.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {buyListings.map((listing) => (
-                <ListingCard key={listing.id} listing={listing} isLease={false} />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Lease Commercial Properties Section */}
-        <section id="lease-listings" className="py-16 md:py-20 bg-gray-50">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6">
-                Lease Commercial Space
-              </h2>
-              {/* Divider with red accent */}
-              <div className="flex items-center justify-center mb-6">
-                <div className="w-24 h-1 bg-black relative">
-                  <div className="absolute inset-0 bg-brand-red-700 opacity-30"></div>
-                </div>
-                <div className="w-2 h-2 bg-black mx-2 relative">
-                  <div className="absolute inset-0 bg-brand-red-700 opacity-40"></div>
-                </div>
-                <div className="w-24 h-1 bg-black relative">
-                  <div className="absolute inset-0 bg-brand-red-700 opacity-30"></div>
-                </div>
-              </div>
-              <p className="text-base md:text-lg text-gray-600 uppercase tracking-wider">
-                Available commercial spaces for lease throughout Northwest Arkansas.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {leaseListings.map((listing) => (
-                <ListingCard key={listing.id} listing={listing} isLease={true} />
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Commercial Listings Section */}
+        <CommercialListings buyListings={buyListings} leaseListings={leaseListings} />
 
         {/* Sell Commercial Property Section */}
         <section className="py-16 md:py-20">

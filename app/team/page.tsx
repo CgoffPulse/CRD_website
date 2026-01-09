@@ -17,12 +17,23 @@ export default function TeamPage() {
         <section className="py-16 md:py-20">
           <div className="container mx-auto px-6 max-w-4xl">
             <div className="text-center">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-4">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-8">
                 Our Team
               </h1>
-              <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto mb-12">
                 Local expertise. Strategic guidance. People you can trust with meaningful real estate decisions.
               </p>
+              {/* Team Picture */}
+              <div className="w-full max-w-2xl mx-auto mb-12">
+                <Image
+                  src="/images/CRD_Team_Pic.webp"
+                  alt="CRD Real Estate & Development Team"
+                  width={800}
+                  height={600}
+                  className="w-full h-auto rounded-sm object-cover"
+                  priority
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -30,7 +41,7 @@ export default function TeamPage() {
         {/* Intro Section */}
         <section className="py-10 bg-gray-50">
           <div className="container mx-auto px-6 max-w-5xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-6">
               <p className="text-black text-base leading-relaxed">
                 CRD Real Estate & Development is built around people who understand Northwest Arkansas — not just the market, but the communities, neighborhoods, and long-term implications behind every real estate decision. Our team brings deep local roots, professional experience across commercial, residential, and development real estate, and a shared commitment to guiding clients with clarity and care.
               </p>

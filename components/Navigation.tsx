@@ -22,7 +22,7 @@ export default function Navigation() {
           <Link
             key={link.href}
             href={link.href}
-            className="text-gray-300 hover:text-white transition-colors duration-200 text-base md:text-lg font-semibold uppercase tracking-wide relative group"
+            className="text-gray-300 hover:text-white transition-colors duration-200 text-sm md:text-base font-semibold uppercase tracking-wide relative group"
           >
             {link.label}
             {/* Subtle red underline on hover */}
