@@ -17,10 +17,10 @@ export default function TeamPage() {
         <section className="py-16 md:py-20">
           <div className="container mx-auto px-6 max-w-4xl">
             <div className="text-center">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-8">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6 sm:mb-8">
                 Our Team
               </h1>
-              <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto mb-12">
+              <p className="text-base sm:text-lg md:text-xl text-gray-700 max-w-2xl mx-auto mb-8 sm:mb-12 px-2">
                 Local expertise. Strategic guidance. People you can trust with meaningful real estate decisions.
               </p>
               {/* Team Picture */}
@@ -176,7 +176,7 @@ export default function TeamPage() {
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-6 max-w-4xl">
             <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-3 sm:mb-4">
                 Work With a Team That Knows Northwest Arkansas
               </h2>
               <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">

@@ -50,15 +50,15 @@ export default function Hero() {
         <div className="inline-block mb-6">
           <div className="w-24 h-1 bg-white mx-auto mb-4"></div>
         </div>
-        <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-semibold leading-tight tracking-wide uppercase mb-8 drop-shadow-2xl">
+        <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-display font-semibold leading-tight tracking-wide uppercase mb-6 sm:mb-8 drop-shadow-2xl px-2">
           Community Focused<br />Results Driven
         </h2>
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <div className="w-12 h-px bg-white/60"></div>
+        <div className="flex items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="w-8 sm:w-12 h-px bg-white/60"></div>
           <div className="w-2 h-2 bg-white rounded-full"></div>
-          <div className="w-12 h-px bg-white/60"></div>
+          <div className="w-8 sm:w-12 h-px bg-white/60"></div>
         </div>
-        <p className="text-xl md:text-2xl lg:text-3xl text-white/95 font-light tracking-wide leading-relaxed max-w-6xl mx-auto drop-shadow-lg">
+        <p className="text-base sm:text-lg md:text-2xl lg:text-3xl text-white/95 font-light tracking-wide leading-relaxed max-w-6xl mx-auto drop-shadow-lg px-2">
           Commercial, Residential, and Development Real Estate Across Northwest Arkansas
         </p>
       </div>

@@ -16,7 +16,7 @@ export default function ResidentialPage() {
       <Header />
       <main className="pt-0 min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="relative w-full h-[60vh] min-h-[500px] md:h-[70vh] md:min-h-[600px] flex items-center justify-center overflow-hidden">
+        <section className="relative w-full h-[60vh] min-h-[400px] sm:min-h-[500px] md:h-[70vh] md:min-h-[600px] flex items-center justify-center overflow-hidden">
           {/* Background Image */}
           <div className="absolute inset-0 w-full h-full">
             <Image
@@ -33,10 +33,10 @@ export default function ResidentialPage() {
           
           {/* Overlaid Content */}
           <div className="relative z-10 container mx-auto px-6 max-w-6xl text-center">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 drop-shadow-lg leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 sm:mb-8 drop-shadow-lg leading-tight px-2">
               Residential Real Estate in Northwest Arkansas
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white max-w-5xl mx-auto mb-10 drop-shadow-md leading-relaxed">
+            <p className="text-base sm:text-lg md:text-2xl lg:text-3xl text-white max-w-5xl mx-auto mb-8 sm:mb-10 drop-shadow-md leading-relaxed px-2">
               Local expertise and thoughtful guidance for buyers, sellers, and investors across Northwest Arkansas.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -57,7 +57,7 @@ export default function ResidentialPage() {
         </section>
 
         {/* Intro Section */}
-        <section className="py-16 md:py-20 bg-gradient-to-b from-white to-gray-50 relative">
+        <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white to-gray-50 relative">
           <div className="container mx-auto px-6 max-w-6xl">
             {/* Logo */}
             <div className="flex justify-center mb-12">
@@ -106,7 +106,7 @@ export default function ResidentialPage() {
                   AVAILABLE PROPERTIES
                 </span>
               </div>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-4 sm:mb-6">
                 Current Residential Listings
               </h2>
               <div className="flex items-center justify-center gap-4 mb-6">
@@ -129,9 +129,9 @@ export default function ResidentialPage() {
         </section>
 
         {/* Residential Services Section */}
-        <section className="py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white relative">
+        <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white relative">
           <div className="container mx-auto px-6 max-w-6xl">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-8 text-center">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6 sm:mb-8 text-center">
               How We Support Residential Clients
             </h2>
             <div className="flex items-center justify-center mb-10">
@@ -146,7 +146,7 @@ export default function ResidentialPage() {
               </div>
             </div>
             <p className="text-gray-700 text-lg md:text-xl leading-relaxed mb-12 text-center max-w-5xl mx-auto">
-              Our residential clients work directly with experienced professionals who guide every step of the process — from first showing through closing and beyond. CRD provides clear communication, strong negotiation, and local insight tailored to each client's goals.
+              Our residential clients work directly with experienced professionals who guide every step of the process, from first showing through closing and beyond. CRD provides clear communication, strong negotiation, and local insight tailored to each client's goals.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
               <div className="group flex items-start gap-4 bg-white border-2 border-black p-6 shadow-md hover:shadow-xl transition-all duration-300 relative overflow-hidden hover:scale-[1.02]">
@@ -211,7 +211,7 @@ export default function ResidentialPage() {
         {/* Why CRD Section */}
         <section className="py-16 md:py-20 bg-gradient-to-b from-white to-gray-50">
           <div className="container mx-auto px-6 max-w-5xl">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-8 text-center">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6 sm:mb-8 text-center">
               Why CRD
             </h2>
             <div className="flex items-center justify-center mb-12">
@@ -238,7 +238,7 @@ export default function ResidentialPage() {
                   <div className="absolute inset-0 bg-brand-red-700 opacity-40"></div>
                 </div>
                 <p className="text-gray-700 leading-relaxed text-lg transition-colors duration-300">
-                  We understand Northwest Arkansas neighborhoods because we live here — and that insight helps clients make better decisions.
+                  We understand Northwest Arkansas neighborhoods because we live here, and that insight helps clients make better decisions.
                 </p>
               </div>
               <div className="bg-white border-2 border-black shadow-lg p-8 md:p-10 hover:shadow-2xl transition-all duration-300 relative group cursor-pointer hover:scale-[1.02] overflow-hidden">
@@ -277,14 +277,14 @@ export default function ResidentialPage() {
         </section>
 
         {/* Final CTA Section */}
-        <section className="py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+        <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
           <div className="absolute inset-0 opacity-5">
             <div className="absolute top-10 right-10 w-32 h-32 border-2 border-black rounded-full"></div>
             <div className="absolute bottom-10 left-10 w-24 h-24 border-2 border-black rounded-full"></div>
           </div>
           <div className="container mx-auto px-6 max-w-6xl relative z-10">
             <div className="text-center bg-white border-2 border-black shadow-2xl p-10 md:p-16">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-8">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6 sm:mb-8">
                 Looking for a Home in Northwest Arkansas?
               </h2>
               <div className="flex items-center justify-center mb-8">

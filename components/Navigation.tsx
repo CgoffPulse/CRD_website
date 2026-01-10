@@ -33,7 +33,7 @@ export default function Navigation() {
 
       {/* Mobile Menu Button */}
       <button
-        className="md:hidden text-gray-300 p-2"
+        className="md:hidden text-gray-300 p-2 -mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle menu"
       >
@@ -56,13 +56,13 @@ export default function Navigation() {
 
       {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-black py-4 border-t border-gray-800 shadow-lg">
-          <nav className="flex flex-col space-y-4 px-6">
+        <div className="md:hidden fixed top-[73px] left-0 right-0 bg-black py-4 border-t border-gray-800 shadow-lg z-50 max-h-[calc(100vh-73px)] overflow-y-auto">
+          <nav className="flex flex-col space-y-2 px-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-300 hover:text-white transition-colors duration-200 text-base font-semibold uppercase tracking-wide py-2 relative group"
+                className="text-gray-300 hover:text-white transition-colors duration-200 text-base font-semibold uppercase tracking-wide py-3 relative group min-h-[44px] flex items-center"
                 onClick={() => setIsOpen(false)}
               >
                 {link.label}
