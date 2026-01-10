@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 interface PropertyDetails {
@@ -369,6 +370,16 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
                 </div>
               </div>
             )}
+
+            {/* Contact Button */}
+            <div className="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t-2 border-gray-200">
+              <Link
+                href="/contact"
+                className="btn-primary inline-flex items-center justify-center w-full sm:w-auto px-8 py-3 sm:py-4 rounded-none text-base sm:text-lg font-semibold min-h-[44px]"
+              >
+                Reach Out About This Listing
+              </Link>
+            </div>
           </div>
         </div>
       </div>

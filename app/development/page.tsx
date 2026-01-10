@@ -3,8 +3,8 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Real Estate Development Services in Northwest Arkansas | CRD Real Estate & Development",
-  description: "Strategic development support from site selection through delivery. End-to-end real estate development services across Northwest Arkansas including Bentonville, Rogers, Springdale, and Fayetteville.",
+  title: "Real Estate Development Strategy and Site Selection Services | CRD Real Estate & Development",
+  description: "Real estate development consulting services focused on site selection, market feasibility and early stage planning. Supporting landowners, investors and organizations navigating complex real estate decisions.",
 };
 
 export default function DevelopmentPage() {
@@ -41,7 +41,7 @@ export default function DevelopmentPage() {
           {/* Content */}
           <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl text-center pt-24 sm:pt-32">
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 sm:mb-8 leading-tight drop-shadow-2xl">
-              Real Estate Development Services in Northwest Arkansas
+              Development
             </h1>
             {/* Divider with red accent */}
             <div className="flex items-center justify-center mb-6 sm:mb-10">
@@ -56,7 +56,7 @@ export default function DevelopmentPage() {
               </div>
             </div>
             <p className="text-base sm:text-lg md:text-2xl lg:text-3xl text-white max-w-5xl mx-auto mb-8 sm:mb-10 leading-relaxed drop-shadow-lg px-2">
-              Strategic development support from site selection through delivery. Helping landowners, investors, and developers plan and execute projects built for long-term value.
+              Real Estate Development Strategy and Site Selection Services
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link 
@@ -91,21 +91,21 @@ export default function DevelopmentPage() {
             </div>
             <div className="prose prose-lg max-w-none">
               <p className="text-black text-base sm:text-lg md:text-2xl leading-relaxed mb-6 sm:mb-10 max-w-5xl mx-auto">
-                CRD Real Estate & Development provides end-to-end real estate development services across Northwest Arkansas, supporting projects from early-stage evaluation through execution and delivery. Our team works alongside landowners, investors, and development partners to bring clarity to complex decisions and align projects with market realities, regulatory requirements, and long-term goals.
+                CRD Real Estate and Development provides real estate development consulting services focused on site selection, market feasibility and early stage planning. We support landowners, investors and organizations navigating complex real estate decisions with clarity and discipline.
               </p>
               <p className="text-black text-base sm:text-lg md:text-2xl leading-relaxed max-w-5xl mx-auto">
-                With hands-on experience across redevelopment, adaptive reuse, mixed-use, and ground-up projects, CRD brings a practical, strategy-first approach to development. We understand the nuances of local municipalities, historic districts, and growth corridors, allowing our clients to move forward with confidence and fewer surprises.
+                While headquartered in Northwest Arkansas, CRD has supported development initiatives across multiple markets, working with national clients on site selection services and strategic development advisory. Our approach emphasizes repeatable analysis, market specific evaluation and thoughtful coordination where projects move forward.
               </p>
             </div>
           </div>
         </section>
 
-        {/* What We Do Section */}
+        {/* Development Services Section */}
         <section className="py-12 sm:py-16 md:py-20">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6 sm:mb-8">
-                What We Do
+                Development Services
               </h2>
               {/* Divider with red accent */}
               <div className="flex items-center justify-center mb-12">
@@ -121,7 +121,7 @@ export default function DevelopmentPage() {
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Site Selection & Feasibility */}
+              {/* Site Selection and Market Evaluation Services */}
               <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
@@ -133,18 +133,21 @@ export default function DevelopmentPage() {
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 <div className="relative z-10">
                   <h3 className="text-2xl md:text-3xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Site Selection & Feasibility
+                    Site Selection and Market Evaluation Services
                   </h3>
                   <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
                     <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                   </div>
                   <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
-                    We evaluate potential sites through market analysis, zoning considerations, infrastructure access, and highest-and-best-use assessment to help determine whether a project is viable before major capital is committed.
+                    CRD advises clients on site selection by evaluating market dynamics, demographics, access, zoning frameworks and long term growth indicators. This process helps identify locations that align with operational goals, investment strategy and development feasibility.
+                  </p>
+                  <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300 mt-4">
+                    We regularly support organizations evaluating opportunities across multiple markets, providing consistent analysis and clear recommendations tailored to each location.
                   </p>
                 </div>
               </div>
 
-              {/* Entitlement & Permitting Support */}
+              {/* Feasibility and Development Strategy */}
               <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
@@ -156,18 +159,21 @@ export default function DevelopmentPage() {
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 <div className="relative z-10">
                   <h3 className="text-2xl md:text-3xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Entitlement & Permitting Support
+                    Feasibility and Development Strategy
                   </h3>
                   <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
                     <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                   </div>
                   <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
-                    CRD helps navigate entitlement processes, rezoning considerations, and permitting paths by coordinating with local municipalities and consultants, reducing friction and uncertainty during early project stages.
+                    Early stage decisions carry the greatest impact. CRD supports feasibility analysis and development strategy by aligning market demand, project goals and financial considerations before significant capital is committed.
+                  </p>
+                  <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300 mt-4">
+                    Our team helps clients determine where projects make sense, how they should be positioned and what risks should be addressed early in the process.
                   </p>
                 </div>
               </div>
 
-              {/* Development Strategy & Pro Forma Guidance */}
+              {/* Strategic Development Advisory Services */}
               <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
@@ -179,18 +185,21 @@ export default function DevelopmentPage() {
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 <div className="relative z-10">
                   <h3 className="text-2xl md:text-3xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Development Strategy & Pro Forma Guidance
+                    Strategic Development Advisory Services
                   </h3>
                   <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
                     <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                   </div>
                   <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
-                    We assist clients in aligning development concepts with realistic budgets, timelines, and market demand, supporting informed decision-making before design and construction begin.
+                    CRD serves as a strategic development advisor to clients pursuing growth across single or multiple markets. We support planning, coordination and decision making at the front end of development projects, helping clients move forward with confidence and intention.
+                  </p>
+                  <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300 mt-4">
+                    This advisory role allows us to bring structure and clarity to complex initiatives without extending beyond what the project requires.
                   </p>
                 </div>
               </div>
 
-              {/* Design Coordination */}
+              {/* Entitlement and Permitting Support */}
               <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
@@ -202,18 +211,18 @@ export default function DevelopmentPage() {
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 <div className="relative z-10">
                   <h3 className="text-2xl md:text-3xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Design Coordination
+                    Entitlement and Permitting Support
                   </h3>
                   <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
                     <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                   </div>
                   <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
-                    CRD works with architects, engineers, and design teams to ensure plans align with project goals, site constraints, and approval requirements while maintaining momentum through the design phase.
+                    Where appropriate, CRD assists clients in navigating entitlement and permitting processes. We work alongside local consultants, municipalities and project teams to help reduce friction and maintain momentum during planning and approval phases.
                   </p>
                 </div>
               </div>
 
-              {/* Project Oversight & Vendor Coordination */}
+              {/* Design Coordination and Project Oversight */}
               <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
@@ -225,18 +234,18 @@ export default function DevelopmentPage() {
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 <div className="relative z-10">
                   <h3 className="text-2xl md:text-3xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Project Oversight & Vendor Coordination
+                    Design Coordination and Project Oversight
                   </h3>
                   <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
                     <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                   </div>
                   <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
-                    From consultants to contractors, we help coordinate key parties involved in the development process to keep projects organized, aligned, and moving forward.
+                    CRD coordinates with architects, engineers and project partners to ensure design decisions align with development strategy, budgets and timelines. Our involvement helps keep projects organized and aligned as they move from planning into execution.
                   </p>
                 </div>
               </div>
 
-              {/* Redevelopment, Adaptive Reuse & Mixed-Use Projects */}
+              {/* Redevelopment and Adaptive Reuse */}
               <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
@@ -248,13 +257,13 @@ export default function DevelopmentPage() {
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 <div className="relative z-10">
                   <h3 className="text-2xl md:text-3xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Redevelopment, Adaptive Reuse & Mixed-Use Projects
+                    Redevelopment and Adaptive Reuse
                   </h3>
                   <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
                     <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                   </div>
                   <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
-                    Our experience includes adaptive reuse and redevelopment projects, particularly in Downtown Rogers and other evolving districts, where understanding context, regulations, and community impact is critical.
+                    Our experience includes redevelopment and adaptive reuse projects in complex environments where regulatory constraints, existing structures and community considerations must be carefully balanced. This work requires patience, local understanding and disciplined planning.
                   </p>
                 </div>
               </div>
@@ -262,12 +271,12 @@ export default function DevelopmentPage() {
           </div>
         </section>
 
-        {/* Who We Work With Section - Flowing text without boxes */}
+        {/* Who We Support Section - Flowing text without boxes */}
         <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6 sm:mb-8">
-                Who We Work With
+                Who We Support
               </h2>
               {/* Divider with red accent */}
               <div className="flex items-center justify-center mb-12">
@@ -283,41 +292,38 @@ export default function DevelopmentPage() {
               </div>
             </div>
             <div className="max-w-5xl mx-auto">
-              <p className="text-gray-700 text-xl md:text-2xl leading-relaxed mb-10 text-center">
-                CRD partners with a wide range of clients involved in development throughout Northwest Arkansas, including:
+              <p className="text-gray-700 text-base sm:text-lg md:text-2xl leading-relaxed mb-8 sm:mb-10 text-center">
+                CRD works with a range of clients involved in development and expansion, including:
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div className="flex items-start gap-3 group">
-                  <div className="flex-shrink-0 w-6 h-6 bg-black group-hover:bg-brand-red-700 transition-colors duration-300 rounded-full flex items-center justify-center mt-1">
-                    <span className="text-white font-bold text-sm">•</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8">
+                <div className="flex items-start gap-2 sm:gap-3 group">
+                  <div className="flex-shrink-0 w-4 h-4 sm:w-6 sm:h-6 bg-black group-hover:bg-brand-red-700 transition-colors duration-300 rounded-full flex items-center justify-center mt-1">
+                    <span className="text-white font-bold text-xs sm:text-sm">•</span>
                   </div>
-                  <span className="text-gray-700 text-lg md:text-xl leading-relaxed group-hover:text-black transition-colors duration-300">Landowners evaluating highest-and-best use</span>
+                  <span className="text-gray-700 text-sm sm:text-base md:text-xl leading-relaxed group-hover:text-black transition-colors duration-300">Developers evaluating new markets or growth opportunities</span>
                 </div>
-                <div className="flex items-start gap-3 group">
-                  <div className="flex-shrink-0 w-6 h-6 bg-black group-hover:bg-brand-red-700 transition-colors duration-300 rounded-full flex items-center justify-center mt-1">
-                    <span className="text-white font-bold text-sm">•</span>
+                <div className="flex items-start gap-2 sm:gap-3 group">
+                  <div className="flex-shrink-0 w-4 h-4 sm:w-6 sm:h-6 bg-black group-hover:bg-brand-red-700 transition-colors duration-300 rounded-full flex items-center justify-center mt-1">
+                    <span className="text-white font-bold text-xs sm:text-sm">•</span>
                   </div>
-                  <span className="text-gray-700 text-lg md:text-xl leading-relaxed group-hover:text-black transition-colors duration-300">Investors seeking development-ready opportunities</span>
+                  <span className="text-gray-700 text-sm sm:text-base md:text-xl leading-relaxed group-hover:text-black transition-colors duration-300">Investors assessing site viability and long term potential</span>
                 </div>
-                <div className="flex items-start gap-3 group">
-                  <div className="flex-shrink-0 w-6 h-6 bg-black group-hover:bg-brand-red-700 transition-colors duration-300 rounded-full flex items-center justify-center mt-1">
-                    <span className="text-white font-bold text-sm">•</span>
+                <div className="flex items-start gap-2 sm:gap-3 group">
+                  <div className="flex-shrink-0 w-4 h-4 sm:w-6 sm:h-6 bg-black group-hover:bg-brand-red-700 transition-colors duration-300 rounded-full flex items-center justify-center mt-1">
+                    <span className="text-white font-bold text-xs sm:text-sm">•</span>
                   </div>
-                  <span className="text-gray-700 text-lg md:text-xl leading-relaxed group-hover:text-black transition-colors duration-300">Developers needing local market and entitlement support</span>
+                  <span className="text-gray-700 text-sm sm:text-base md:text-xl leading-relaxed group-hover:text-black transition-colors duration-300">Landowners planning future development or repositioning</span>
                 </div>
-                <div className="flex items-start gap-3 group">
-                  <div className="flex-shrink-0 w-6 h-6 bg-black group-hover:bg-brand-red-700 transition-colors duration-300 rounded-full flex items-center justify-center mt-1">
-                    <span className="text-white font-bold text-sm">•</span>
+                <div className="flex items-start gap-2 sm:gap-3 group">
+                  <div className="flex-shrink-0 w-4 h-4 sm:w-6 sm:h-6 bg-black group-hover:bg-brand-red-700 transition-colors duration-300 rounded-full flex items-center justify-center mt-1">
+                    <span className="text-white font-bold text-xs sm:text-sm">•</span>
                   </div>
-                  <span className="text-gray-700 text-lg md:text-xl leading-relaxed group-hover:text-black transition-colors duration-300">Business owners planning expansions or new builds</span>
-                </div>
-                <div className="flex items-start gap-3 md:col-span-2 group">
-                  <div className="flex-shrink-0 w-6 h-6 bg-black group-hover:bg-brand-red-700 transition-colors duration-300 rounded-full flex items-center justify-center mt-1">
-                    <span className="text-white font-bold text-sm">•</span>
-                  </div>
-                  <span className="text-gray-700 text-lg md:text-xl leading-relaxed group-hover:text-black transition-colors duration-300">Groups pursuing mixed-use or multi-tenant projects</span>
+                  <span className="text-gray-700 text-sm sm:text-base md:text-xl leading-relaxed group-hover:text-black transition-colors duration-300">Organizations pursuing multi location strategies</span>
                 </div>
               </div>
+              <p className="text-gray-700 text-base sm:text-lg md:text-xl leading-relaxed text-center">
+                Our role adapts to the needs of each project and market.
+              </p>
             </div>
           </div>
         </section>
@@ -355,10 +361,10 @@ export default function DevelopmentPage() {
                     <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                   </div>
                   <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Discovery & Goals
+                    Discovery and Goals
                   </h3>
                   <p className="text-gray-700 leading-relaxed text-lg md:text-xl">
-                    We begin by understanding the project vision, financial goals, timeline expectations, and risk considerations.
+                    We begin by understanding the project vision, objectives and constraints.
                   </p>
                 </div>
               </div>
@@ -375,10 +381,10 @@ export default function DevelopmentPage() {
                     <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                   </div>
                   <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Site & Market Evaluation
+                    Market and Site Evaluation
                   </h3>
                   <p className="text-gray-700 leading-relaxed text-lg md:text-xl">
-                    Our team evaluates site conditions, zoning, surrounding uses, and market dynamics to assess feasibility and constraints.
+                    We assess location specific factors, market demand and development feasibility.
                   </p>
                 </div>
               </div>
@@ -395,10 +401,10 @@ export default function DevelopmentPage() {
                     <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                   </div>
                   <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Entitlements & Planning Path
+                    Strategy and Planning
                   </h3>
                   <p className="text-gray-700 leading-relaxed text-lg md:text-xl">
-                    We help map the entitlement and permitting path, coordinating with local jurisdictions and consultants as needed.
+                    We align site selection, development approach and early stage planning.
                   </p>
                 </div>
               </div>
@@ -415,10 +421,10 @@ export default function DevelopmentPage() {
                     <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                   </div>
                   <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Design & Budget Alignment
+                    Coordination and Approvals
                   </h3>
                   <p className="text-gray-700 leading-relaxed text-lg md:text-xl">
-                    CRD supports alignment between design concepts, budgets, and development strategy before execution begins.
+                    We support coordination with design teams and local stakeholders as needed.
                   </p>
                 </div>
               </div>
@@ -435,10 +441,10 @@ export default function DevelopmentPage() {
                     <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                   </div>
                   <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Execution Support & Delivery
+                    Execution Support
                   </h3>
                   <p className="text-gray-700 leading-relaxed text-lg md:text-xl">
-                    As the project moves forward, we remain involved to support coordination, decision-making, and momentum through delivery.
+                    We remain involved to support informed decision making through delivery.
                   </p>
                 </div>
               </div>
@@ -473,10 +479,10 @@ export default function DevelopmentPage() {
                   <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                 </div>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                  Local Knowledge, Real Execution
+                  Strategy First
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg md:text-xl transition-colors duration-300">
-                  Our team brings firsthand experience navigating development across Northwest Arkansas, including historic districts and growth corridors.
+                  We focus on early stage clarity to reduce risk and protect long term value.
                 </p>
               </div>
 
@@ -486,10 +492,10 @@ export default function DevelopmentPage() {
                   <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                 </div>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                  Strategy First, Details Matter
+                  Experience That Translates
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg md:text-xl transition-colors duration-300">
-                  We focus on disciplined planning and thoughtful execution to help clients avoid costly missteps and delays.
+                  Our approach is built on real world development experience applied thoughtfully across markets.
                 </p>
               </div>
 
@@ -499,10 +505,10 @@ export default function DevelopmentPage() {
                   <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                 </div>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                  Built for Long-Term Value
+                  Disciplined and Accountable
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg md:text-xl transition-colors duration-300">
-                  Every recommendation is made with durability, market relevance, and long-term performance in mind.
+                  Every recommendation is grounded in practicality, transparency and responsibility.
                 </p>
               </div>
             </div>
@@ -536,10 +542,10 @@ export default function DevelopmentPage() {
                   <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                 </div>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                  What types of development projects do you support?
+                  What types of development projects do you support
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg md:text-xl transition-colors duration-300">
-                  We support a range of projects including mixed-use, multi-tenant, redevelopment, adaptive reuse, and ground-up developments.
+                  We support a range of projects including mixed use, multi tenant, redevelopment, adaptive reuse and ground up developments.
                 </p>
               </div>
 
@@ -549,7 +555,7 @@ export default function DevelopmentPage() {
                   <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                 </div>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                  Do you help with entitlements and permitting?
+                  Do you help with entitlements and permitting
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg md:text-xl transition-colors duration-300">
                   Yes. We assist clients in understanding and navigating entitlement and permitting processes in coordination with local municipalities and consultants.
@@ -562,7 +568,7 @@ export default function DevelopmentPage() {
                   <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                 </div>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                  Can you assist with redevelopment or adaptive reuse projects?
+                  Can you assist with redevelopment or adaptive reuse projects
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg md:text-xl transition-colors duration-300">
                   Yes. Our team has experience supporting redevelopment and adaptive reuse projects, particularly in Downtown Rogers and similar districts.
@@ -575,23 +581,36 @@ export default function DevelopmentPage() {
                   <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                 </div>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                  When should I involve CRD in my development project?
+                  When should I involve CRD in my development project
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg md:text-xl transition-colors duration-300">
-                  Ideally, as early as possible. Early involvement allows for better feasibility analysis, planning, and risk management.
+                  Ideally, as early as possible. Early involvement allows for better feasibility analysis, planning and risk management.
                 </p>
               </div>
 
               {/* FAQ 5 */}
+              <div className="group relative pb-8 border-b-2 border-black/20 hover:border-brand-red-700 transition-colors duration-300">
+                <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
+                </div>
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
+                  Do you work across all of Northwest Arkansas
+                </h3>
+                <p className="text-gray-700 leading-relaxed text-lg md:text-xl transition-colors duration-300">
+                  Yes. We work throughout Bentonville, Rogers, Springdale, Fayetteville and surrounding areas.
+                </p>
+              </div>
+
+              {/* FAQ 6 */}
               <div className="group relative">
                 <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
                   <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                 </div>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 group-hover:text-brand-red-700 transition-colors duration-300">
-                  Do you work across all of Northwest Arkansas?
+                  Do you provide development services outside of Northwest Arkansas
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-lg md:text-xl transition-colors duration-300">
-                  Yes. We work throughout Bentonville, Rogers, Springdale, Fayetteville, and surrounding areas.
+                  Yes. While CRD is headquartered in Northwest Arkansas, we also support national clients through site selection services and strategic development advisory in multiple states. Our involvement is tailored to the needs of each project and market.
                 </p>
               </div>
             </div>
@@ -603,10 +622,10 @@ export default function DevelopmentPage() {
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center">
               <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-black mb-4 sm:mb-6">
-                Let's Talk About Your Development Project
+                Let's Talk About Your Development Strategy
               </h2>
               {/* Divider with red accent */}
-              <div className="flex items-center justify-center mb-10">
+              <div className="flex items-center justify-center mb-8 sm:mb-10">
                 <div className="w-24 h-1 bg-black relative">
                   <div className="absolute inset-0 bg-brand-red-700 opacity-30"></div>
                 </div>
@@ -617,8 +636,8 @@ export default function DevelopmentPage() {
                   <div className="absolute inset-0 bg-brand-red-700 opacity-30"></div>
                 </div>
               </div>
-              <p className="text-xl md:text-2xl text-gray-700 mb-10 max-w-5xl mx-auto leading-relaxed">
-                Tell us what you're planning and where. We'll help you evaluate the opportunity, map the path forward, and move ahead with clarity.
+              <p className="text-base sm:text-lg md:text-2xl text-gray-700 mb-8 sm:mb-10 max-w-5xl mx-auto leading-relaxed px-2">
+                Whether you are evaluating sites, planning growth or preparing a project for execution, CRD can help you move forward with clarity and confidence.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Link 

@@ -37,15 +37,15 @@ export default function AboutSection() {
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-0.5 bg-brand-red-700 opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
             
             <p className="text-black text-base sm:text-lg md:text-xl leading-relaxed mb-6 sm:mb-8">
-              CRD Real Estate & Development is a Northwest Arkansas–based real estate firm providing commercial brokerage, residential representation, and end-to-end development services. Headquartered in Downtown Rogers, CRD works across Bentonville, Rogers, Springdale, Fayetteville, and the surrounding region, supporting clients through every stage of the real estate lifecycle.
+              CRD Real Estate & Development is a Northwest Arkansas based full-service brokerage providing commercial brokerage, residential representation, and end-to-end development services. Headquartered in Downtown Rogers, CRD works across Bentonville, Rogers, Springdale, Fayetteville, and the surrounding region, supporting clients through every stage of the real estate lifecycle.
             </p>
             <p className="text-black text-base sm:text-lg md:text-xl leading-relaxed">
-              What sets CRD apart is an ownership mindset. With hands-on development experience and in-house expertise spanning acquisitions, leasing, investment strategy, and project execution, the team delivers more than transactions — they deliver informed decisions designed to protect value, reduce risk, and create long-term returns for investors, owners, and communities.
+              What sets CRD apart is an ownership mindset. With hands-on development experience and in-house expertise spanning acquisitions, leasing, investment strategy, and project execution, the team delivers more than transactions, they deliver informed decisions designed to protect value, reduce risk, and create long-term returns for investors, owners, and communities.
             </p>
           </div>
           
           {/* Full Width Emphasis Line with red accent for text splitter */}
-          <div className="mt-8 sm:mt-12 pt-8 sm:pt-12 border-t-2 border-black relative">
+          <div className="mt-12 pt-12 border-t-2 border-black relative">
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <div className="w-16 h-1 bg-black relative">
                 <div className="absolute inset-0 bg-brand-red-700 opacity-40"></div>
