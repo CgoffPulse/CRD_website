@@ -15,23 +15,42 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[100vh] flex items-end text-white overflow-hidden">
-      {/* YouTube Video Background */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden">
-        <iframe
-          className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh]"
-          style={{
-            transform: 'translate(-50%, -40%)',
-            pointerEvents: 'none'
-          }}
-          src="https://www.youtube.com/embed/FRVwWUwxZHs?autoplay=1&mute=1&loop=1&playlist=FRVwWUwxZHs&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&vq=hd1080"
-          title="YouTube video background"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-        />
-        {/* Reduced overlay for better video visibility, stronger gradient only at bottom for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
-      </div>
+    <>
+      <style dangerouslySetInnerHTML={{__html: `
+        .hero-video-iframe {
+          width: max(100vw, 177.78vh);
+          height: max(56.25vw, 100vh);
+        }
+        @media (max-width: 767px) {
+          .hero-video-iframe {
+            width: 177.78vh;
+            height: 100vh;
+          }
+          @media (orientation: landscape) {
+            .hero-video-iframe {
+              width: 100vw;
+              height: max(56.25vw, 100vh);
+            }
+          }
+        }
+      `}} />
+      <section className="relative min-h-[100vh] flex items-end text-white overflow-hidden">
+        {/* YouTube Video Background */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          <iframe
+            className="hero-video-iframe absolute top-1/2 left-1/2"
+            style={{
+              transform: 'translate(-50%, -50%)',
+              pointerEvents: 'none'
+            }}
+            src="https://www.youtube.com/embed/FRVwWUwxZHs?autoplay=1&mute=1&loop=1&playlist=FRVwWUwxZHs&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&vq=hd1080"
+            title="YouTube video background"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+          />
+          {/* Reduced overlay for better video visibility, stronger gradient only at bottom for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
+        </div>
       
       {/* Subtle corner accents */}
       <div className="absolute inset-0 pointer-events-none z-10">
@@ -63,6 +82,7 @@ export default function Hero() {
         </p>
       </div>
     </section>
+    </>
   );
 }
 

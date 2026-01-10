@@ -14,11 +14,11 @@ export default function ResidentialPage() {
   return (
     <>
       <Header />
-      <main className="pt-0 min-h-screen bg-white">
+      <main className="min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="relative w-full h-[60vh] min-h-[400px] sm:min-h-[500px] md:h-[70vh] md:min-h-[600px] flex items-center justify-center overflow-hidden">
-          {/* Background Image */}
-          <div className="absolute inset-0 w-full h-full">
+        <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+          {/* Background Image - extends behind header */}
+          <div className="absolute inset-0 w-full h-full top-0">
             <Image
               src="/images/Rogers_AR_Hero.jpg"
               alt="Rogers, Arkansas - Residential Real Estate"
@@ -31,24 +31,24 @@ export default function ResidentialPage() {
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
           
-          {/* Overlaid Content */}
-          <div className="relative z-10 container mx-auto px-6 max-w-6xl text-center pt-24 sm:pt-32">
-            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 sm:mb-8 drop-shadow-lg leading-tight px-2">
+          {/* Overlaid Content - starts below header */}
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl text-center pt-24 sm:pt-28 md:pt-32 pb-8 sm:pb-12">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-5 md:mb-6 lg:mb-8 drop-shadow-lg leading-tight px-2">
               Residential Real Estate in Northwest Arkansas
             </h1>
-            <p className="text-base sm:text-lg md:text-2xl lg:text-3xl text-white max-w-5xl mx-auto mb-8 sm:mb-10 drop-shadow-md leading-relaxed px-2">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white max-w-5xl mx-auto mb-6 sm:mb-7 md:mb-8 lg:mb-10 drop-shadow-md leading-relaxed px-2">
               Local expertise and thoughtful guidance for buyers, sellers, and investors across Northwest Arkansas.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-2">
               <Link 
                 href="#listings" 
-                className="bg-white text-black border-2 border-white hover:bg-gray-100 inline-flex items-center justify-center px-8 py-3 rounded-none text-sm font-semibold transition-colors"
+                className="bg-white text-black border-2 border-white hover:bg-gray-100 inline-flex items-center justify-center px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-none text-xs sm:text-sm font-semibold transition-colors min-h-[44px]"
               >
                 View Current Listings
               </Link>
               <Link 
                 href="/contact" 
-                className="bg-transparent text-white border-2 border-white hover:bg-white hover:text-black inline-flex items-center justify-center px-8 py-3 rounded-none text-sm font-semibold transition-colors"
+                className="bg-transparent text-white border-2 border-white hover:bg-white hover:text-black inline-flex items-center justify-center px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-none text-xs sm:text-sm font-semibold transition-colors min-h-[44px]"
               >
                 Contact Us
               </Link>
