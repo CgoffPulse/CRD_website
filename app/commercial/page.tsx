@@ -241,7 +241,7 @@ export default function CommercialPage() {
           </div>
           
           {/* Overlaid Content */}
-          <div className="relative z-10 container mx-auto px-6 max-w-6xl text-center">
+          <div className="relative z-10 container mx-auto px-6 max-w-6xl text-center pt-24 sm:pt-32">
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 sm:mb-8 drop-shadow-lg leading-tight px-2">
               Commercial Real Estate in Northwest Arkansas
             </h1>
