@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 interface PropertyDetails {
@@ -15,6 +16,7 @@ interface PropertyDetails {
   details?: {
     parcelNumber?: string;
     specialConditions?: string;
+    subdivision?: string;
   };
   construction?: {
     homeType?: string;
@@ -44,6 +46,7 @@ interface Listing {
   galleryImages?: string[];
   propertyDetails?: PropertyDetails;
   isLease?: boolean;
+  pdfFlyer?: string;
 }
 
 interface ListingModalProps {
@@ -54,28 +57,33 @@ interface ListingModalProps {
 
 function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
   const images = listing?.galleryImages || [];
+  const [showPdfViewer, setShowPdfViewer] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === "Escape") {
-          onClose();
+          if (showPdfViewer) {
+            setShowPdfViewer(false);
+          } else {
+            onClose();
+          }
         }
       };
       document.addEventListener("keydown", handleEscape);
       return () => document.removeEventListener("keydown", handleEscape);
     }
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, showPdfViewer]);
 
   if (!isOpen || !listing) return null;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="bg-white shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col border-4 border-black relative"
+        className="bg-white shadow-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col border-2 sm:border-4 border-black relative m-2 sm:m-0"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Corner accents with red */}
@@ -88,13 +96,13 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-brand-red-700 opacity-15 z-20"></div>
         
         {/* Header with back button */}
-        <div className="flex items-center justify-between p-6 border-b-4 border-black bg-gray-50 relative z-10">
+        <div className="flex items-center justify-between p-3 sm:p-6 border-b-2 sm:border-b-4 border-black bg-gray-50 relative z-10 flex-shrink-0">
           <button
             onClick={onClose}
-            className="flex items-center gap-2 text-black font-semibold hover:text-gray-700 transition-colors cursor-pointer"
+            className="flex items-center gap-1 sm:gap-2 text-black font-semibold hover:text-gray-700 transition-colors cursor-pointer text-sm sm:text-base min-h-[44px]"
           >
             <svg
-              className="w-5 h-5"
+              className="w-4 h-4 sm:w-5 sm:h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -106,15 +114,16 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            Back to Listings
+            <span className="hidden sm:inline">Back to Listings</span>
+            <span className="sm:hidden">Back</span>
           </button>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-black transition-colors cursor-pointer"
+            className="text-gray-500 hover:text-black transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
             aria-label="Close"
           >
             <svg
-              className="w-6 h-6"
+              className="w-5 h-5 sm:w-6 sm:h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -153,33 +162,57 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
           )}
 
           {/* Content */}
-          <div className="p-6 md:p-8">
-            <div className="mb-6">
-              <h2 className="text-4xl md:text-5xl font-bold text-black mb-3">
+          <div className="p-4 sm:p-6 md:p-8">
+            <div className="mb-4 sm:mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-black mb-2 sm:mb-3">
                 {listing.title}
               </h2>
               {listing.isLease ? (
-                <p className="text-4xl md:text-5xl font-bold text-black mb-4">
+                <p className="text-2xl sm:text-3xl md:text-5xl font-bold text-black mb-3 sm:mb-4">
                   {listing.leaseRate}
                 </p>
               ) : (
-                <p className="text-4xl md:text-5xl font-bold text-black mb-4">
+                <p className="text-2xl sm:text-3xl md:text-5xl font-bold text-black mb-3 sm:mb-4">
                   {listing.price}
                 </p>
               )}
-              <p className="text-gray-700 text-xl font-medium mb-3">
+              <p className="text-gray-700 text-base sm:text-lg md:text-xl font-medium mb-2 sm:mb-3">
                 {listing.location}
               </p>
               {listing.mlsNumber && (
-                <p className="text-sm text-gray-600">MLS#: {listing.mlsNumber}</p>
+                <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">MLS#: {listing.mlsNumber}</p>
+              )}
+              {listing.pdfFlyer && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowPdfViewer(true);
+                  }}
+                  className="inline-flex items-center gap-2 px-4 py-3 sm:py-2 bg-black text-white hover:bg-brand-red-700 transition-colors duration-300 font-semibold text-xs sm:text-sm min-h-[44px]"
+                >
+                  <svg
+                    className="w-4 h-4 sm:w-5 sm:h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
+                  </svg>
+                  View Flyer PDF
+                </button>
               )}
             </div>
 
             {/* Description */}
             {(listing.description || listing.summary) && (
-              <div className="mb-8">
-                <h3 className="text-2xl md:text-3xl font-bold text-black mb-6">Description</h3>
-                <p className="text-gray-700 leading-relaxed text-lg md:text-xl whitespace-pre-line">
+              <div className="mb-6 sm:mb-8">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-black mb-4 sm:mb-6">Description</h3>
+                <p className="text-gray-700 leading-relaxed text-sm sm:text-base md:text-xl whitespace-pre-line">
                   {listing.description || listing.summary}
                 </p>
               </div>
@@ -187,8 +220,8 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
 
             {/* Features */}
             {listing.bullets.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-2xl md:text-3xl font-bold text-black mb-6">Features</h3>
+              <div className="mb-6 sm:mb-8">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-black mb-4 sm:mb-6">Features</h3>
                 <ul className="space-y-2">
                   {listing.bullets.map((bullet, idx) => (
                     <li
@@ -205,14 +238,14 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
 
             {/* Facts & Features */}
             {listing.propertyDetails && (
-              <div className="mb-8 border-t-2 border-gray-200 pt-8">
-                <h3 className="text-3xl md:text-4xl font-bold text-black mb-8">Facts & Features</h3>
+              <div className="mb-6 sm:mb-8 border-t-2 border-gray-200 pt-6 sm:pt-8">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-6 sm:mb-8">Facts & Features</h3>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                   {/* Lot */}
                   {listing.propertyDetails.lot && (
                     <div>
-                      <h4 className="text-xl md:text-2xl font-bold text-black mb-6">Lot</h4>
+                      <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-black mb-4 sm:mb-6">Lot</h4>
                       <div className="space-y-3">
                         {listing.propertyDetails.lot.size && (
                           <div className="flex justify-between border-b border-gray-100 pb-2">
@@ -233,7 +266,7 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
                   {/* Property */}
                   {listing.propertyDetails.property && (
                     <div>
-                      <h4 className="text-xl md:text-2xl font-bold text-black mb-6">Property</h4>
+                      <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-black mb-4 sm:mb-6">Property</h4>
                       <div className="space-y-3">
                         {listing.propertyDetails.property.fencing && (
                           <div className="flex justify-between border-b border-gray-100 pb-2">
@@ -254,12 +287,18 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
                   {/* Details */}
                   {listing.propertyDetails.details && (
                     <div>
-                      <h4 className="text-xl md:text-2xl font-bold text-black mb-6">Details</h4>
+                      <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-black mb-4 sm:mb-6">Details</h4>
                       <div className="space-y-3">
                         {listing.propertyDetails.details.parcelNumber && (
                           <div className="flex justify-between border-b border-gray-100 pb-2">
                             <span className="text-gray-600 font-medium">Parcel number</span>
                             <span className="text-black font-mono text-sm">{listing.propertyDetails.details.parcelNumber}</span>
+                          </div>
+                        )}
+                        {listing.propertyDetails.details.subdivision && (
+                          <div className="flex justify-between border-b border-gray-100 pb-2">
+                            <span className="text-gray-600 font-medium">Subdivision</span>
+                            <span className="text-black">{listing.propertyDetails.details.subdivision}</span>
                           </div>
                         )}
                         {listing.propertyDetails.details.specialConditions !== undefined && (
@@ -275,7 +314,7 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
                   {/* Construction */}
                   {listing.propertyDetails.construction && (
                     <div>
-                      <h4 className="text-xl md:text-2xl font-bold text-black mb-6">Construction</h4>
+                      <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-black mb-4 sm:mb-6">Construction</h4>
                       <div className="space-y-3">
                         {listing.propertyDetails.construction.homeType && (
                           <div className="flex justify-between border-b border-gray-100 pb-2">
@@ -296,7 +335,7 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
                   {/* Location */}
                   {listing.propertyDetails.location && (
                     <div>
-                      <h4 className="text-xl md:text-2xl font-bold text-black mb-6">Location</h4>
+                      <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-black mb-4 sm:mb-6">Location</h4>
                       <div className="space-y-3">
                         {listing.propertyDetails.location.region && (
                           <div className="flex justify-between border-b border-gray-100 pb-2">
@@ -311,7 +350,7 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
                   {/* Financial & Listing Details */}
                   {listing.propertyDetails.financial && (
                     <div>
-                      <h4 className="text-xl md:text-2xl font-bold text-black mb-6">Financial & Listing Details</h4>
+                      <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-black mb-4 sm:mb-6">Financial & Listing Details</h4>
                       <div className="space-y-3">
                         {listing.propertyDetails.financial.annualTaxAmount && (
                           <div className="flex justify-between border-b border-gray-100 pb-2">
@@ -331,9 +370,64 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
                 </div>
               </div>
             )}
+
+            {/* Contact Button */}
+            <div className="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t-2 border-gray-200">
+              <Link
+                href="/contact"
+                className="btn-primary inline-flex items-center justify-center w-full sm:w-auto px-8 py-3 sm:py-4 rounded-none text-base sm:text-lg font-semibold min-h-[44px]"
+              >
+                Reach Out About This Listing
+              </Link>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* PDF Viewer Modal */}
+      {showPdfViewer && listing.pdfFlyer && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm"
+          onClick={() => setShowPdfViewer(false)}
+        >
+          <div
+            className="bg-white shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col border-2 sm:border-4 border-black relative m-2 sm:m-0"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-3 sm:p-4 border-b-2 sm:border-b-4 border-black bg-gray-50 flex-shrink-0">
+              <h3 className="text-base sm:text-xl font-bold text-black">Property Flyer</h3>
+              <button
+                onClick={() => setShowPdfViewer(false)}
+                className="text-gray-500 hover:text-black transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label="Close PDF"
+              >
+                <svg
+                  className="w-5 h-5 sm:w-6 sm:h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            {/* PDF Viewer */}
+            <div className="flex-1 overflow-hidden">
+              <iframe
+                src={`${encodeURI(listing.pdfFlyer)}#toolbar=1`}
+                className="w-full h-full min-h-[60vh] sm:min-h-[80vh]"
+                title="Property Flyer PDF"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -369,13 +463,13 @@ export default function CommercialListings({ buyListings, leaseListings }: Comme
       {/* Subtle red accent line on hover */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-10"></div>
       {/* Cover Image */}
-      <div className="w-full h-64 bg-gray-200 relative overflow-hidden flex items-center justify-center">
+      <div className="w-full h-48 sm:h-64 bg-gray-200 relative overflow-hidden flex items-center justify-center">
         {listing.imageSrc ? (
           <Image
             src={listing.imageSrc}
             alt={listing.title}
             fill
-            className="object-contain group-hover:scale-105 transition-transform duration-300"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-200">
@@ -403,37 +497,37 @@ export default function CommercialListings({ buyListings, leaseListings }: Comme
       </div>
 
       {/* Content */}
-      <div className="p-6 flex flex-col flex-grow">
-        <div className="mb-4">
-          <h3 className="text-xl md:text-2xl font-bold text-black mb-3">
+      <div className="p-4 sm:p-6 flex flex-col flex-grow">
+        <div className="mb-3 sm:mb-4">
+          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-black mb-2 sm:mb-3">
             {listing.title}
           </h3>
           {isLease ? (
-            <p className="text-2xl md:text-3xl font-bold text-black mb-3">
+            <p className="text-xl sm:text-2xl md:text-3xl font-bold text-black mb-2 sm:mb-3">
               {listing.leaseRate}
             </p>
           ) : (
-            <p className="text-2xl md:text-3xl font-bold text-black mb-3">
+            <p className="text-xl sm:text-2xl md:text-3xl font-bold text-black mb-2 sm:mb-3">
               {listing.price}
             </p>
           )}
-          <p className="text-gray-600 text-sm md:text-base font-medium">
+          <p className="text-gray-600 text-xs sm:text-sm md:text-base font-medium">
             {listing.location}
           </p>
         </div>
-        <ul className="space-y-2 mb-4 max-h-48 overflow-y-auto flex-grow">
+        <ul className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4 max-h-40 sm:max-h-48 overflow-y-auto flex-grow">
           {listing.bullets.map((bullet: string, idx: number) => (
-            <li key={idx} className="flex items-start gap-2 text-sm md:text-base text-gray-700">
-              <span className="text-black font-semibold">•</span>
+            <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm md:text-base text-gray-700">
+              <span className="text-black font-semibold mt-0.5">•</span>
               <span>{bullet}</span>
             </li>
           ))}
         </ul>
-        <div className="mt-auto">
-          <span className="text-black font-semibold text-sm uppercase tracking-wide inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+        <div className="mt-auto pt-2">
+          <span className="text-black font-semibold text-xs sm:text-sm uppercase tracking-wide inline-flex items-center gap-1.5 sm:gap-2 group-hover:gap-2 sm:group-hover:gap-3 transition-all">
             {isLease ? "View Space" : "View Property"}
             <svg 
-              className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
+              className="w-3 h-3 sm:w-4 sm:h-4 transform group-hover:translate-x-1 transition-transform" 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"
@@ -449,10 +543,10 @@ export default function CommercialListings({ buyListings, leaseListings }: Comme
   return (
     <>
       {/* Buy Listings */}
-      <section id="buy-listings" className="py-16 md:py-20">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6">
+      <section id="buy-listings" className="py-12 sm:py-16 md:py-20">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-4 sm:mb-6">
               Buy Commercial Property
             </h2>
             {/* Divider with red accent */}
@@ -471,7 +565,7 @@ export default function CommercialListings({ buyListings, leaseListings }: Comme
               Explore available commercial properties for purchase across Northwest Arkansas.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {buyListings.map((listing) => (
               <ListingCard key={listing.id} listing={listing} isLease={false} />
             ))}
@@ -480,10 +574,10 @@ export default function CommercialListings({ buyListings, leaseListings }: Comme
       </section>
 
       {/* Lease Listings */}
-      <section id="lease-listings" className="py-16 md:py-20 bg-gray-50">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6">
+      <section id="lease-listings" className="py-12 sm:py-16 md:py-20 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-4 sm:mb-6">
               Lease Commercial Space
             </h2>
             {/* Divider with red accent */}
@@ -502,7 +596,7 @@ export default function CommercialListings({ buyListings, leaseListings }: Comme
               Available commercial spaces for lease throughout Northwest Arkansas.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {leaseListings.map((listing) => (
               <ListingCard key={listing.id} listing={listing} isLease={true} />
             ))}

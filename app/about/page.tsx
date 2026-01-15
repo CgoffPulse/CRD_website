@@ -1,8 +1,8 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import Image from "next/image";
 import ClientLogoBanner from "@/components/ClientLogoBanner";
+import AboutHero from "@/components/AboutHero";
 
 export const metadata = {
   title: "About CRD Real Estate & Development | Northwest Arkansas",
@@ -13,34 +13,15 @@ export default function AboutPage() {
   return (
     <>
       <Header />
-      <main className="pt-32 min-h-screen bg-white">
+      <main className="min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="py-16 md:py-20">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <div className="text-center mb-12">
-              <Image
-                src="/images/CRD_Logo.png"
-                alt="CRD Real Estate & Development"
-                width={600}
-                height={180}
-                className="h-32 md:h-48 lg:h-56 w-auto mx-auto mb-8"
-                priority
-              />
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6">
-                About CRD Real Estate & Development
-              </h1>
-              <p className="text-lg md:text-xl text-gray-700 max-w-5xl mx-auto">
-                Local expertise. Ownership mindset. Long-term value across Northwest Arkansas.
-              </p>
-            </div>
-          </div>
-        </section>
+        <AboutHero />
 
         {/* Who We Are Section */}
-        <section className="py-12 bg-gray-50">
+        <section className="py-10 sm:py-12 bg-gray-50">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-6 sm:mb-8">
                 Who We Are
               </h2>
               {/* Divider with red accent */}
@@ -60,12 +41,12 @@ export default function AboutPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-8 max-w-5xl mx-auto">
                 <div>
                   <p className="text-black text-base md:text-lg leading-relaxed mb-6">
-                    CRD Real Estate & Development is a Northwest Arkansas–based real estate firm providing commercial brokerage, residential representation, and end-to-end development services. Headquartered in Downtown Rogers, CRD works across Bentonville, Rogers, Springdale, Fayetteville, and the surrounding region, supporting clients through every stage of the real estate lifecycle.
+                    CRD Real Estate & Development is a Northwest Arkansas based real estate firm providing commercial brokerage, residential representation, and end-to-end development services. Headquartered in Downtown Rogers, CRD works across Bentonville, Rogers, Springdale, Fayetteville, and the surrounding region, supporting clients through every stage of the real estate lifecycle.
                   </p>
                 </div>
                 <div>
                   <p className="text-black text-base md:text-lg leading-relaxed mb-6">
-                    What sets CRD apart is an ownership mindset. With hands-on development experience and in-house expertise spanning acquisitions, leasing, investment strategy, and project execution, the team delivers more than transactions — they deliver informed decisions designed to protect value, reduce risk, and create long-term returns for investors, owners, and communities.
+                    What sets CRD apart is an ownership mindset. With hands-on development experience and in-house expertise spanning acquisitions, leasing, investment strategy, and project execution, the team delivers more than transactions, they deliver informed decisions designed to protect value, reduce risk, and create long-term returns for investors, owners, and communities.
                   </p>
                 </div>
               </div>
@@ -75,7 +56,7 @@ export default function AboutPage() {
                   <div className="absolute inset-0 bg-brand-red-700 opacity-40"></div>
                 </div>
                 <p className="text-black text-lg md:text-xl leading-relaxed font-semibold text-center max-w-5xl mx-auto">
-                  From first-time homebuyers to private investors and complex development projects, CRD brings clarity, strategy, and local expertise to every engagement.
+                CRD is defined by experience on both sides of the table. Understanding real estate as owners, investors, and operators.
                 </p>
               </div>
             </div>
@@ -83,10 +64,10 @@ export default function AboutPage() {
         </section>
 
         {/* Our History Section */}
-        <section className="py-16 md:py-20">
+        <section className="py-12 sm:py-16 md:py-20">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-6 sm:mb-8">
                 Our History
               </h2>
               {/* Divider with red accent */}
@@ -104,7 +85,7 @@ export default function AboutPage() {
             </div>
             <div className="prose prose-lg max-w-none max-w-5xl mx-auto">
               <p className="text-black text-base md:text-lg leading-relaxed mb-6">
-                CRD Real Estate & Development was founded on the principle that real estate success requires more than market knowledge — it requires genuine investment in the communities we serve. Built by professionals who live and work in Northwest Arkansas, CRD brings deep local roots and a long-term perspective to every client relationship.
+                CRD Real Estate & Development was founded on the principle that real estate success requires more than market knowledge, it requires genuine investment in the communities we serve. Built by professionals who live and work in Northwest Arkansas, CRD brings deep local roots and a long-term perspective to every client relationship.
               </p>
               <p className="text-black text-base md:text-lg leading-relaxed mb-6">
                 Since 2018, our firm has been an established comprehensive real estate practice serving commercial buyers and sellers, tenants, property owners, and development partners across the region. Our expansion has been driven by client needs and market opportunities, always grounded in our core commitment to strategic guidance and ownership-level expertise. As we've grown in the markets we serve, our company has evolved into a true full-service brokerage, offering residential buying, selling, and investment services led by long-standing leaders with deep expertise in the Northwest Arkansas residential market.
@@ -117,10 +98,10 @@ export default function AboutPage() {
         </section>
 
         {/* Our Impact Section */}
-        <section className="py-16 md:py-20 bg-gray-50">
+        <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
           <div className="container mx-auto px-6 max-w-6xl">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-8">
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-6 sm:mb-8">
                 Our Impact
               </h2>
               {/* Divider with red accent */}
@@ -136,113 +117,41 @@ export default function AboutPage() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-              <div className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-8 md:p-10 relative overflow-hidden cursor-pointer hover:scale-[1.02]">
-                {/* Hover effect background */}
-                <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
-                
-                {/* Corner accents with red */}
-                <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                
-                {/* Red accent line on hover */}
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
-                
-                <div className="relative z-10">
-                  {/* Divider with red accent */}
-                  <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
-                  </div>
-                  <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-black mb-4 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Community Development
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
-                    CRD has played an active role in Northwest Arkansas's growth, particularly in Downtown Rogers and other evolving districts. Our team has supported adaptive reuse conversions, multi-tenant mixed-use redevelopments, and ground-up housing projects that contribute to the region's vitality and long-term value.
-                  </p>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
+              <div className="group bg-white rounded-2xl shadow-md hover:shadow-[0_0_30px_rgba(185,28,28,0.4)] transition-all duration-500 p-6 sm:p-8 md:p-10 relative">
+                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-black mb-3 sm:mb-4">
+                  Community Development
+                </h3>
+                <p className="text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
+                  CRD has played an active role in Northwest Arkansas's growth, particularly in Downtown Rogers and other evolving districts. Our team has supported adaptive reuse conversions, multi-tenant mixed-use redevelopments, and ground-up housing projects that contribute to the region's vitality and long-term value.
+                </p>
               </div>
               
-              <div className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-8 md:p-10 relative overflow-hidden cursor-pointer hover:scale-[1.02]">
-                {/* Hover effect background */}
-                <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
-                
-                {/* Corner accents with red */}
-                <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                
-                {/* Red accent line on hover */}
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
-                
-                <div className="relative z-10">
-                  {/* Divider with red accent */}
-                  <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
-                  </div>
-                  <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-black mb-4 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Client Success
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
-                    From first-time homebuyers finding their perfect home to investors executing complex commercial transactions, CRD has guided countless clients through successful real estate decisions. Our focus on long-term value and strategic positioning has helped clients protect investments, reduce risk, and achieve their goals.
-                  </p>
-                </div>
+              <div className="group bg-white rounded-2xl shadow-md hover:shadow-[0_0_30px_rgba(185,28,28,0.4)] transition-all duration-500 p-8 md:p-10 relative">
+                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-black mb-3 sm:mb-4">
+                  Client Success
+                </h3>
+                <p className="text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
+                  From first-time homebuyers finding their perfect home to investors executing complex commercial transactions, CRD has guided countless clients through successful real estate decisions. Our focus on long-term value and strategic positioning has helped clients protect investments, reduce risk, and achieve their goals.
+                </p>
               </div>
               
-              <div className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-8 md:p-10 relative overflow-hidden cursor-pointer hover:scale-[1.02]">
-                {/* Hover effect background */}
-                <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
-                
-                {/* Corner accents with red */}
-                <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                
-                {/* Red accent line on hover */}
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
-                
-                <div className="relative z-10">
-                  {/* Divider with red accent */}
-                  <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
-                  </div>
-                  <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-black mb-4 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Market Expertise
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
-                    Through years of hands-on experience across commercial, residential, and development real estate, CRD has developed deep insight into Northwest Arkansas market dynamics. This knowledge informs every recommendation and helps clients make decisions aligned with both current conditions and future potential.
-                  </p>
-                </div>
+              <div className="group bg-white rounded-2xl shadow-md hover:shadow-[0_0_30px_rgba(185,28,28,0.4)] transition-all duration-500 p-8 md:p-10 relative">
+                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-black mb-3 sm:mb-4">
+                  Market Expertise
+                </h3>
+                <p className="text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
+                  Through years of hands-on experience across commercial, residential, and development real estate, CRD has developed deep insight into Northwest Arkansas market dynamics. This knowledge informs every recommendation and helps clients make decisions aligned with both current conditions and future potential.
+                </p>
               </div>
               
-              <div className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-8 md:p-10 relative overflow-hidden cursor-pointer hover:scale-[1.02]">
-                {/* Hover effect background */}
-                <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
-                
-                {/* Corner accents with red */}
-                <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
-                
-                {/* Red accent line on hover */}
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
-                
-                <div className="relative z-10">
-                  {/* Divider with red accent */}
-                  <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
-                  </div>
-                  <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-black mb-4 group-hover:text-brand-red-700 transition-colors duration-300">
-                    Strategic Partnerships
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
-                    CRD works alongside landowners, investors, developers, and business owners to bring clarity to complex decisions. Our collaborative approach and network of trusted partners across brokerage, development, construction, and advisory services enable comprehensive support for clients' diverse needs.
-                  </p>
-                </div>
+              <div className="group bg-white rounded-2xl shadow-md hover:shadow-[0_0_30px_rgba(185,28,28,0.4)] transition-all duration-500 p-8 md:p-10 relative">
+                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-black mb-3 sm:mb-4">
+                  Strategic Partnerships
+                </h3>
+                <p className="text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
+                  CRD works alongside landowners, investors, developers, and business owners to bring clarity to complex decisions. Our collaborative approach and network of trusted partners across brokerage, development, construction, and advisory services enable comprehensive support for clients' diverse needs.
+                </p>
               </div>
             </div>
           </div>
@@ -252,10 +161,10 @@ export default function AboutPage() {
         <ClientLogoBanner />
 
         {/* Our Approach Section */}
-        <section className="py-16 md:py-20">
+        <section className="py-12 sm:py-16 md:py-20">
           <div className="container mx-auto px-6 max-w-5xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-6 sm:mb-8">
                 Our Approach
               </h2>
               {/* Divider with red accent */}
@@ -338,10 +247,10 @@ export default function AboutPage() {
         </section>
 
         {/* Values Section */}
-        <section className="py-16 md:py-20 bg-gray-50">
+        <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
           <div className="container mx-auto px-6 max-w-4xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-6 sm:mb-8">
                 What We Stand For
               </h2>
               {/* Divider with red accent */}
@@ -430,6 +339,60 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* Final CTA Section */}
+        <section className="py-16 md:py-20">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center">
+              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+                Work With a Team That Knows Northwest Arkansas
+              </h2>
+              <p className="text-lg text-gray-700 mb-8 max-w-4xl mx-auto">
+                Whether you're buying, selling, leasing, investing, or planning a development, our team is ready to help you move forward with confidence.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Link 
+                  href="/contact" 
+                  className="btn-primary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm"
+                >
+                  Contact Us
+                </Link>
+                <Link 
+                  href="/team" 
+                  className="btn-secondary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm"
+                >
+                  Meet Our Team
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* Final CTA Section */}
+        <section className="py-12 sm:py-16 md:py-20">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-4 sm:mb-6">
+                Work With a Team That Knows Northwest Arkansas
+              </h2>
+              <p className="text-lg text-gray-700 mb-8 max-w-4xl mx-auto">
+                Whether you're buying, selling, leasing, investing, or planning a development, our team is ready to help you move forward with confidence.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Link 
+                  href="/contact" 
+                  className="btn-primary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm"
+                >
+                  Contact Us
+                </Link>
+                <Link 
+                  href="/team" 
+                  className="btn-secondary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm"
+                >
+                  Meet Our Team
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </>

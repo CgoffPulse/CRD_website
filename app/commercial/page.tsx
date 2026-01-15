@@ -64,17 +64,170 @@ export default function CommercialPage() {
   ];
 
   // NOTE: The Lease listings below are placeholder listings and will be replaced with live MLS or CMS-driven data in the future.
-  const leaseListings: any[] = [];
+  const leaseListings: any[] = [
+    {
+      id: "203-w-wood-st-unit-a",
+      title: "203 W Wood Street Unit A",
+      leaseRate: "$21/sqft • 1,250 sqft",
+      location: "Rogers, AR 72756",
+      imageSrc: "/images/Commerical Leases/203_Wood_St_Crossing_Downtown_Rogers_Commercial_proprty_For_Lease_Flyer.webp",
+      summary: "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. Suite A is 1,250 sf with a side garage roll up door, beautiful wood accents, industrial interior feel with a private bathroom and open floor plan. Perfect for Retail, Office, Bar or Restaurant.",
+      description: "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. Suite A is 1,250 sf with a side garage roll up door, beautiful wood accents, industrial interior feel with a private bathroom and open floor plan. Perfect for Retail, Office, Bar or Restaurant.",
+      bullets: [
+        "For Lease",
+        "Mixed Use Office",
+        "$21/sqft",
+        "1,250 sqft",
+        "0.23 Acres",
+        "Side garage roll up door",
+        "Wood accents",
+        "Industrial interior feel",
+        "Private bathroom",
+        "Open floor plan",
+        "Perfect for Retail, Office, Bar or Restaurant",
+        "Adjacent to Railyard Loop of Greenway Trail System",
+        "MLS#: 1332308"
+      ],
+      href: "/commercial/lease/203-w-wood-st-unit-a",
+      mlsNumber: "1332308",
+      galleryImages: [
+        "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Exterior.webp",
+        "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Interior.webp",
+        "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Interior_2.webp",
+        "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Interior_Road_View.webp",
+        "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Unit_A_End_Cap.webp"
+      ],
+      propertyDetails: {
+        construction: {
+          homeType: "Mixed Use Office",
+          propertySubtype: "Retail"
+        },
+        lot: {
+          size: "0.23 Acres",
+          features: "Central Business District, City Lot, Neighborhood"
+        },
+        location: {
+          region: "Rogers"
+        },
+        details: {
+          subdivision: "Wood Stroud Add Rogers"
+        }
+      },
+      pdfFlyer: "/203 W WOOD ST Flyer (Real Estate Flyer).pdf",
+      isLease: true
+    },
+    {
+      id: "203-w-wood-st-unit-b",
+      title: "203 W Wood Street Unit B",
+      leaseRate: "$21/sqft • 1,850 sqft",
+      location: "Rogers, AR 72756",
+      imageSrc: "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Exterior.webp",
+      summary: "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. Suite B is 1,850 sf that provides a large break area, beautiful details, industrial interior feel with a private bathroom and open floor plan. Perfect for Retail, Office, Bar or Restaurant.",
+      description: "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. Suite B is 1,850 sf that provides a large break area, beautiful details, industrial interior feel with a private bathroom and open floor plan. Perfect for Retail, Office, Bar or Restaurant.",
+      bullets: [
+        "For Lease",
+        "Mixed Use Office",
+        "$21/sqft",
+        "1,850 sqft",
+        "0.23 Acres",
+        "Large break area",
+        "Beautiful details",
+        "Industrial interior feel",
+        "Private bathroom",
+        "Open floor plan",
+        "Perfect for Retail, Office, Bar or Restaurant",
+        "Adjacent to Railyard Loop of Greenway Trail System",
+        "MLS#: 1332314"
+      ],
+      href: "/commercial/lease/203-w-wood-st-unit-b",
+      mlsNumber: "1332314",
+      galleryImages: [
+        "/images/Commerical Leases/203_Wood_St_Crossing_Downtown_Rogers_Commercial_proprty_For_Lease_Flyer.webp",
+        "/images/Commerical Leases/CRD_Commercial_listing_203_W_Wood_Street_B_Rogers_Arkansas_Interior.webp",
+        "/images/Commerical Leases/CRD_Commercial_listing_203_W_Wood_Street_B_Rogers_Arkansas_Kitchen.webp",
+        "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_B_Rogers_Arkansas_Office_Space.webp",
+        "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_B_Rogers_Arkansas_Office_Space_B.webp"
+      ],
+      propertyDetails: {
+        construction: {
+          homeType: "Mixed Use Office",
+          propertySubtype: "Retail"
+        },
+        lot: {
+          size: "0.23 Acres",
+          features: "Central Business District, City Lot, Neighborhood"
+        },
+        location: {
+          region: "Rogers"
+        },
+        details: {
+          subdivision: "Wood Stroud Add Rogers"
+        }
+      },
+      pdfFlyer: "/203 W WOOD ST Flyer (Real Estate Flyer).pdf",
+      isLease: true
+    },
+    {
+      id: "203-w-wood-st-unit-c",
+      title: "203 W Wood Street Unit C",
+      leaseRate: "$21/sqft • 1,500 sqft",
+      location: "Rogers, AR 72756",
+      imageSrc: "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_C_Rogers_Arkansas_72756_Interior.webp",
+      summary: "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. A former Hair Salon, Suite C is 1,500 sf is next to the trail, large windows with lots of natural light, industrial interior feel with a private bathroom with shower and open floor plan. Perfect for Retail, Office, Bar or Restaurant. See the attached flyer for additional leasing details and pictures.",
+      description: "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. A former Hair Salon, Suite C is 1,500 sf is next to the trail, large windows with lots of natural light, industrial interior feel with a private bathroom with shower and open floor plan. Perfect for Retail, Office, Bar or Restaurant. See the attached flyer for additional leasing details and pictures.",
+      bullets: [
+        "For Lease",
+        "Mixed Use Office",
+        "$21/sqft",
+        "1,500 sqft",
+        "0.23 Acres",
+        "Next to the trail",
+        "Large windows with lots of natural light",
+        "Industrial interior feel",
+        "Private bathroom with shower",
+        "Open floor plan",
+        "Perfect for Retail, Office, Bar or Restaurant",
+        "Adjacent to Railyard Loop of Greenway Trail System",
+        "MLS#: 1332341"
+      ],
+      href: "/commercial/lease/203-w-wood-st-unit-c",
+      mlsNumber: "1332341",
+      galleryImages: [
+        "/images/Commerical Leases/203_Wood_St_Crossing_Downtown_Rogers_Commercial_proprty_For_Lease_Flyer.webp",
+        "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_C_Rogers_Arkansas_72756_Interior.webp",
+        "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_C_Rogers_Arkansas_72756_Road_View.webp",
+        "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_C_Rogers_Arkansas_72756_Bathroom.webp"
+      ],
+      propertyDetails: {
+        construction: {
+          homeType: "Mixed Use Office",
+          propertySubtype: "Retail"
+        },
+        lot: {
+          size: "0.23 Acres",
+          features: "Central Business District, City Lot, Neighborhood"
+        },
+        location: {
+          region: "Rogers"
+        },
+        details: {
+          subdivision: "Wood Stroud Add Rogers"
+        }
+      },
+      pdfFlyer: "/203 W WOOD ST Flyer (Real Estate Flyer).pdf",
+      isLease: true
+    },
+  ];
 
 
   return (
     <>
       <Header />
-      <main className="pt-0 min-h-screen bg-white">
+      <main className="min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="relative w-full h-[60vh] min-h-[500px] md:h-[70vh] md:min-h-[600px] flex items-center justify-center overflow-hidden">
-          {/* Background Image */}
-          <div className="absolute inset-0 w-full h-full">
+        <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+          {/* Background Image - extends behind header */}
+          <div className="absolute inset-0 w-full h-full top-0">
             <Image
               src="/images/Rogers_Skyline.webp"
               alt="Rogers, Arkansas Skyline - Commercial Real Estate"
@@ -87,24 +240,24 @@ export default function CommercialPage() {
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
           
-          {/* Overlaid Content */}
-          <div className="relative z-10 container mx-auto px-6 max-w-6xl text-center">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 drop-shadow-lg leading-tight">
+          {/* Overlaid Content - starts below header */}
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl text-center pt-24 sm:pt-28 md:pt-32 pb-8 sm:pb-12">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-5 md:mb-6 lg:mb-8 drop-shadow-lg leading-tight px-2">
               Commercial Real Estate in Northwest Arkansas
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white max-w-5xl mx-auto mb-10 drop-shadow-md leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white max-w-5xl mx-auto mb-6 sm:mb-7 md:mb-8 lg:mb-10 drop-shadow-md leading-relaxed px-2">
               Strategic guidance for buying, leasing, and selling commercial property across Northwest Arkansas.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-2">
               <Link 
                 href="#buy-listings" 
-                className="bg-white text-black border-2 border-white hover:bg-gray-100 inline-flex items-center justify-center px-8 py-3 rounded-none text-sm font-semibold transition-colors"
+                className="bg-white text-black border-2 border-white hover:bg-gray-100 inline-flex items-center justify-center px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-none text-xs sm:text-sm font-semibold transition-colors min-h-[44px]"
               >
                 View Commercial Listings
               </Link>
               <Link 
                 href="/contact" 
-                className="bg-transparent text-white border-2 border-white hover:bg-white hover:text-black inline-flex items-center justify-center px-8 py-3 rounded-none text-sm font-semibold transition-colors"
+                className="bg-transparent text-white border-2 border-white hover:bg-white hover:text-black inline-flex items-center justify-center px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-none text-xs sm:text-sm font-semibold transition-colors min-h-[44px]"
               >
                 Talk With Our Team
               </Link>
@@ -113,8 +266,8 @@ export default function CommercialPage() {
         </section>
 
         {/* Intro Section */}
-        <section className="py-12 bg-gray-50">
-          <div className="container mx-auto px-6 max-w-6xl">
+        <section className="py-10 sm:py-12 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
             <div className="flex items-center justify-center mb-8">
               <div className="w-24 h-1 bg-black relative">
                 <div className="absolute inset-0 bg-brand-red-700 opacity-20"></div>
@@ -138,8 +291,8 @@ export default function CommercialPage() {
         <section className="py-16 md:py-20">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6">
-                Thinking About Selling Commercial Property?
+              <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-black mb-4 sm:mb-6">
+                Thinking About Buying, Selling, or Leasing Commercial Property?
               </h2>
               {/* Divider with red accent */}
               <div className="flex items-center justify-center mb-10">
@@ -154,38 +307,47 @@ export default function CommercialPage() {
                 </div>
               </div>
             </div>
-            <div className="prose prose-lg max-w-none mb-8">
-              <p className="text-black text-lg md:text-xl leading-relaxed mb-8">
-                Selling commercial real estate requires more than listing a property — it requires positioning, market insight, and a clear strategy. CRD works directly with property owners and landowners to evaluate opportunities, price assets accurately, and bring properties to market with intention.
+            <div className="prose prose-lg max-w-none mb-6 sm:mb-8">
+              <p className="text-black text-base sm:text-lg md:text-xl leading-relaxed mb-6 sm:mb-8">
+                Commercial real estate decisions require more than a transaction, they require context, positioning, and a clear understanding of market dynamics. CRD works alongside property owners, investors, buyers, and tenants to evaluate opportunities, align strategy, and move forward with confidence.
               </p>
-              <p className="text-black text-lg md:text-xl leading-relaxed mb-10">
-                Whether you're selling an income-producing property, vacant land, or a redevelopment opportunity, our team provides guidance grounded in market data, local demand, and real-world execution experience. Our goal is to help owners make informed decisions and achieve outcomes aligned with their financial and long-term objectives.
+              <p className="text-black text-base sm:text-lg md:text-xl leading-relaxed mb-6 sm:mb-10">
+                Whether you're acquiring a commercial asset, leasing space for your business, repositioning a property, or preparing to sell, our team provides guidance grounded in market data, local demand, and real-world execution experience. Our goal is to help clients make informed decisions that support both immediate needs and long-term objectives.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-5xl mx-auto">
-              <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-black flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span className="text-gray-700">Commercial property owners</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-black flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span className="text-gray-700">Landowners considering sale or redevelopment</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-black flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span className="text-gray-700">Owners evaluating timing and market conditions</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-black flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span className="text-gray-700">Investors repositioning or exiting assets</span>
+            <div className="mb-6 sm:mb-8 max-w-5xl mx-auto">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-black mb-4 sm:mb-6">Who this is for:</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-black flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm sm:text-base text-gray-700">Buyers evaluating commercial investment or owner-user opportunities</span>
+                </div>
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-black flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm sm:text-base text-gray-700">Property owners considering selling or repositioning assets</span>
+                </div>
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-black flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm sm:text-base text-gray-700">Landowners planning future development or redevelopment</span>
+                </div>
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-black flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm sm:text-base text-gray-700">Businesses seeking commercial space to lease</span>
+                </div>
+                <div className="flex items-start gap-2 sm:gap-3 md:col-span-2">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-black flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm sm:text-base text-gray-700">Investors adjusting or exiting positions</span>
+                </div>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -193,7 +355,7 @@ export default function CommercialPage() {
                 href="/contact" 
                 className="btn-primary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm"
               >
-                Discuss Selling Your Property
+                Discuss Your Project
               </Link>
               <Link 
                 href="/contact" 
@@ -206,10 +368,10 @@ export default function CommercialPage() {
         </section>
 
         {/* Why CRD Section */}
-        <section className="py-16 md:py-20 bg-gray-50">
+        <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-8">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6 sm:mb-8">
                 Why CRD
               </h2>
               {/* Divider with red accent */}
@@ -314,10 +476,10 @@ export default function CommercialPage() {
         <section className="py-16 md:py-20">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-black mb-4 sm:mb-6">
                 Let's Talk About Your Commercial Real Estate Goals
               </h2>
-              <p className="text-xl md:text-2xl text-gray-700 mb-10 max-w-4xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg md:text-2xl text-gray-700 mb-8 sm:mb-10 max-w-4xl mx-auto leading-relaxed px-2">
                 Whether you're buying, leasing, or selling, our team is ready to help you evaluate opportunities and move forward with confidence.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
