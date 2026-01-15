@@ -91,7 +91,7 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
         <div className="flex items-center justify-between p-6 border-b-4 border-black bg-gray-50 relative z-10">
           <button
             onClick={onClose}
-            className="flex items-center gap-2 text-black font-semibold hover:text-gray-700 transition-colors"
+            className="flex items-center gap-2 text-black font-semibold hover:text-gray-700 transition-colors cursor-pointer"
           >
             <svg
               className="w-5 h-5"
@@ -110,7 +110,7 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
           </button>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-black transition-colors"
+            className="text-gray-500 hover:text-black transition-colors cursor-pointer"
             aria-label="Close"
           >
             <svg
@@ -364,7 +364,7 @@ export default function CommercialListings({ buyListings, leaseListings }: Comme
   const ListingCard = ({ listing, isLease = false }: { listing: Listing; isLease?: boolean }) => (
     <button
       onClick={(e) => handleListingClick({ ...listing, isLease }, e)}
-      className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col h-full overflow-hidden relative text-left"
+      className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col h-full overflow-hidden relative text-left cursor-pointer"
     >
       {/* Subtle red accent line on hover */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-10"></div>

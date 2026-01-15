@@ -119,7 +119,7 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
         <div className="flex items-center justify-between p-6 border-b-4 border-black bg-gray-50 relative z-10">
           <button
             onClick={onClose}
-            className="flex items-center gap-2 text-black font-semibold hover:text-gray-700 transition-colors"
+            className="flex items-center gap-2 text-black font-semibold hover:text-gray-700 transition-colors cursor-pointer"
           >
             <svg
               className="w-5 h-5"
@@ -138,7 +138,7 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
           </button>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-black transition-colors"
+            className="text-gray-500 hover:text-black transition-colors cursor-pointer"
             aria-label="Close"
           >
             <svg
@@ -527,7 +527,14 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
                   </p>
                 )}
                 {listing.officePhone && (
-                  <p className="text-gray-700 mb-4">{listing.officePhone}</p>
+                  <p className="text-gray-700 mb-4">
+                    <a
+                      href={`tel:${listing.officePhone}`}
+                      className="text-gray-600 hover:text-black underline"
+                    >
+                      {listing.officePhone}
+                    </a>
+                  </p>
                 )}
                 {listing.agents && listing.agents.length > 0 && (
                   <div className="space-y-2">
@@ -545,7 +552,7 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
                         {agent.phone && (
                           <a
                             href={`tel:${agent.phone}`}
-                            className="text-gray-600 hover:text-black"
+                            className="text-gray-600 hover:text-black underline"
                           >
                             {agent.phone}
                           </a>
@@ -686,7 +693,7 @@ export default function ResidentialListings() {
       href: "/residential/listings/1326751",
       mlsNumber: "1326751",
       agents: [
-        { name: "Hannah Cicioni", email: "jgill@crdred.com" },
+        { name: "Hannah Cicioni", email: "hcicioni@crdred.com" },
         { name: "Rhonda Moore", phone: "479-530-0185" },
       ],
       office: "CRD Real Estate & Development",
@@ -770,7 +777,7 @@ export default function ResidentialListings() {
           <button
             key={listing.id}
             onClick={(e) => handleListingClick(listing, e)}
-            className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col h-full overflow-hidden text-left relative"
+            className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col h-full overflow-hidden text-left relative cursor-pointer"
           >
             {/* Corner accents with red and navy */}
             <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300 z-10"></div>

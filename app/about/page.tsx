@@ -107,7 +107,7 @@ export default function AboutPage() {
                 CRD Real Estate & Development was founded on the principle that real estate success requires more than market knowledge — it requires genuine investment in the communities we serve. Built by professionals who live and work in Northwest Arkansas, CRD brings deep local roots and a long-term perspective to every client relationship.
               </p>
               <p className="text-black text-base md:text-lg leading-relaxed mb-6">
-                Over the years, our team has grown from a small firm focused on residential representation to a comprehensive real estate practice serving commercial buyers and sellers, tenants, property owners, and development partners across the region. Our expansion has been driven by client needs and market opportunities, always grounded in our core commitment to strategic guidance and ownership-level expertise.
+                Since 2018, our firm has been an established comprehensive real estate practice serving commercial buyers and sellers, tenants, property owners, and development partners across the region. Our expansion has been driven by client needs and market opportunities, always grounded in our core commitment to strategic guidance and ownership-level expertise. As we've grown in the markets we serve, our company has evolved into a true full-service brokerage, offering residential buying, selling, and investment services led by long-standing leaders with deep expertise in the Northwest Arkansas residential market.
               </p>
               <p className="text-black text-base md:text-lg leading-relaxed">
                 Today, CRD operates from our headquarters in Downtown Rogers, where we've been actively involved in the area's revitalization and growth. Our team's hands-on experience in development, redevelopment, and adaptive reuse projects has positioned us as trusted advisors for clients seeking to invest in, develop, or reposition properties throughout Northwest Arkansas.
@@ -430,33 +430,6 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Final CTA Section */}
-        <section className="py-16 md:py-20">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
-                Work With a Team That Knows Northwest Arkansas
-              </h2>
-              <p className="text-lg text-gray-700 mb-8 max-w-4xl mx-auto">
-                Whether you're buying, selling, leasing, investing, or planning a development, our team is ready to help you move forward with confidence.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link 
-                  href="/contact" 
-                  className="btn-primary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm"
-                >
-                  Contact Us
-                </Link>
-                <Link 
-                  href="/team" 
-                  className="btn-secondary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm"
-                >
-                  Meet Our Team
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
       <Footer />
     </>

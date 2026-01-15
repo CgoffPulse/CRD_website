@@ -13,14 +13,8 @@ export default function Footer() {
             <div className="space-y-1.5 text-gray-400 text-xs md:text-sm">
               <p>
                 <span className="text-white font-semibold">Address:</span><br />
-                123 Main Street<br />
-                Downtown Rogers, AR 72756
-              </p>
-              <p>
-                <span className="text-white font-semibold">Phone:</span> <a href="tel:+1234567890" className="hover:text-white transition-colors">(123) 456-7890</a>
-              </p>
-              <p>
-                <span className="text-white font-semibold">Email:</span> <a href="mailto:info@crdrealestate.com" className="hover:text-white transition-colors">info@crdrealestate.com</a>
+                115 S 2nd St<br />
+                Rogers, AR 72756
               </p>
             </div>
           </div>

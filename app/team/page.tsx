@@ -74,6 +74,14 @@ export default function TeamPage() {
                   <p className="text-lg text-gray-700 mb-6 font-semibold">
                     Commercial Executive Broker / Owner
                   </p>
+                  <div className="text-sm text-gray-600 mb-6 space-y-1">
+                    <p>
+                      <a href="mailto:hcicioni@crdred.com" className="hover:text-black transition-colors underline">hcicioni@crdred.com</a>
+                    </p>
+                    <p>
+                      <a href="tel:479-270-4982" className="hover:text-black transition-colors underline">479-270-4982</a>
+                    </p>
+                  </div>
                   <div className="prose prose-base max-w-none">
                     <p className="text-gray-700 leading-relaxed">
                       With over 12 years of experience in commercial real estate and development, Hannah Cicioni is a seasoned leader in the Northwest Arkansas real estate landscape. As Co-Owner and Commercial Executive Broker of CRD Real Estate & Development, she has helped guide projects that support growth and revitalization across the region's downtown districts. Hannah's work spans adaptive re-use conversions for hospitality-driven developments, multi-tenant mixed-use redevelopments, and ground-up housing projects. She brings a strategic, execution-minded approach that helps investors, owners, and developers make confident decisions backed by real-world development experience. Deeply invested in the community—especially Downtown Rogers—Hannah is actively involved through multiple businesses and development projects, with a focus on long-term value and responsible growth.
@@ -100,6 +108,14 @@ export default function TeamPage() {
                   <p className="text-lg text-gray-700 mb-6 font-semibold">
                     Principal Broker / Owner
                   </p>
+                  <div className="text-sm text-gray-600 mb-6 space-y-1">
+                    <p>
+                      <a href="mailto:jgill@crdred.com" className="hover:text-black transition-colors underline">jgill@crdred.com</a>
+                    </p>
+                    <p>
+                      <a href="tel:479-445-4501" className="hover:text-black transition-colors underline">479-445-4501</a>
+                    </p>
+                  </div>
                   <div className="prose prose-base max-w-none">
                     <p className="text-gray-700 leading-relaxed">
                       Jenna Gill is Co-Owner and Principal Broker of CRD Real Estate & Development, bringing more than eight years of experience across residential and commercial real estate. A Northwest Arkansas resident for over 23 years, Jenna offers clients deep market knowledge paired with a calm, strategic approach to complex decisions. Before entering real estate, Jenna spent years as a high school teacher—an experience that shaped her patient communication style, attention to detail, and ability to guide people through unfamiliar processes with confidence. She is well-versed in the financing side of real estate and is known for being a thoughtful listener and problem solver. Jenna remains actively involved in the community and is passionate about helping clients make informed, successful real estate decisions.
@@ -126,6 +142,14 @@ export default function TeamPage() {
                   <p className="text-lg text-gray-700 mb-6 font-semibold">
                     Executive Broker
                   </p>
+                  <div className="text-sm text-gray-600 mb-6 space-y-1">
+                    <p>
+                      <a href="mailto:rhondamooresellsnwa@gmail.com" className="hover:text-black transition-colors underline">rhondamooresellsnwa@gmail.com</a>
+                    </p>
+                    <p>
+                      <a href="tel:479-530-0185" className="hover:text-black transition-colors underline">479-530-0185</a>
+                    </p>
+                  </div>
                   <div className="prose prose-base max-w-none">
                     <p className="text-gray-700 leading-relaxed">
                       As a seventh-generation Arkansan, Rhonda Moore brings deep local knowledge, heritage, and dedication to every client relationship. Known for her exceptional communication skills and steady negotiating presence, Rhonda is both a trusted advisor and a relentless advocate who makes clients feel understood and supported throughout the process. Rhonda believes successful outcomes begin with truly understanding her clients—their goals, concerns, and long-term plans. From start to finish and beyond, she works diligently to anticipate needs, manage details, and make the experience as smooth and stress-free as possible. Clients often describe her as both warm and formidable—bringing heart, clarity, and strength to every transaction, no matter how large or complex.
@@ -152,9 +176,51 @@ export default function TeamPage() {
                   <p className="text-lg text-gray-700 mb-6 font-semibold">
                     Brokerage Associate
                   </p>
+                  <div className="text-sm text-gray-600 mb-6 space-y-1">
+                    <p>
+                      <a href="mailto:mteague@crdred.com" className="hover:text-black transition-colors underline">mteague@crdred.com</a>
+                    </p>
+                    <p>
+                      <a href="tel:479-466-3000" className="hover:text-black transition-colors underline">479-466-3000</a>
+                    </p>
+                  </div>
                   <div className="prose prose-base max-w-none">
                     <p className="text-gray-700 leading-relaxed">
                       Max Teague is a native Arkansan with two decades of direct sales experience in the construction industry and has been a Realtor since 2013. He specializes in commercial and land development sales, while also supporting clients with residential acquisitions and sales when needs overlap. A sharpened negotiator, people-connector, and fierce advocate for his clients, Max brings clear communication and steady leadership to help clients move quickly and confidently in competitive situations. Outside of real estate, Max's greatest joy is being a father and raising his three boys.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Megan Gage */}
+              <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+                <div className="flex-shrink-0 w-full md:w-80">
+                  <Image
+                    src="/images/team/Max_teague_Realestate.webp"
+                    alt="Megan Gage"
+                    width={320}
+                    height={320}
+                    className="w-full rounded-sm object-cover"
+                  />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
+                    Megan Gage
+                  </h2>
+                  <p className="text-lg text-gray-700 mb-6 font-semibold">
+                    Brokerage Associate
+                  </p>
+                  <div className="text-sm text-gray-600 mb-6 space-y-1">
+                    <p>
+                      <a href="mailto:megan.gage29@gmail.com" className="hover:text-black transition-colors underline">megan.gage29@gmail.com</a>
+                    </p>
+                    <p>
+                      <a href="tel:479-601-2211" className="hover:text-black transition-colors underline">479-601-2211</a>
+                    </p>
+                  </div>
+                  <div className="prose prose-base max-w-none">
+                    <p className="text-gray-700 leading-relaxed">
+                      Megan Gage is a Brokerage Associate at CRD Real Estate & Development, bringing dedication and expertise to help clients navigate their real estate needs across Northwest Arkansas.
                     </p>
                   </div>
                 </div>

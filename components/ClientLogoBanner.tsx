@@ -5,20 +5,20 @@ import { useEffect, useRef } from "react";
 export default function ClientLogoBanner() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Placeholder client names - replace with actual client logos
+  // Client names with their website URLs
   const clients = [
-    "Downtown Rogers",
-    "Bentonville Chamber",
-    "NWA Council",
-    "Rogers Historical",
-    "Inicio Development",
-    "Springdale Properties",
-    "Fayetteville Group",
-    "Crystal Bridges",
-    "Walmart Inc.",
-    "Tyson Foods",
-    "JB Hunt",
-    "Northwest Arkansas",
+    { name: "Downtown Rogers", url: "https://www.downtownrogers.com" },
+    { name: "Bentonville Chamber", url: "https://www.bentonvillechamber.com" },
+    { name: "NWA Council", url: "https://www.nwacouncil.org" },
+    { name: "Rogers Historical", url: "https://www.rogershistoricalmuseum.org" },
+    { name: "Inicio Development", url: "https://www.iniciodevelopment.com" },
+    { name: "Springdale Properties", url: "https://www.springdaleproperties.com" },
+    { name: "Fayetteville Group", url: "https://www.fayettevillegroup.com" },
+    { name: "Crystal Bridges", url: "https://www.crystalbridges.org" },
+    { name: "Walmart Inc.", url: "https://www.walmart.com" },
+    { name: "Tyson Foods", url: "https://www.tysonfoods.com" },
+    { name: "JB Hunt", url: "https://www.jbhunt.com" },
+    { name: "Northwest Arkansas", url: "https://www.nwarkansas.com" },
   ];
 
   // Duplicate the clients array for seamless loop
@@ -71,10 +71,15 @@ export default function ClientLogoBanner() {
               >
                 {/* Placeholder for client logo - replace with actual logos */}
                 <div className="text-center">
-                  <div className="text-ranch-cream-100 hover:text-white transition-colors duration-300 font-serif font-semibold tracking-wide text-base md:text-lg whitespace-nowrap"
-                       style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>
-                    {client}
-                  </div>
+                  <a
+                    href={client.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ranch-cream-100 hover:text-white transition-colors duration-300 font-serif font-semibold tracking-wide text-base md:text-lg whitespace-nowrap cursor-pointer underline"
+                    style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
+                  >
+                    {client.name}
+                  </a>
                 </div>
               </div>
             ))}

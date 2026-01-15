@@ -1,0 +1,11 @@
+{
+  "enabled": false,
+  "type": "single",
+  "images": [],
+  "pastPromos": [],
+  "linkUrl": null,
+  "linkText": null,
+  "popupBgColor": "#FFFFFF",
+  "buttonColor": "#000000",
+  "forceGoLive": false
+}

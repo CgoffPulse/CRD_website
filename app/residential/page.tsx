@@ -309,7 +309,7 @@ export default function ResidentialPage() {
                   View Listings
                 </Link>
                 <Link 
-                  href="/contact" 
+                  href="mailto:jgill@crdred.com,rhondamooresellsnwa@gmail.com?subject=Residential Real Estate Inquiry" 
                   className="btn-secondary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm"
                 >
                   Contact Us
