@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useActionState } from 'react';
+import { useActionState, useOptimistic } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useDropzone } from 'react-dropzone';
 import { createCommercialListing } from '../actions/commercialListings';
@@ -11,11 +11,18 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
+import { PropertyDetailsForm } from '../components/PropertyDetailsForm';
 
 type UploadState = {
   success?: boolean;
   error?: string;
   listingId?: string;
+};
+
+type OptimisticListing = {
+  id: string;
+  title: string;
+  mode: 'Buy' | 'Lease';
 };
 
 function SubmitButton() {
@@ -33,6 +40,15 @@ export function CommercialListingUploadForm() {
     createCommercialListing,
     {}
   );
+  const [optimisticListings, updateOptimisticListings] = useOptimistic<
+    OptimisticListing[],
+    { type: 'add'; listing: OptimisticListing } | { type: 'clear' }
+  >([], (current, action) => {
+    if (action.type === 'clear') {
+      return [];
+    }
+    return [...current, action.listing];
+  });
   const [isLease, setIsLease] = useState(false);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
@@ -87,9 +103,10 @@ export function CommercialListingUploadForm() {
       setGalleryPreviews([]);
       setBullets(['']);
       setIsLease(false);
+      updateOptimisticListings({ type: 'clear' });
       router.refresh();
     }
-  }, [state, router]);
+  }, [state, router, updateOptimisticListings]);
 
   const addBullet = () => {
     setBullets([...bullets, '']);
@@ -114,9 +131,31 @@ export function CommercialListingUploadForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {optimisticListings.length > 0 && (
+          <div className="mb-6 rounded border border-gray-200 bg-gray-50 p-4">
+            <p className="text-sm font-semibold text-black mb-2">Pending uploads</p>
+            <ul className="space-y-1 text-sm text-gray-700">
+              {optimisticListings.map((listing) => (
+                <li key={listing.id} className="flex items-center justify-between">
+                  <span className="font-medium text-black">{listing.title}</span>
+                  <span className="text-gray-600">{listing.mode}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <form
           ref={formRef}
           action={async (formData: FormData) => {
+            const title = (formData.get('title') as string) || 'New Listing';
+            updateOptimisticListings({
+              type: 'add',
+              listing: {
+                id: String(Date.now()),
+                title,
+                mode: isLease ? 'Lease' : 'Buy',
+              },
+            });
             formData.set('isLease', isLease.toString());
             formData.set('bullets', JSON.stringify(bullets.filter((b) => b.trim())));
             await formAction(formData);
@@ -175,11 +214,6 @@ export function CommercialListingUploadForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="summary">Summary</Label>
-            <Textarea id="summary" name="summary" rows={3} className="bg-background text-foreground" />
-          </div>
-
-          <div className="space-y-2">
             <Label htmlFor="mlsNumber">MLS Number</Label>
             <Input id="mlsNumber" name="mlsNumber" className="bg-background text-foreground" />
           </div>
@@ -187,7 +221,7 @@ export function CommercialListingUploadForm() {
           <div className="space-y-2">
             <Label>Bullets</Label>
             {bullets.map((bullet, index) => (
-              <div key={index} className="flex gap-2">
+              <div key={`${index}-${bullet}`} className="flex gap-2">
                 <Input
                   value={bullet}
                   onChange={(e) => updateBullet(index, e.target.value)}
@@ -241,25 +275,13 @@ export function CommercialListingUploadForm() {
             {galleryPreviews.length > 0 && (
               <div className="grid grid-cols-3 gap-2 mt-2">
                 {galleryPreviews.map((preview, index) => (
-                  <img key={index} src={preview} alt={`Preview ${index + 1}`} className="rounded" />
+                  <img key={preview} src={preview} alt={`Preview ${index + 1}`} className="rounded" />
                 ))}
               </div>
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="propertyDetails">Property Details (JSON)</Label>
-            <Textarea
-              id="propertyDetails"
-              name="propertyDetails"
-              rows={10}
-              placeholder='{"lot": {"size": "6,969.6 Square Feet"}, "property": {"fencing": "Partial"}}'
-              className="bg-background text-foreground font-mono text-sm"
-            />
-            <p className="text-xs text-muted-foreground">
-              Enter property details as JSON. Leave empty if not needed.
-            </p>
-          </div>
+          <PropertyDetailsForm type="commercial" />
 
           {state?.error && (
             <p className="text-sm text-destructive font-medium">{state.error}</p>

@@ -18,6 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { PropertyDetailsForm } from '../components/PropertyDetailsForm';
 import type { CommercialListing } from '../types/listings';
 
 interface CommercialListingEditFormProps {
@@ -135,7 +136,6 @@ export function CommercialListingEditForm({
             formData.set('id', listing.id);
             formData.set('isLease', isLease.toString());
             formData.set('bullets', JSON.stringify(bullets.filter((b) => b.trim())));
-            formData.set('propertyDetails', JSON.stringify(listing.propertyDetails || {}));
             await formAction(formData);
           }}
           className="space-y-6"
@@ -189,11 +189,6 @@ export function CommercialListingEditForm({
           <div className="space-y-2">
             <Label htmlFor="edit-description">Description</Label>
             <Textarea id="edit-description" name="description" rows={6} defaultValue={listing.description || ''} className="bg-background text-foreground" />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="edit-summary">Summary</Label>
-            <Textarea id="edit-summary" name="summary" rows={3} defaultValue={listing.summary || ''} className="bg-background text-foreground" />
           </div>
 
           <div className="space-y-2">
@@ -264,16 +259,7 @@ export function CommercialListingEditForm({
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-propertyDetails">Property Details (JSON)</Label>
-            <Textarea
-              id="edit-propertyDetails"
-              name="propertyDetails"
-              rows={10}
-              defaultValue={JSON.stringify(listing.propertyDetails || {}, null, 2)}
-              className="bg-background text-foreground font-mono text-sm"
-            />
-          </div>
+          <PropertyDetailsForm type="commercial" defaultValue={listing.propertyDetails} />
 
           {state?.error && (
             <p className="text-sm text-destructive font-medium">{state.error}</p>

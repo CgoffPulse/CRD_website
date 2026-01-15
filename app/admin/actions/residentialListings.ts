@@ -2,7 +2,7 @@
 
 import { put, del } from '@vercel/blob';
 import { cookies } from 'next/headers';
-import { unstable_noStore } from 'next/cache';
+import { unstable_cache, revalidatePath, revalidateTag, unstable_noStore } from 'next/cache';
 import { z } from 'zod';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
@@ -16,9 +16,12 @@ const RESIDENTIAL_LISTINGS_BLOB_PATH = process.env.CMS_RESIDENTIAL_LISTINGS_BLOB
 export async function verifyAuth(): Promise<boolean> {
   const cookieStore = await cookies();
   const authCookie = cookieStore.get('cms-auth');
-  const expectedPassword = process.env.CMS_PASSWORD;
+  const expectedPassword = process.env.CMS_PASSWORD?.trim();
 
-  if (!expectedPassword) {
+  if (!expectedPassword || expectedPassword.length === 0) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('CMS_PASSWORD is not set in environment variables');
+    }
     return false;
   }
 
@@ -26,20 +29,26 @@ export async function verifyAuth(): Promise<boolean> {
     return false;
   }
 
-  return authCookie.value === expectedPassword;
+  // Simple comparison - in production, use proper hashing
+  return authCookie.value.trim() === expectedPassword;
 }
 
 export async function login(password: string): Promise<{ success: boolean; error?: string }> {
-  const expectedPassword = process.env.CMS_PASSWORD;
+  // Prevent caching to ensure fresh env var access
+  unstable_noStore();
+  
+  const expectedPassword = process.env.CMS_PASSWORD?.trim();
 
-  if (!expectedPassword) {
+  if (!expectedPassword || expectedPassword.length === 0) {
+    // Log in production to help debug (without exposing the actual value)
+    console.error('[CMS Auth] CMS_PASSWORD is not set or is empty. Env var exists:', !!process.env.CMS_PASSWORD);
     return {
       success: false,
-      error: 'CMS password not configured',
+      error: 'CMS password not configured. Please set CMS_PASSWORD in your environment variables and redeploy.',
     };
   }
 
-  if (password !== expectedPassword) {
+  if (password.trim() !== expectedPassword) {
     return {
       success: false,
       error: 'Invalid password',
@@ -65,51 +74,54 @@ export async function logout(): Promise<void> {
 }
 
 // Read listings from JSON file or Blob Storage
-export async function getResidentialListings(): Promise<ResidentialListing[]> {
-  unstable_noStore();
-  
+export const getResidentialListings = unstable_cache(async (): Promise<ResidentialListing[]> => {
   if (process.env.NODE_ENV === 'production' && process.env.BLOB_READ_WRITE_TOKEN) {
-    let blobListings: ResidentialListing[] = [];
-    let fileListings: ResidentialListing[] = [];
-    
-    try {
-      const { list } = await import('@vercel/blob');
-      const blobs = await list({
-        prefix: RESIDENTIAL_LISTINGS_BLOB_PATH,
-        token: process.env.BLOB_READ_WRITE_TOKEN,
-      });
-      
-      if (blobs.blobs.length > 0) {
-        const blob = blobs.blobs[0];
-        const response = await fetch(blob.url);
-        const fileContents = await response.text();
-        blobListings = JSON.parse(fileContents) as ResidentialListing[];
+    const blobPromise = (async () => {
+      try {
+        const { list } = await import('@vercel/blob');
+        const blobs = await list({
+          prefix: RESIDENTIAL_LISTINGS_BLOB_PATH,
+          token: process.env.BLOB_READ_WRITE_TOKEN,
+        });
+
+        if (blobs.blobs.length > 0) {
+          const blob = blobs.blobs[0];
+          const response = await fetch(blob.url);
+          const fileContents = await response.text();
+          return JSON.parse(fileContents) as ResidentialListing[];
+        }
+      } catch (error) {
+        console.error('Error reading residential listings from blob:', error);
       }
-    } catch (error) {
-      console.error('Error reading residential listings from blob:', error);
-    }
-    
-    try {
-      const fileContents = await readFile(RESIDENTIAL_LISTINGS_FILE_PATH, 'utf-8');
-      fileListings = JSON.parse(fileContents) as ResidentialListing[];
-    } catch (fileError) {
-      if (!(fileError instanceof Error && 'code' in fileError && fileError.code === 'ENOENT')) {
-        console.error('Error reading residential listings from file:', fileError);
+      return [];
+    })();
+
+    const filePromise = (async () => {
+      try {
+        const fileContents = await readFile(RESIDENTIAL_LISTINGS_FILE_PATH, 'utf-8');
+        return JSON.parse(fileContents) as ResidentialListing[];
+      } catch (fileError) {
+        if (!(fileError instanceof Error && 'code' in fileError && fileError.code === 'ENOENT')) {
+          console.error('Error reading residential listings from file:', fileError);
+        }
       }
-    }
-    
+      return [];
+    })();
+
+    const [blobListings, fileListings] = await Promise.all([blobPromise, filePromise]);
+
     const allListingsMap = new Map<string, ResidentialListing>();
-    
+
     for (const listing of fileListings) {
       allListingsMap.set(listing.id, listing);
     }
-    
+
     for (const listing of blobListings) {
       allListingsMap.set(listing.id, listing);
     }
-    
+
     const mergedListings = Array.from(allListingsMap.values());
-    
+
     if (mergedListings.length > 0) {
       if (blobListings.length === 0 || mergedListings.length > blobListings.length) {
         try {
@@ -119,10 +131,10 @@ export async function getResidentialListings(): Promise<ResidentialListing[]> {
         }
       }
     }
-    
+
     return mergedListings;
   }
-  
+
   try {
     const fileContents = await readFile(RESIDENTIAL_LISTINGS_FILE_PATH, 'utf-8');
     const listings = JSON.parse(fileContents) as ResidentialListing[];
@@ -134,7 +146,7 @@ export async function getResidentialListings(): Promise<ResidentialListing[]> {
     console.error('Error reading residential listings:', error);
     return [];
   }
-}
+}, ['residential-listings'], { tags: ['residential-listings'], revalidate: 60 });
 
 async function saveResidentialListings(listings: ResidentialListing[]): Promise<void> {
   const listingsJson = JSON.stringify(listings, null, 2);
@@ -188,7 +200,6 @@ export async function createResidentialListing(
     const price = formData.get('price') as string;
     const location = formData.get('location') as string;
     const description = formData.get('description') as string || '';
-    const summary = formData.get('summary') as string || '';
     const mlsNumber = formData.get('mlsNumber') as string || '';
     const office = formData.get('office') as string || '';
     const officePhone = formData.get('officePhone') as string || '';
@@ -287,7 +298,6 @@ export async function createResidentialListing(
       location,
       imageSrc,
       description: description || undefined,
-      summary: summary || undefined,
       bullets,
       href: `/residential/listings/${id}`,
       mlsNumber: mlsNumber || undefined,
@@ -300,6 +310,8 @@ export async function createResidentialListing(
 
     listings.push(newListing);
     await saveResidentialListings(listings);
+    revalidatePath('/residential');
+    revalidateTag('residential-listings', 'max');
 
     return {
       success: true,
@@ -351,7 +363,6 @@ export async function updateResidentialListing(
     const price = formData.get('price') as string;
     const location = formData.get('location') as string;
     const description = formData.get('description') as string || '';
-    const summary = formData.get('summary') as string || '';
     const mlsNumber = formData.get('mlsNumber') as string || '';
     const office = formData.get('office') as string || '';
     const officePhone = formData.get('officePhone') as string || '';
@@ -441,7 +452,6 @@ export async function updateResidentialListing(
       location,
       imageSrc,
       description: description || undefined,
-      summary: summary || undefined,
       bullets,
       mlsNumber: mlsNumber || undefined,
       agents: agents.length > 0 ? agents : undefined,
@@ -452,6 +462,8 @@ export async function updateResidentialListing(
     };
 
     await saveResidentialListings(listings);
+    revalidatePath('/residential');
+    revalidateTag('residential-listings', 'max');
 
     return {
       success: true,
@@ -514,6 +526,8 @@ export async function deleteResidentialListing(id: string): Promise<{ success: b
 
     listings.splice(listingIndex, 1);
     await saveResidentialListings(listings);
+    revalidatePath('/residential');
+    revalidateTag('residential-listings', 'max');
 
     return {
       success: true,
@@ -523,6 +537,99 @@ export async function deleteResidentialListing(id: string): Promise<{ success: b
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to delete listing',
+    };
+  }
+}
+
+// Import residential listings from JSON (dev tool)
+export async function importResidentialListingsFromJson(
+  prevState: { success?: boolean; error?: string; importedCount?: number },
+  formData: FormData
+): Promise<{ success?: boolean; error?: string; importedCount?: number }> {
+  const isAuthenticated = await verifyAuth();
+  if (!isAuthenticated) {
+    return {
+      success: false,
+      error: 'Unauthorized. Please log in.',
+      importedCount: 0,
+    };
+  }
+
+  try {
+    const jsonData = formData.get('jsonData') as string;
+    if (!jsonData || !jsonData.trim()) {
+      return {
+        success: false,
+        error: 'JSON data is required',
+        importedCount: 0,
+      };
+    }
+
+    let importedListings: ResidentialListing[];
+    try {
+      importedListings = JSON.parse(jsonData) as ResidentialListing[];
+      if (!Array.isArray(importedListings)) {
+        return {
+          success: false,
+          error: 'JSON must be an array of listings',
+          importedCount: 0,
+        };
+      }
+    } catch (parseError) {
+      return {
+        success: false,
+        error: `Invalid JSON: ${parseError instanceof Error ? parseError.message : 'Unknown error'}`,
+        importedCount: 0,
+      };
+    }
+
+    // Validate required fields for each listing
+    for (const listing of importedListings) {
+      if (!listing.id || !listing.title || !listing.price || !listing.location) {
+        return {
+          success: false,
+          error: `Listing missing required fields (id, title, price, location). Found: ${JSON.stringify({
+            id: listing.id,
+            title: listing.title,
+            price: listing.price,
+            location: listing.location,
+          })}`,
+          importedCount: 0,
+        };
+      }
+    }
+
+    // Get existing listings
+    const existingListings = await getResidentialListings();
+    const existingIds = new Set(existingListings.map((l) => l.id));
+
+    // Filter out listings that already exist (by ID)
+    const newListings = importedListings.filter((listing) => !existingIds.has(listing.id));
+
+    if (newListings.length === 0) {
+      return {
+        success: false,
+        error: 'All listings already exist. No new listings to import.',
+        importedCount: 0,
+      };
+    }
+
+    // Add new listings
+    const updatedListings = [...existingListings, ...newListings];
+    await saveResidentialListings(updatedListings);
+    revalidatePath('/residential');
+    revalidateTag('residential-listings', 'max');
+
+    return {
+      success: true,
+      importedCount: newListings.length,
+    };
+  } catch (error) {
+    console.error('Error importing residential listings from JSON:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to import listings',
+      importedCount: 0,
     };
   }
 }

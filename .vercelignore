@@ -1,0 +1,11 @@
+# Exclude large media files from Vercel deployment
+# These are hosted on Vercel Blob Storage instead (see scripts/upload-videos.ts)
+public/images/*.MP4
+public/images/*.mp4
+public/*.pdf
+
+# Keep node_modules excluded (already handled by Vercel)
+node_modules
+
+# Exclude scripts directory from deployment
+scripts/

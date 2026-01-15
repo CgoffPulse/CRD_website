@@ -268,7 +268,7 @@ export function CurrentPromoSection({
                     asChild
                     className="cursor-pointer"
                   >
-                    <a href="/cms-portable/events">Manage Events</a>
+                    <a href="/events">Manage Events</a>
                   </Button>
                 </div>
 

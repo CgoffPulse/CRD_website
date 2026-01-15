@@ -1,57 +1,17 @@
+"use client";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
-
-export const metadata = {
-  title: "Our Team | CRD Real Estate & Development",
-  description: "Meet the professionals behind CRD Real Estate & Development.",
-};
+import TeamHero from "./TeamHero";
 
 export default function TeamPage() {
   return (
     <>
       <Header />
-      <main className="pt-32 min-h-screen bg-white">
-        {/* Hero Section */}
-        <section className="py-16 md:py-20">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <div className="text-center">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6 sm:mb-8">
-                Our Team
-              </h1>
-              <p className="text-base sm:text-lg md:text-xl text-gray-700 max-w-2xl mx-auto mb-8 sm:mb-12 px-2">
-                Local expertise. Strategic guidance. People you can trust with meaningful real estate decisions.
-              </p>
-              {/* Team Picture */}
-              <div className="w-full max-w-2xl mx-auto mb-12">
-                <Image
-                  src="/images/CRD_Team_Pic.webp"
-                  alt="CRD Real Estate & Development Team"
-                  width={800}
-                  height={600}
-                  className="w-full h-auto rounded-sm object-cover"
-                  priority
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Intro Section */}
-        <section className="py-10 bg-gray-50">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <div className="space-y-6">
-              <p className="text-black text-base leading-relaxed">
-                CRD Real Estate & Development is built around people who understand Northwest Arkansas — not just the market, but the communities, neighborhoods, and long-term implications behind every real estate decision. Our team brings deep local roots, professional experience across commercial, residential, and development real estate, and a shared commitment to guiding clients with clarity and care.
-              </p>
-              <p className="text-black text-base leading-relaxed">
-                We believe strong outcomes start with strong relationships. That's why clients work directly with experienced professionals who listen closely, communicate clearly, and stay engaged from first conversation through closing and beyond.
-              </p>
-            </div>
-          </div>
-        </section>
-
+      <TeamHero />
+      <main className="min-h-screen bg-white">
         {/* Leadership Section */}
         <section id="leadership" className="py-12 md:py-16">
           <div className="container mx-auto px-6 max-w-7xl">
@@ -128,7 +88,7 @@ export default function TeamPage() {
               <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
                 <div className="flex-shrink-0 w-full md:w-80">
                   <Image
-                    src="/images/team/Rhona_Moore_real_estate.webp"
+                    src="/images/team/Rhonda.JPG"
                     alt="Rhonda Moore"
                     width={320}
                     height={320}
@@ -196,7 +156,7 @@ export default function TeamPage() {
               <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
                 <div className="flex-shrink-0 w-full md:w-80">
                   <Image
-                    src="/images/team/Max_teague_Realestate.webp"
+                    src="/images/team/megan.JPEG"
                     alt="Megan Gage"
                     width={320}
                     height={320}
@@ -220,7 +180,7 @@ export default function TeamPage() {
                   </div>
                   <div className="prose prose-base max-w-none">
                     <p className="text-gray-700 leading-relaxed">
-                      Megan Gage is a Brokerage Associate at CRD Real Estate & Development, bringing dedication and expertise to help clients navigate their real estate needs across Northwest Arkansas.
+                      Megan Gage is a Brokerage Associate at CRD Real Estate & Development, bringing over a decade of experience in Northwest Arkansas and dedication to help clients navigate their real estate needs across the region.
                     </p>
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useOptimistic } from 'react';
 import { useRouter } from 'next/navigation';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
@@ -20,6 +20,14 @@ type PromoConfigState = {
   error?: string;
 };
 
+type OptimisticConfig = {
+  enabled: boolean;
+  linkUrl: string;
+  linkText: string;
+  popupBgColor: string;
+  buttonColor: string;
+};
+
 // React 19 pattern: useFormStatus in child component
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -37,6 +45,15 @@ export function PromoConfigForm({ config }: PromoConfigFormProps) {
     updatePromoPopupConfigAction,
     {}
   );
+  const [optimisticConfig, updateOptimisticConfig] = useOptimistic<
+    OptimisticConfig | null,
+    { type: 'set'; config: OptimisticConfig } | { type: 'clear' }
+  >(null, (current, action) => {
+    if (action.type === 'clear') {
+      return null;
+    }
+    return action.config;
+  });
   const [enabled, setEnabled] = useState(config.enabled);
   const [linkUrl, setLinkUrl] = useState(config.linkUrl || '');
   const [linkText, setLinkText] = useState(config.linkText || '');
@@ -45,11 +62,22 @@ export function PromoConfigForm({ config }: PromoConfigFormProps) {
 
   useEffect(() => {
     if (state?.success) {
+      updateOptimisticConfig({ type: 'clear' });
       router.refresh();
     }
-  }, [state, router]);
+  }, [state, router, updateOptimisticConfig]);
 
   const handleSubmit = async (formData: FormData) => {
+    updateOptimisticConfig({
+      type: 'set',
+      config: {
+        enabled,
+        linkUrl,
+        linkText,
+        popupBgColor,
+        buttonColor,
+      },
+    });
     formData.set('enabled', enabled.toString());
     if (linkUrl) {
       formData.set('linkUrl', linkUrl);
@@ -71,6 +99,22 @@ export function PromoConfigForm({ config }: PromoConfigFormProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {optimisticConfig && (
+          <div className="mb-6 rounded border border-gray-200 bg-gray-50 p-4">
+            <p className="text-sm font-semibold text-black mb-2">Pending configuration update</p>
+            <div className="text-sm text-gray-700 space-y-1">
+              <div>
+                <span className="font-medium text-black">Enabled:</span> {optimisticConfig.enabled ? 'Yes' : 'No'}
+              </div>
+              <div>
+                <span className="font-medium text-black">Link text:</span> {optimisticConfig.linkText || 'Not set'}
+              </div>
+              <div>
+                <span className="font-medium text-black">Link URL:</span> {optimisticConfig.linkUrl || 'Not set'}
+              </div>
+            </div>
+          </div>
+        )}
         <form ref={formRef} action={handleSubmit} className="space-y-4">
           <div className="flex items-center space-x-2">
             <input

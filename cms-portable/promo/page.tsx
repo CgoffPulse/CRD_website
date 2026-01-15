@@ -69,7 +69,7 @@ export default async function AdminPromoPage() {
           </div>
           <div className="flex gap-2">
             <Button variant="outline" asChild className="cursor-pointer">
-              <a href="/cms-portable/events">Events CMS</a>
+              <a href="/events">Events CMS</a>
             </Button>
             <form
               action={async () => {

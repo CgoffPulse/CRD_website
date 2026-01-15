@@ -3,12 +3,6 @@ import Image from "next/image";
 export default function AboutSection() {
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 w-64 h-64 border-2 border-black rounded-full"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 border-2 border-black rounded-full"></div>
-      </div>
-      
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
         {/* Logo - Larger Size */}
         <div className="flex flex-col items-center mb-10 sm:mb-16">

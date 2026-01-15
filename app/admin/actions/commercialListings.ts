@@ -2,7 +2,7 @@
 
 import { put, del } from '@vercel/blob';
 import { cookies } from 'next/headers';
-import { unstable_noStore } from 'next/cache';
+import { unstable_cache, revalidatePath, revalidateTag, unstable_noStore } from 'next/cache';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import sharp from 'sharp';
@@ -15,9 +15,12 @@ const COMMERCIAL_LISTINGS_BLOB_PATH = process.env.CMS_COMMERCIAL_LISTINGS_BLOB_P
 export async function verifyAuth(): Promise<boolean> {
   const cookieStore = await cookies();
   const authCookie = cookieStore.get('cms-auth');
-  const expectedPassword = process.env.CMS_PASSWORD;
+  const expectedPassword = process.env.CMS_PASSWORD?.trim();
 
-  if (!expectedPassword) {
+  if (!expectedPassword || expectedPassword.length === 0) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('CMS_PASSWORD is not set in environment variables');
+    }
     return false;
   }
 
@@ -25,20 +28,26 @@ export async function verifyAuth(): Promise<boolean> {
     return false;
   }
 
-  return authCookie.value === expectedPassword;
+  // Simple comparison - in production, use proper hashing
+  return authCookie.value.trim() === expectedPassword;
 }
 
 export async function login(password: string): Promise<{ success: boolean; error?: string }> {
-  const expectedPassword = process.env.CMS_PASSWORD;
+  // Prevent caching to ensure fresh env var access
+  unstable_noStore();
+  
+  const expectedPassword = process.env.CMS_PASSWORD?.trim();
 
-  if (!expectedPassword) {
+  if (!expectedPassword || expectedPassword.length === 0) {
+    // Log in production to help debug (without exposing the actual value)
+    console.error('[CMS Auth] CMS_PASSWORD is not set or is empty. Env var exists:', !!process.env.CMS_PASSWORD);
     return {
       success: false,
-      error: 'CMS password not configured',
+      error: 'CMS password not configured. Please set CMS_PASSWORD in your environment variables and redeploy.',
     };
   }
 
-  if (password !== expectedPassword) {
+  if (password.trim() !== expectedPassword) {
     return {
       success: false,
       error: 'Invalid password',
@@ -64,51 +73,54 @@ export async function logout(): Promise<void> {
 }
 
 // Read listings from JSON file or Blob Storage
-export async function getCommercialListings(): Promise<CommercialListing[]> {
-  unstable_noStore();
-  
+export const getCommercialListings = unstable_cache(async (): Promise<CommercialListing[]> => {
   if (process.env.NODE_ENV === 'production' && process.env.BLOB_READ_WRITE_TOKEN) {
-    let blobListings: CommercialListing[] = [];
-    let fileListings: CommercialListing[] = [];
-    
-    try {
-      const { list } = await import('@vercel/blob');
-      const blobs = await list({
-        prefix: COMMERCIAL_LISTINGS_BLOB_PATH,
-        token: process.env.BLOB_READ_WRITE_TOKEN,
-      });
-      
-      if (blobs.blobs.length > 0) {
-        const blob = blobs.blobs[0];
-        const response = await fetch(blob.url);
-        const fileContents = await response.text();
-        blobListings = JSON.parse(fileContents) as CommercialListing[];
+    const blobPromise = (async () => {
+      try {
+        const { list } = await import('@vercel/blob');
+        const blobs = await list({
+          prefix: COMMERCIAL_LISTINGS_BLOB_PATH,
+          token: process.env.BLOB_READ_WRITE_TOKEN,
+        });
+
+        if (blobs.blobs.length > 0) {
+          const blob = blobs.blobs[0];
+          const response = await fetch(blob.url);
+          const fileContents = await response.text();
+          return JSON.parse(fileContents) as CommercialListing[];
+        }
+      } catch (error) {
+        console.error('Error reading commercial listings from blob:', error);
       }
-    } catch (error) {
-      console.error('Error reading commercial listings from blob:', error);
-    }
-    
-    try {
-      const fileContents = await readFile(COMMERCIAL_LISTINGS_FILE_PATH, 'utf-8');
-      fileListings = JSON.parse(fileContents) as CommercialListing[];
-    } catch (fileError) {
-      if (!(fileError instanceof Error && 'code' in fileError && fileError.code === 'ENOENT')) {
-        console.error('Error reading commercial listings from file:', fileError);
+      return [];
+    })();
+
+    const filePromise = (async () => {
+      try {
+        const fileContents = await readFile(COMMERCIAL_LISTINGS_FILE_PATH, 'utf-8');
+        return JSON.parse(fileContents) as CommercialListing[];
+      } catch (fileError) {
+        if (!(fileError instanceof Error && 'code' in fileError && fileError.code === 'ENOENT')) {
+          console.error('Error reading commercial listings from file:', fileError);
+        }
       }
-    }
-    
+      return [];
+    })();
+
+    const [blobListings, fileListings] = await Promise.all([blobPromise, filePromise]);
+
     const allListingsMap = new Map<string, CommercialListing>();
-    
+
     for (const listing of fileListings) {
       allListingsMap.set(listing.id, listing);
     }
-    
+
     for (const listing of blobListings) {
       allListingsMap.set(listing.id, listing);
     }
-    
+
     const mergedListings = Array.from(allListingsMap.values());
-    
+
     if (mergedListings.length > 0) {
       if (blobListings.length === 0 || mergedListings.length > blobListings.length) {
         try {
@@ -118,10 +130,10 @@ export async function getCommercialListings(): Promise<CommercialListing[]> {
         }
       }
     }
-    
+
     return mergedListings;
   }
-  
+
   try {
     const fileContents = await readFile(COMMERCIAL_LISTINGS_FILE_PATH, 'utf-8');
     const listings = JSON.parse(fileContents) as CommercialListing[];
@@ -133,7 +145,7 @@ export async function getCommercialListings(): Promise<CommercialListing[]> {
     console.error('Error reading commercial listings:', error);
     return [];
   }
-}
+}, ['commercial-listings'], { tags: ['commercial-listings'], revalidate: 60 });
 
 async function saveCommercialListings(listings: CommercialListing[]): Promise<void> {
   const listingsJson = JSON.stringify(listings, null, 2);
@@ -186,7 +198,6 @@ export async function createCommercialListing(
     const title = formData.get('title') as string;
     const location = formData.get('location') as string;
     const description = formData.get('description') as string || '';
-    const summary = formData.get('summary') as string || '';
     const mlsNumber = formData.get('mlsNumber') as string || '';
     const isLeaseStr = formData.get('isLease') as string;
     const isLease = isLeaseStr === 'true' || isLeaseStr === 'on';
@@ -292,7 +303,6 @@ export async function createCommercialListing(
       location,
       imageSrc,
       description: description || undefined,
-      summary: summary || undefined,
       bullets,
       href: `/commercial/${isLease ? 'lease' : 'buy'}/${id}`,
       mlsNumber: mlsNumber || undefined,
@@ -305,6 +315,8 @@ export async function createCommercialListing(
 
     listings.push(newListing);
     await saveCommercialListings(listings);
+    revalidatePath('/commercial');
+    revalidateTag('commercial-listings', 'max');
 
     return {
       success: true,
@@ -355,7 +367,6 @@ export async function updateCommercialListing(
     const title = formData.get('title') as string;
     const location = formData.get('location') as string;
     const description = formData.get('description') as string || '';
-    const summary = formData.get('summary') as string || '';
     const mlsNumber = formData.get('mlsNumber') as string || '';
     const isLeaseStr = formData.get('isLease') as string;
     const isLease = isLeaseStr === 'true' || isLeaseStr === 'on';
@@ -438,7 +449,6 @@ export async function updateCommercialListing(
       location,
       imageSrc,
       description: description || undefined,
-      summary: summary || undefined,
       bullets,
       mlsNumber: mlsNumber || undefined,
       galleryImages: galleryImageUrls.length > 0 ? galleryImageUrls : undefined,
@@ -450,6 +460,8 @@ export async function updateCommercialListing(
     };
 
     await saveCommercialListings(listings);
+    revalidatePath('/commercial');
+    revalidateTag('commercial-listings', 'max');
 
     return {
       success: true,
@@ -512,6 +524,8 @@ export async function deleteCommercialListing(id: string): Promise<{ success: bo
 
     listings.splice(listingIndex, 1);
     await saveCommercialListings(listings);
+    revalidatePath('/commercial');
+    revalidateTag('commercial-listings', 'max');
 
     return {
       success: true,
@@ -521,6 +535,110 @@ export async function deleteCommercialListing(id: string): Promise<{ success: bo
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to delete listing',
+    };
+  }
+}
+
+// Import commercial listings from JSON (dev tool)
+export async function importCommercialListingsFromJson(
+  prevState: { success?: boolean; error?: string; importedCount?: number },
+  formData: FormData
+): Promise<{ success?: boolean; error?: string; importedCount?: number }> {
+  const isAuthenticated = await verifyAuth();
+  if (!isAuthenticated) {
+    return {
+      success: false,
+      error: 'Unauthorized. Please log in.',
+      importedCount: 0,
+    };
+  }
+
+  try {
+    const jsonData = formData.get('jsonData') as string;
+    if (!jsonData || !jsonData.trim()) {
+      return {
+        success: false,
+        error: 'JSON data is required',
+        importedCount: 0,
+      };
+    }
+
+    let importedListings: CommercialListing[];
+    try {
+      importedListings = JSON.parse(jsonData) as CommercialListing[];
+      if (!Array.isArray(importedListings)) {
+        return {
+          success: false,
+          error: 'JSON must be an array of listings',
+          importedCount: 0,
+        };
+      }
+    } catch (parseError) {
+      return {
+        success: false,
+        error: `Invalid JSON: ${parseError instanceof Error ? parseError.message : 'Unknown error'}`,
+        importedCount: 0,
+      };
+    }
+
+    // Validate required fields for each listing
+    for (const listing of importedListings) {
+      if (!listing.id || !listing.title || !listing.location) {
+        return {
+          success: false,
+          error: `Listing missing required fields (id, title, location). Found: ${JSON.stringify({
+            id: listing.id,
+            title: listing.title,
+            location: listing.location,
+          })}`,
+          importedCount: 0,
+        };
+      }
+      // Commercial listings need either price or leaseRate
+      if (!listing.price && !listing.leaseRate) {
+        return {
+          success: false,
+          error: `Listing missing price or leaseRate. Found: ${JSON.stringify({
+            id: listing.id,
+            price: listing.price,
+            leaseRate: listing.leaseRate,
+          })}`,
+          importedCount: 0,
+        };
+      }
+    }
+
+    // Get existing listings
+    const existingListings = await getCommercialListings();
+    const existingIds = new Set(existingListings.map((l) => l.id));
+
+    // Filter out listings that already exist (by ID)
+    const newListings = importedListings.filter((listing) => !existingIds.has(listing.id));
+
+    if (newListings.length === 0) {
+      return {
+        success: false,
+        error: 'All listings already exist. No new listings to import.',
+        importedCount: 0,
+      };
+    }
+
+    // Add new listings
+    const updatedListings = [...existingListings, ...newListings];
+    await saveCommercialListings(updatedListings);
+    revalidatePath('/commercial');
+    revalidateTag('commercial-listings', 'max');
+
+    return {
+      success: true,
+      importedCount: newListings.length,
+    };
+  } catch (error) {
+    console.error('Error importing commercial listings from JSON:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to import listings',
+      importedCount: 0,
     };
   }
 }

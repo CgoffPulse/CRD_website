@@ -32,7 +32,7 @@ export default function CMSPortalPage() {
             </CardHeader>
             <CardContent>
               <Button asChild className="w-full cursor-pointer">
-                <a href="/cms-portable/events">Go to Events CMS</a>
+                <a href="/events">Go to Events CMS</a>
               </Button>
             </CardContent>
           </Card>

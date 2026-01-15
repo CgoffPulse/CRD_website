@@ -29,9 +29,12 @@ type EventActionState = {
 export async function verifyAuth(): Promise<boolean> {
   const cookieStore = await cookies();
   const authCookie = cookieStore.get('cms-auth');
-  const expectedPassword = process.env.CMS_PASSWORD;
+  const expectedPassword = process.env.CMS_PASSWORD?.trim();
 
-  if (!expectedPassword) {
+  if (!expectedPassword || expectedPassword.length === 0) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('CMS_PASSWORD is not set in environment variables');
+    }
     return false;
   }
 
@@ -40,7 +43,7 @@ export async function verifyAuth(): Promise<boolean> {
   }
 
   // Simple comparison - in production, use proper hashing
-  return authCookie.value === expectedPassword;
+  return authCookie.value.trim() === expectedPassword;
 }
 
 const loginSchema = z.object({
@@ -70,16 +73,21 @@ export async function loginAction(
 }
 
 export async function login(password: string): Promise<{ success: boolean; error?: string }> {
-  const expectedPassword = process.env.CMS_PASSWORD;
+  // Ensure we're not using cached values
+  unstable_noStore();
+  
+  const expectedPassword = process.env.CMS_PASSWORD?.trim();
 
-  if (!expectedPassword) {
+  if (!expectedPassword || expectedPassword.length === 0) {
+    // Log in production to help debug (without exposing the actual value)
+    console.error('[CMS Auth] CMS_PASSWORD is not set or is empty. Env var exists:', !!process.env.CMS_PASSWORD);
     return {
       success: false,
-      error: 'CMS password not configured',
+      error: 'CMS password not configured. Please set CMS_PASSWORD in your environment variables and redeploy.',
     };
   }
 
-  if (password !== expectedPassword) {
+  if (password.trim() !== expectedPassword) {
     return {
       success: false,
       error: 'Invalid password',

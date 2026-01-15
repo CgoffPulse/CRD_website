@@ -2,86 +2,17 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-
-interface PropertyDetails {
-  interior?: {
-    heating?: string;
-    cooling?: string;
-    appliances?: string;
-    flooring?: string;
-    hasBasement?: string;
-    totalStructureArea?: string;
-    totalInteriorLivableArea?: string;
-  };
-  property?: {
-    parking?: {
-      totalSpaces?: string;
-      parkingFeatures?: string;
-      coveredSpaces?: string;
-    };
-    levels?: string;
-    stories?: string;
-    exteriorFeatures?: string;
-    fencing?: string;
-  };
-  lot?: {
-    size?: string;
-    features?: string;
-  };
-  details?: {
-    parcelNumber?: string;
-    specialConditions?: string;
-  };
-  construction?: {
-    homeType?: string;
-    propertySubtype?: string;
-    materials?: string;
-    foundation?: string;
-    roof?: string;
-    newConstruction?: string;
-    yearBuilt?: string;
-  };
-  community?: {
-    features?: string;
-    security?: string;
-    subdivision?: string;
-  };
-  location?: {
-    region?: string;
-  };
-  financial?: {
-    pricePerSquareFoot?: string;
-    annualTaxAmount?: string;
-    dateOnMarket?: string;
-  };
-}
-
-interface Listing {
-  id: string;
-  title: string;
-  price: string;
-  location: string;
-  imageSrc: string | null;
-  summary?: string;
-  description?: string;
-  bullets: string[];
-  href: string;
-  mlsNumber?: string;
-  agents?: Array<{ name: string; email?: string; phone?: string }>;
-  office?: string;
-  officePhone?: string;
-  galleryImages?: string[];
-  propertyDetails?: PropertyDetails;
-}
+import type { ResidentialListing } from "@/app/admin/types/listings";
 
 interface ListingModalProps {
-  listing: Listing | null;
+  listing: ResidentialListing | null;
   isOpen: boolean;
   onClose: () => void;
 }
 
 function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
   const images = listing?.galleryImages || [];
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     if (isOpen) {
@@ -90,30 +21,64 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
           onClose();
         }
       };
+      const handleArrowKeys = (e: KeyboardEvent) => {
+        if (images.length === 0) {
+          return;
+        }
+        if (e.key === "ArrowLeft") {
+          setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+        } else if (e.key === "ArrowRight") {
+          setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+        }
+      };
       document.addEventListener("keydown", handleEscape);
-      return () => document.removeEventListener("keydown", handleEscape);
+      document.addEventListener("keydown", handleArrowKeys);
+      return () => {
+        document.removeEventListener("keydown", handleEscape);
+        document.removeEventListener("keydown", handleArrowKeys);
+      };
     }
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, images.length]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentImageIndex(0);
+    }
+  }, [isOpen]);
+
+  const goToPrevious = () => {
+    if (images.length === 0) {
+      return;
+    }
+    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    if (images.length === 0) {
+      return;
+    }
+    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
 
   if (!isOpen || !listing) return null;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]"
       onClick={onClose}
     >
       <div
-        className="bg-white shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col border-4 border-black relative"
+        className="bg-white shadow-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col border-2 sm:border-4 border-black relative m-2 sm:m-0 animate-[fadeInScale_0.3s_ease-out]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Corner accents with red and navy */}
-        <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-black hover:border-brand-red-700 transition-colors duration-300 z-20"></div>
-        <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-black hover:border-navy-700 transition-colors duration-300 z-20"></div>
-        <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-black hover:border-navy-700 transition-colors duration-300 z-20"></div>
-        <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-black hover:border-brand-red-700 transition-colors duration-300 z-20"></div>
+        <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-black hover:border-brand-red-700 transition-colors duration-300 z-10"></div>
+        <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-black hover:border-navy-700 transition-colors duration-300 z-10"></div>
+        <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-black hover:border-navy-700 transition-colors duration-300 z-10"></div>
+        <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-black hover:border-brand-red-700 transition-colors duration-300 z-10"></div>
         {/* Red and navy accent lines */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-brand-red-700 opacity-15 z-20"></div>
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-navy-700 opacity-15 z-20"></div>
+        <div className="absolute top-0 left-0 right-0 h-1 bg-brand-red-700 opacity-15 z-10"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-navy-700 opacity-15 z-10"></div>
         
         {/* Header with back button */}
         <div className="flex items-center justify-between p-6 border-b-4 border-black bg-gray-50 relative z-10">
@@ -159,24 +124,108 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
 
         {/* Scrollable content */}
         <div className="overflow-y-auto flex-1">
-          {/* Image Gallery */}
+          {/* Image Carousel */}
           {images.length > 0 && (
-            <div className="border-b-2 border-gray-200">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+            <div className="relative border-b-2 border-gray-200 bg-black">
+              <div className="relative aspect-video w-full overflow-hidden">
                 {images.map((image, idx) => (
                   <div
                     key={idx}
-                    className="relative aspect-video bg-gray-200"
+                    className={`absolute inset-0 transition-opacity duration-300 ${
+                      idx === currentImageIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+                    }`}
                   >
                     <Image
                       src={image}
                       alt={`${listing.title} - Image ${idx + 1}`}
                       fill
-                      className="object-cover"
+                      className="object-contain"
+                      priority={idx === currentImageIndex}
                     />
                   </div>
                 ))}
               </div>
+
+              {/* Navigation Arrows */}
+              {images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goToPrevious();
+                    }}
+                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 bg-black/60 hover:bg-black/80 text-white p-2 sm:p-3 rounded-full transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+                    aria-label="Previous image"
+                  >
+                    <svg
+                      className="w-5 h-5 sm:w-6 sm:h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goToNext();
+                    }}
+                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 bg-black/60 hover:bg-black/80 text-white p-2 sm:p-3 rounded-full transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+                    aria-label="Next image"
+                  >
+                    <svg
+                      className="w-5 h-5 sm:w-6 sm:h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+                </>
+              )}
+
+              {/* Dot Indicators */}
+              {images.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+                  {images.map((_, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentImageIndex(idx);
+                      }}
+                      className={`h-2 sm:h-2.5 rounded-full transition-all duration-200 min-h-[8px] min-w-[8px] cursor-pointer ${
+                        idx === currentImageIndex
+                          ? "bg-white w-6 sm:w-8"
+                          : "bg-white/50 w-2 sm:w-2.5 hover:bg-white/75"
+                      }`}
+                      aria-label={`Go to image ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Image Counter */}
+              {images.length > 1 && (
+                <div className="absolute top-4 right-4 z-20 bg-black/60 text-white px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium">
+                  {currentImageIndex + 1} / {images.length}
+                </div>
+              )}
             </div>
           )}
 
@@ -198,11 +247,11 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
             </div>
 
             {/* Description */}
-            {(listing.description || listing.summary) && (
+            {listing.description && (
               <div className="mb-8">
                 <h3 className="text-2xl md:text-3xl font-bold text-black mb-6">Description</h3>
                 <p className="text-gray-700 leading-relaxed text-lg md:text-xl whitespace-pre-line">
-                  {listing.description || listing.summary}
+                  {listing.description}
                 </p>
               </div>
             )}
@@ -570,205 +619,47 @@ function ListingModal({ listing, isOpen, onClose }: ListingModalProps) {
   );
 }
 
-export default function ResidentialListings() {
-  const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
+interface ResidentialListingsProps {
+  listings: ResidentialListing[];
+}
+
+export default function ResidentialListings({ listings }: ResidentialListingsProps) {
+  const [selectedListing, setSelectedListing] = useState<ResidentialListing | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const listings: Listing[] = [
-    {
-      id: "1316127",
-      title: "Cozy Lake Cabin – Lost Bridge Village",
-      price: "$160,000",
-      location: "21548 Walnut St, Garfield, AR 72732",
-      imageSrc: "/images/21548_walnut_st_garfield_ar_72732.webp",
-      description: "Enjoy the lake life and charm of Lost Bridge Village! You will love this cozy, updated cabin that is being sold fully furnished. Park your boat out front, unload your bikes & lake toys, and make yourself at home as you enjoy the peace and nostalgia of Lost Bridge Village. This adorable cabin features an open kitchen and living area with a dining nook & island seating. Relax in the bright and open living room after a day on the water. There are two bedrooms and a large (newly added) bunkroom for sleeping. Enjoy dinners outside in the screened-in porch as you watch the sun set and deer graze. Stroll down to the park, pool, & community center and enjoy the lake from there or the shoreline behind the community center. Play pickleball or tennis on our brand-new courts! Got a plane? Fly in and land on the LBV airstrip. Only 3 miles to Lost Bridge Marina. Short drive to Rogers, Pea Ridge, & Eureka Springs. Don't miss this great opportunity- they don't come around very often at this price!",
-      bullets: [
-        "3 bedrooms / 1 bathroom",
-        "850 sq ft",
-        "Manufactured Home, Single Family Residence",
-        "Built in 1970",
-        "5,662.8 sq ft lot",
-        "Lost Bridge Village community",
-        "Fully furnished",
-        "Screened-in porch",
-        "Community pool, park, and recreation center",
-        "Pickleball and tennis courts",
-        "Near Beaver Lake",
-        "MLS#: 1316127",
-        "$188/sqft",
-        "HOA: $160 annually",
-      ],
-      href: "/residential/listings/1316127",
-      mlsNumber: "1316127",
-      agents: [
-        { name: "Jenna Gill", email: "jgill@crdred.com" },
-      ],
-      office: "CRD Real Estate & Development",
-      officePhone: "479-445-4501",
-      galleryImages: [
-        "/images/21548_walnut_st_garfield_ar_72732.webp",
-        "/images/21548_walnut_st_garfield_ar_living_room.webp",
-        "/images/21548_walnut_st_living_room_tv.webp",
-        "/images/21548_walnut_st_garfield_ar_dining_room.webp",
-        "/images/21548_walnut_st_garfield_ar_72732_bedroom.webp",
-        "/images/21548_walnut_st_garflied_ar_72732_bunk_beds_kids_room.webp",
-        "/images/21548_walnut_st_garfield_ar_72732_spare_bathroom.webp",
-        "/images/21548_walnut_st_garfield_ar_72732_Closed_In_Deck.webp",
-        "/images/21548_walnut_st_garfield_ar_72732_washing_room.webp",
-        "/images/21548_walnut_st_garfield_ar_72732_In_house_Gym.webp",
-        "/images/21548_walnut_st_garfield_Pool.webp",
-        "/images/21548_walnut_st_garfield_ar_72732_Pool_Lake_view.webp",
-        "/images/21548_walnut_st_garfield_aerial.webp",
-      ],
-      propertyDetails: {
-        interior: {
-          heating: "Ductless",
-          cooling: "Ductless",
-          appliances: "Included: Dryer, Electric Range, Electric Water Heater, Disposal, Refrigerator, Washer",
-          flooring: "Laminate",
-          hasBasement: "Crawl Space",
-          totalStructureArea: "850",
-          totalInteriorLivableArea: "850 sqft",
-        },
-        property: {
-          parking: {
-            totalSpaces: "1",
-            parkingFeatures: "Attached Carport",
-            coveredSpaces: "1",
-          },
-          levels: "One",
-          stories: "1",
-          exteriorFeatures: "Gravel Driveway, Covered, Patio",
-          fencing: "None",
-        },
-        lot: {
-          size: "5,662.8 Square Feet",
-          features: "Near Park, Sloped",
-        },
-        details: {
-          parcelNumber: "1505163000",
-          specialConditions: "None",
-        },
-        construction: {
-          homeType: "MobileManufactured",
-          propertySubtype: "Manufactured Home, Single Family Residence",
-          materials: "Wood Siding",
-          foundation: "Crawlspace",
-          roof: "Architectural, Shingle",
-          newConstruction: "No",
-          yearBuilt: "1970",
-        },
-        community: {
-          features: "Clubhouse, Fitness, Playground, Recreation Area, Tennis Court(s), Lake, Near State Park, Park, Pool",
-          security: "Security System",
-          subdivision: "Forest Hills Sub Lost Bridge Village",
-        },
-        location: {
-          region: "Garfield",
-        },
-        financial: {
-          pricePerSquareFoot: "$188/sqft",
-          annualTaxAmount: "$535",
-          dateOnMarket: "7/28/2025",
-        },
-      },
-    },
-    {
-      id: "1326751",
-      title: "4-Plex Multi-Family Investment – Rogers",
-      price: "$625,000",
-      location: "1225 W Sunset Dr #4, Rogers, AR 72756",
-      imageSrc: "/images/1223-W-Sunset-Dr-4.webp",
-      description: "Multi-family Investment in Rogers. This well maintained 4-plex is a prime Value Add asset. Renting below current market rates, this 4-plex is able to provide stabilized cashflow in a great location of Rogers. With a strategic location that is across from Northwest Park and walking distance to Lingle Middle School, this 4-plex is well a positioned investment. Onsite parking for tenants. This is part of a small multi-family investment portfolio and can be sold in conjunction with MLS 1326750. More pictures coming soon.",
-      bullets: [
-        "3,144 sq ft",
-        "Multi-family 4-plex investment property",
-        "Prime location across from Northwest Park",
-        "Walking distance to Lingle Middle School",
-        "Onsite parking for tenants",
-        "Currently renting below market rates - Value Add opportunity",
-        "MLS#: 1326751",
-        "Can be sold in conjunction with MLS 1326750",
-      ],
-      href: "/residential/listings/1326751",
-      mlsNumber: "1326751",
-      agents: [
-        { name: "Hannah Cicioni", email: "hcicioni@crdred.com" },
-        { name: "Rhonda Moore", phone: "479-530-0185" },
-      ],
-      office: "CRD Real Estate & Development",
-      officePhone: "479-445-4501",
-      galleryImages: [
-        "/images/1223-W-Sunset-Dr-4.webp",
-        "/images/1225-w-sunset-dr-4-back.webp",
-      ],
-      propertyDetails: {
-        interior: {
-          heating: "Central",
-          cooling: "Central Air",
-          appliances: "Included: Electric Water Heater",
-          flooring: "Laminate, Simulated Wood",
-          hasBasement: "No",
-          totalStructureArea: "3,144",
-          totalInteriorLivableArea: "3,144 sqft",
-        },
-        property: {
-          parking: {
-            totalSpaces: "8",
-            parkingFeatures: "On Street",
-            coveredSpaces: "8",
-          },
-          levels: "One",
-          stories: "1",
-          exteriorFeatures: "Concrete Driveway",
-          fencing: "None",
-        },
-        lot: {
-          size: "0.39 Acres",
-          features: "City Lot, Level, Near Park",
-        },
-        details: {
-          parcelNumber: "0208139000",
-          specialConditions: "None",
-        },
-        construction: {
-          homeType: "MultiFamily",
-          propertySubtype: "Quadruplex, Multi Family",
-          materials: "Brick, Vinyl Siding",
-          foundation: "Block",
-          roof: "Metal",
-          newConstruction: "No",
-          yearBuilt: "1981",
-        },
-        community: {
-          features: "Near Schools, Park",
-          security: "Smoke Detector(s)",
-          subdivision: "Sunset Manor Ph 2-Rogers",
-        },
-        location: {
-          region: "Rogers",
-        },
-        financial: {
-          pricePerSquareFoot: "$199/sqft",
-          annualTaxAmount: "$1,922",
-          dateOnMarket: "10/28/2025",
-        },
-      },
-    },
-  ];
+  useEffect(() => {
+    return () => {
+      if (typeof document !== "undefined") {
+        document.body.style.overflow = "";
+      }
+    };
+  }, []);
 
-  const handleListingClick = (listing: Listing, e: React.MouseEvent) => {
+  const handleListingClick = (listing: ResidentialListing, e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setSelectedListing(listing);
     setIsModalOpen(true);
-    document.body.style.overflow = "hidden";
+    if (typeof document !== "undefined") {
+      document.body.style.overflow = "hidden";
+    }
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedListing(null);
-    document.body.style.overflow = "unset";
+    if (typeof document !== "undefined") {
+      document.body.style.overflow = "";
+    }
   };
+
+  if (listings.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-600 text-lg">No listings available at this time.</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -794,6 +685,8 @@ export default function ResidentialListings() {
                   alt={listing.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  loading="lazy"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gray-200">
@@ -836,7 +729,7 @@ export default function ResidentialListings() {
                   {listing.location}
                 </p>
               </div>
-              <ul className="space-y-2 mb-6 flex-grow">
+              <ul className="space-y-2 mb-6 grow">
                 {listing.bullets.map((bullet, idx) => (
                   <li
                     key={idx}

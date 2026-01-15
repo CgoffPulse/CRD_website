@@ -40,9 +40,12 @@ export interface PromoPopupConfig {
 async function verifyAuth(): Promise<boolean> {
   const cookieStore = await cookies();
   const authCookie = cookieStore.get('cms-auth');
-  const expectedPassword = process.env.CMS_PASSWORD;
+  const expectedPassword = process.env.CMS_PASSWORD?.trim();
 
-  if (!expectedPassword) {
+  if (!expectedPassword || expectedPassword.length === 0) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('CMS_PASSWORD is not set in environment variables');
+    }
     return false;
   }
 
@@ -50,7 +53,8 @@ async function verifyAuth(): Promise<boolean> {
     return false;
   }
 
-  return authCookie.value === expectedPassword;
+  // Simple comparison - in production, use proper hashing
+  return authCookie.value.trim() === expectedPassword;
 }
 
 // Read promo popup config from JSON file or Blob Storage

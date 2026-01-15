@@ -1,18 +1,32 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+
 export default function Footer() {
+  const [year, setYear] = useState<number>(2025);
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
+
   return (
     <footer className="bg-black border-t border-gray-800 py-6 sm:py-8 md:py-10">
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 mb-6">
           {/* Company Info */}
           <div>
             <h3 className="text-white text-base sm:text-lg md:text-xl font-bold mb-2 sm:mb-3">CRD Real Estate & Development</h3>
-            <p className="text-gray-400 text-xs sm:text-sm leading-relaxed mb-2 sm:mb-3">
+            <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
               Community Focused Results Driven
             </p>
+          </div>
+
+          {/* Address */}
+          <div>
+            <h4 className="text-white text-sm sm:text-base font-bold mb-2 sm:mb-3">Address</h4>
             <div className="space-y-1.5 text-gray-400 text-xs sm:text-sm">
               <p>
-                <span className="text-white font-semibold">Address:</span><br />
                 115 S 2nd St<br />
                 Rogers, AR 72756
               </p>
@@ -102,7 +116,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 pt-4 sm:pt-6 mt-4 sm:mt-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-3">
             <p className="text-gray-400 text-xs sm:text-sm text-center md:text-left">
-              © {new Date().getFullYear()} CRD Real Estate & Development. All rights reserved.
+              © {year} CRD Real Estate & Development. All rights reserved.
             </p>
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3 text-gray-400 text-xs sm:text-sm">
               <a href="/about" className="hover:text-white transition-colors">About</a>

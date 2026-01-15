@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useActionState, useTransition } from 'react';
+import { useActionState, useOptimistic } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useDropzone } from 'react-dropzone';
 import { createResidentialListing } from '../actions/residentialListings';
@@ -16,6 +16,11 @@ type UploadState = {
   success?: boolean;
   error?: string;
   listingId?: string;
+};
+
+type OptimisticListing = {
+  id: string;
+  title: string;
 };
 
 function SubmitButton() {
@@ -33,6 +38,15 @@ export function ResidentialListingUploadForm() {
     createResidentialListing,
     {}
   );
+  const [optimisticListings, updateOptimisticListings] = useOptimistic<
+    OptimisticListing[],
+    { type: 'add'; listing: OptimisticListing } | { type: 'clear' }
+  >([], (current, action) => {
+    if (action.type === 'clear') {
+      return [];
+    }
+    return [...current, action.listing];
+  });
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
   const [bullets, setBullets] = useState<string[]>(['']);
@@ -87,9 +101,10 @@ export function ResidentialListingUploadForm() {
       setGalleryPreviews([]);
       setBullets(['']);
       setAgents([{ name: '' }]);
+      updateOptimisticListings({ type: 'clear' });
       router.refresh();
     }
-  }, [state, router]);
+  }, [state, router, updateOptimisticListings]);
 
   const addBullet = () => {
     setBullets([...bullets, '']);
@@ -128,9 +143,30 @@ export function ResidentialListingUploadForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {optimisticListings.length > 0 && (
+          <div className="mb-6 rounded border border-gray-200 bg-gray-50 p-4">
+            <p className="text-sm font-semibold text-black mb-2">Pending uploads</p>
+            <ul className="space-y-1 text-sm text-gray-700">
+              {optimisticListings.map((listing) => (
+                <li key={listing.id} className="flex items-center justify-between">
+                  <span className="font-medium text-black">{listing.title}</span>
+                  <span className="text-gray-600">Residential</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <form
           ref={formRef}
           action={async (formData: FormData) => {
+            const title = (formData.get('title') as string) || 'New Listing';
+            updateOptimisticListings({
+              type: 'add',
+              listing: {
+                id: String(Date.now()),
+                title,
+              },
+            });
             formData.set('bullets', JSON.stringify(bullets.filter((b) => b.trim())));
             formData.set('agents', JSON.stringify(agents.filter((a) => a.name.trim())));
             await formAction(formData);
@@ -158,11 +194,6 @@ export function ResidentialListingUploadForm() {
             <Textarea id="description" name="description" rows={6} className="bg-background text-foreground" />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="summary">Summary</Label>
-            <Textarea id="summary" name="summary" rows={3} className="bg-background text-foreground" />
-          </div>
-
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="mlsNumber">MLS Number</Label>
@@ -182,7 +213,7 @@ export function ResidentialListingUploadForm() {
           <div className="space-y-2">
             <Label>Bullets</Label>
             {bullets.map((bullet, index) => (
-              <div key={index} className="flex gap-2">
+              <div key={`${index}-${bullet}`} className="flex gap-2">
                 <Input
                   value={bullet}
                   onChange={(e) => updateBullet(index, e.target.value)}
@@ -204,7 +235,7 @@ export function ResidentialListingUploadForm() {
           <div className="space-y-2">
             <Label>Agents</Label>
             {agents.map((agent, index) => (
-              <div key={index} className="grid gap-2 md:grid-cols-3 border p-2 rounded">
+              <div key={`${index}-${agent.name}`} className="grid gap-2 md:grid-cols-3 border p-2 rounded">
                 <Input
                   placeholder="Name"
                   value={agent.name}
@@ -272,7 +303,7 @@ export function ResidentialListingUploadForm() {
             {galleryPreviews.length > 0 && (
               <div className="grid grid-cols-3 gap-2 mt-2">
                 {galleryPreviews.map((preview, index) => (
-                  <img key={index} src={preview} alt={`Preview ${index + 1}`} className="rounded" />
+                  <img key={preview} src={preview} alt={`Preview ${index + 1}`} className="rounded" />
                 ))}
               </div>
             )}

@@ -1,12 +1,22 @@
+"use client";
+
 import Link from "next/link";
 import Navigation from "./Navigation";
+import { motion } from "framer-motion";
 
 export default function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-gray-800">
+    <motion.header 
+      className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-gray-800"
+      layout
+      initial={false}
+    >
       <div className="container mx-auto px-6">
         {/* Social Media Links */}
-        <div className="flex justify-end py-2 border-b border-gray-800">
+        <motion.div 
+          className="flex justify-end py-2 border-b border-gray-800"
+          layout
+        >
           <div className="flex space-x-4">
             <a
               href="https://instagram.com"
@@ -41,20 +51,28 @@ export default function Header() {
               </svg>
             </a>
           </div>
-        </div>
+        </motion.div>
 
         {/* Logo and Navigation */}
-        <div className="flex items-center justify-between py-3 sm:py-4 relative">
-          <Link
-            href="/"
-            className="text-white text-2xl sm:text-3xl md:text-4xl font-bold tracking-wide hover:opacity-80 transition-opacity duration-200"
-          >
-            CRD
-          </Link>
+        <motion.div 
+          className="flex items-center justify-between gap-4 py-3 sm:py-4 relative"
+          layout
+        >
+          <motion.div layout className="flex-shrink-0">
+            <Link
+              href="/"
+              className="text-white text-lg sm:text-xl md:text-2xl font-bold tracking-wide hover:opacity-80 transition-opacity duration-200 whitespace-nowrap"
+            >
+              {/* Show full name on mobile (< 768px) and desktop (>= 1024px) */}
+              <span className="md:hidden lg:inline">CRD Real Estate & Development</span>
+              {/* Show CRD RED only on tablet (768px - 1023px) */}
+              <span className="hidden md:inline lg:hidden">CRD RED</span>
+            </Link>
+          </motion.div>
           <Navigation />
-        </div>
+        </motion.div>
       </div>
-    </header>
+    </motion.header>
   );
 }
 

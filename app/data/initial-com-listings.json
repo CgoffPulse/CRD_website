@@ -1,0 +1,201 @@
+[
+  {
+    "id": "201-e-walnut-st-11",
+    "title": "Development Lot – Downtown Rogers",
+    "price": "$1",
+    "location": "201 E Walnut St #11, Rogers, AR 72756",
+    "imageSrc": "/images/201_e_Walnut_St_11_View.webp",
+    "summary": "Prime hard corner development lot in rapidly growing and thriving Downtown Rogers. T5.2 zoning allows for high density development with multiple uses. Positioned in the middle of several active and future development projects, this site provides unlimited investment opportunities. Accepting offers: proof of funds and intended use required with offer submitted.",
+    "bullets": [
+      "6,969.6 sq ft lot",
+      "Unimproved Land",
+      "T5.2 zoning - High density development",
+      "Multiple uses allowed",
+      "Hard corner development lot",
+      "Central Business District location",
+      "MLS#: 1301467",
+      "Annual tax: $693"
+    ],
+    "href": "/commercial/buy/201-e-walnut-st-11",
+    "galleryImages": [
+      "/images/201_e_Walnut_St_11_View.webp",
+      "/images/201_E_Walnut_St_11_Commercial_Lot_In_Rogers_For_Sale.webp",
+      "/images/201_e_walnut_st_11_Zoomed_out_map.webp",
+      "/images/201_e_walnut_st_land_lot.webp"
+    ],
+    "mlsNumber": "1301467",
+    "propertyDetails": {
+      "lot": {
+        "size": "6,969.6 Square Feet",
+        "features": "Central Business District, City Lot, Level, Other, See Remarks"
+      },
+      "property": {
+        "fencing": "Partial",
+        "exteriorFeatures": "Cleared"
+      },
+      "details": {
+        "parcelNumber": "0202198000"
+      },
+      "construction": {
+        "homeType": "Unimproved Land"
+      },
+      "location": {
+        "region": "Rogers"
+      },
+      "financial": {
+        "annualTaxAmount": "$693",
+        "dateOnMarket": "3/17/2025"
+      }
+    },
+    "isLease": false
+  },
+  {
+    "id": "203-w-wood-st-unit-a",
+    "title": "203 W Wood Street Unit A",
+    "leaseRate": "$21/sqft • 1,250 sqft",
+    "location": "Rogers, AR 72756",
+    "imageSrc": "/images/Commerical Leases/203_Wood_St_Crossing_Downtown_Rogers_Commercial_proprty_For_Lease_Flyer.webp",
+    "summary": "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. Suite A is 1,250 sf with a side garage roll up door, beautiful wood accents, industrial interior feel with a private bathroom and open floor plan. Perfect for Retail, Office, Bar or Restaurant.",
+    "description": "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. Suite A is 1,250 sf with a side garage roll up door, beautiful wood accents, industrial interior feel with a private bathroom and open floor plan. Perfect for Retail, Office, Bar or Restaurant.",
+    "bullets": [
+      "For Lease",
+      "Mixed Use Office",
+      "$21/sqft",
+      "1,250 sqft",
+      "0.23 Acres",
+      "Side garage roll up door",
+      "Wood accents",
+      "Industrial interior feel",
+      "Private bathroom",
+      "Open floor plan",
+      "Perfect for Retail, Office, Bar or Restaurant",
+      "Adjacent to Railyard Loop of Greenway Trail System",
+      "MLS#: 1332308"
+    ],
+    "href": "/commercial/lease/203-w-wood-st-unit-a",
+    "mlsNumber": "1332308",
+    "galleryImages": [
+      "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Exterior.webp",
+      "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Interior.webp",
+      "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Interior_2.webp",
+      "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Interior_Road_View.webp",
+      "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Unit_A_End_Cap.webp"
+    ],
+    "propertyDetails": {
+      "construction": {
+        "homeType": "Mixed Use Office",
+        "propertySubtype": "Retail"
+      },
+      "lot": {
+        "size": "0.23 Acres",
+        "features": "Central Business District, City Lot, Neighborhood"
+      },
+      "location": {
+        "region": "Rogers"
+      },
+      "details": {
+        "subdivision": "Wood Stroud Add Rogers"
+      }
+    },
+    "isLease": true
+  },
+  {
+    "id": "203-w-wood-st-unit-b",
+    "title": "203 W Wood Street Unit B",
+    "leaseRate": "$21/sqft • 1,850 sqft",
+    "location": "Rogers, AR 72756",
+    "imageSrc": "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_A_Rogers_Arkansas_72756_Exterior.webp",
+    "summary": "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. Suite B is 1,850 sf that provides a large break area, beautiful details, industrial interior feel with a private bathroom and open floor plan. Perfect for Retail, Office, Bar or Restaurant.",
+    "description": "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. Suite B is 1,850 sf that provides a large break area, beautiful details, industrial interior feel with a private bathroom and open floor plan. Perfect for Retail, Office, Bar or Restaurant.",
+    "bullets": [
+      "For Lease",
+      "Mixed Use Office",
+      "$21/sqft",
+      "1,850 sqft",
+      "0.23 Acres",
+      "Large break area",
+      "Beautiful details",
+      "Industrial interior feel",
+      "Private bathroom",
+      "Open floor plan",
+      "Perfect for Retail, Office, Bar or Restaurant",
+      "Adjacent to Railyard Loop of Greenway Trail System",
+      "MLS#: 1332314"
+    ],
+    "href": "/commercial/lease/203-w-wood-st-unit-b",
+    "mlsNumber": "1332314",
+    "galleryImages": [
+      "/images/Commerical Leases/203_Wood_St_Crossing_Downtown_Rogers_Commercial_proprty_For_Lease_Flyer.webp",
+      "/images/Commerical Leases/CRD_Commercial_listing_203_W_Wood_Street_B_Rogers_Arkansas_Interior.webp",
+      "/images/Commerical Leases/CRD_Commercial_listing_203_W_Wood_Street_B_Rogers_Arkansas_Kitchen.webp",
+      "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_B_Rogers_Arkansas_Office_Space.webp",
+      "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_B_Rogers_Arkansas_Office_Space_B.webp"
+    ],
+    "propertyDetails": {
+      "construction": {
+        "homeType": "Mixed Use Office",
+        "propertySubtype": "Retail"
+      },
+      "lot": {
+        "size": "0.23 Acres",
+        "features": "Central Business District, City Lot, Neighborhood"
+      },
+      "location": {
+        "region": "Rogers"
+      },
+      "details": {
+        "subdivision": "Wood Stroud Add Rogers"
+      }
+    },
+    "isLease": true
+  },
+  {
+    "id": "203-w-wood-st-unit-c",
+    "title": "203 W Wood Street Unit C",
+    "leaseRate": "$21/sqft • 1,500 sqft",
+    "location": "Rogers, AR 72756",
+    "imageSrc": "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_C_Rogers_Arkansas_72756_Interior.webp",
+    "summary": "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. A former Hair Salon, Suite C is 1,500 sf is next to the trail, large windows with lots of natural light, industrial interior feel with a private bathroom with shower and open floor plan. Perfect for Retail, Office, Bar or Restaurant. See the attached flyer for additional leasing details and pictures.",
+    "description": "Wood St Crossing, located in the North District of Downtown Rogers, is an active revitalization of prime Commercial Lease space. In total, the building is 7,310sf of available lease space, situated immediately adjacent to the Railyard Loop of the Greenway Tail System. A former Hair Salon, Suite C is 1,500 sf is next to the trail, large windows with lots of natural light, industrial interior feel with a private bathroom with shower and open floor plan. Perfect for Retail, Office, Bar or Restaurant. See the attached flyer for additional leasing details and pictures.",
+    "bullets": [
+      "For Lease",
+      "Mixed Use Office",
+      "$21/sqft",
+      "1,500 sqft",
+      "0.23 Acres",
+      "Next to the trail",
+      "Large windows with lots of natural light",
+      "Industrial interior feel",
+      "Private bathroom with shower",
+      "Open floor plan",
+      "Perfect for Retail, Office, Bar or Restaurant",
+      "Adjacent to Railyard Loop of Greenway Trail System",
+      "MLS#: 1332341"
+    ],
+    "href": "/commercial/lease/203-w-wood-st-unit-c",
+    "mlsNumber": "1332341",
+    "galleryImages": [
+      "/images/Commerical Leases/203_Wood_St_Crossing_Downtown_Rogers_Commercial_proprty_For_Lease_Flyer.webp",
+      "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_C_Rogers_Arkansas_72756_Interior.webp",
+      "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_C_Rogers_Arkansas_72756_Road_View.webp",
+      "/images/Commerical Leases/CRD_Commercial_Listing_203_W_Wood_Street_C_Rogers_Arkansas_72756_Bathroom.webp"
+    ],
+    "propertyDetails": {
+      "construction": {
+        "homeType": "Mixed Use Office",
+        "propertySubtype": "Retail"
+      },
+      "lot": {
+        "size": "0.23 Acres",
+        "features": "Central Business District, City Lot, Neighborhood"
+      },
+      "location": {
+        "region": "Rogers"
+      },
+      "details": {
+        "subdivision": "Wood Stroud Add Rogers"
+      }
+    },
+    "isLease": true
+  }
+]

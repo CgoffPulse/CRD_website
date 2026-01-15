@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 import { verifyAuth, logout } from '../actions/commercialListings';
 import { getCommercialListings } from '../actions/commercialListings';
 import { LoginForm } from './LoginForm';
 import { CommercialListingUploadForm } from './CommercialListingUploadForm';
 import { CommercialListingsList } from './CommercialListingsList';
+import { JsonImportForm } from './JsonImportForm';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
@@ -16,17 +18,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function CommercialListingsPage() {
-  const isAuthenticated = await verifyAuth();
+// Prevent static generation - this route must be dynamic
+export function generateStaticParams() {
+  return [];
+}
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-        <LoginForm />
-      </div>
-    );
-  }
-
+async function AuthenticatedContent() {
   const listings = await getCommercialListings();
 
   return (
@@ -57,18 +54,52 @@ export default async function CommercialListingsPage() {
           </div>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div>
-            <CommercialListingUploadForm />
-          </div>
-          <div>
-            <div className="space-y-4">
-              <h2 className="text-2xl font-semibold">Existing Listings</h2>
-              <CommercialListingsList listings={listings} />
+        <div className="space-y-8">
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div>
+              <CommercialListingUploadForm />
             </div>
+            <div>
+              <div className="space-y-4">
+                <h2 className="text-2xl font-semibold">Existing Listings</h2>
+                <CommercialListingsList listings={listings} />
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <JsonImportForm />
           </div>
         </div>
       </div>
     </div>
   );
+}
+
+export default async function CommercialListingsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+        <div className="text-center">
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    }>
+      <AuthWrapper />
+    </Suspense>
+  );
+}
+
+async function AuthWrapper() {
+  const isAuthenticated = await verifyAuth();
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+        <LoginForm />
+      </div>
+    );
+  }
+
+  return <AuthenticatedContent />;
 }

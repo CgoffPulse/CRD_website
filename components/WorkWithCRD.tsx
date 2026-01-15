@@ -39,7 +39,7 @@ function ServiceCard({ title, description, features, href, mutedLine }: ServiceC
         </p>
 
         {/* Bullet Points */}
-        <ul className="space-y-4 mb-8 flex-grow">
+        <ul className="space-y-4 mb-8 grow">
           {features.map((feature, idx) => (
             <li key={idx} className="flex items-start gap-3 group/item">
               <svg className="w-6 h-6 text-black flex-shrink-0 mt-0.5 group-hover/item:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">

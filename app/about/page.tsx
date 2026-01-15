@@ -1,13 +1,11 @@
+"use client";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import ClientLogoBanner from "@/components/ClientLogoBanner";
 import AboutHero from "@/components/AboutHero";
-
-export const metadata = {
-  title: "About CRD Real Estate & Development | Northwest Arkansas",
-  description: "Learn about CRD Real Estate & Development, our history, impact, and commitment to Northwest Arkansas. Commercial, residential, and development services across Bentonville, Rogers, Springdale, and Fayetteville.",
-};
+import { motion } from "framer-motion";
 
 export default function AboutPage() {
   return (
@@ -180,8 +178,14 @@ export default function AboutPage() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="group text-center bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 relative overflow-hidden cursor-pointer hover:scale-105">
+            <motion.div 
+              className="grid grid-cols-1 md:grid-cols-3 gap-8"
+              layout
+            >
+              <motion.div 
+                className="group text-center bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 relative overflow-hidden hover:scale-105"
+                layout
+              >
                 {/* Red accent line on hover */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 {/* Divider with red accent */}
@@ -200,8 +204,8 @@ export default function AboutPage() {
                 <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
                   We think like owners and investors, not just brokers. Every recommendation is made with long-term value, risk management, and strategic positioning in mind.
                 </p>
-              </div>
-              <div className="group text-center bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 relative overflow-hidden cursor-pointer hover:scale-105">
+              </motion.div>
+              <div className="group text-center bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 relative overflow-hidden hover:scale-105">
                 {/* Red accent line on hover */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 {/* Divider with red accent */}
@@ -222,7 +226,10 @@ export default function AboutPage() {
                   We live and work in Northwest Arkansas, giving us firsthand understanding of neighborhoods, growth patterns, and market dynamics that shape real estate value.
                 </p>
               </div>
-              <div className="group text-center bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 relative overflow-hidden cursor-pointer hover:scale-105">
+              <motion.div 
+                className="group text-center bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 relative overflow-hidden hover:scale-105"
+                layout
+              >
                 {/* Red accent line on hover */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 {/* Divider with red accent */}
@@ -241,8 +248,8 @@ export default function AboutPage() {
                 <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
                   We focus on providing clear, actionable guidance that helps clients make informed decisions aligned with their business and investment objectives.
                 </p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
@@ -267,7 +274,7 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="space-y-8">
-              <div className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 md:p-8 relative overflow-hidden cursor-pointer hover:scale-[1.02]">
+              <div className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 md:p-8 relative overflow-hidden hover:scale-[1.02]">
                 {/* Red accent line on hover */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 {/* Corner accents */}
@@ -284,7 +291,7 @@ export default function AboutPage() {
                   Every transaction is handled with care, transparency, and a focus on what's best for the client. We believe strong outcomes start with strong relationships.
                 </p>
               </div>
-              <div className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 md:p-8 relative overflow-hidden cursor-pointer hover:scale-[1.02]">
+              <div className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 md:p-8 relative overflow-hidden hover:scale-[1.02]">
                 {/* Red accent line on hover */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 {/* Corner accents */}
@@ -301,7 +308,7 @@ export default function AboutPage() {
                   We make recommendations with durability, market relevance, and long-term performance in mind. Every decision is evaluated through the lens of lasting value.
                 </p>
               </div>
-              <div className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 md:p-8 relative overflow-hidden cursor-pointer hover:scale-[1.02]">
+              <div className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 md:p-8 relative overflow-hidden hover:scale-[1.02]">
                 {/* Red accent line on hover */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 {/* Corner accents */}
@@ -318,7 +325,10 @@ export default function AboutPage() {
                   As active members of the Northwest Arkansas community, we're invested in the region's success. Our work supports growth that benefits investors, owners, and communities alike.
                 </p>
               </div>
-              <div className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 md:p-8 relative overflow-hidden cursor-pointer hover:scale-[1.02]">
+              <motion.div 
+                className="group bg-white border-2 border-black shadow-lg hover:shadow-2xl transition-all duration-300 p-6 md:p-8 relative overflow-hidden hover:scale-[1.02]"
+                layout
+              >
                 {/* Red accent line on hover */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-brand-red-700 opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
                 {/* Corner accents */}
@@ -334,7 +344,7 @@ export default function AboutPage() {
                 <p className="text-gray-700 leading-relaxed text-base md:text-lg transition-colors duration-300">
                   We focus on disciplined planning and thoughtful execution to help clients avoid costly missteps and delays. Strategy matters, but execution determines outcomes.
                 </p>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>

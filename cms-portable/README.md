@@ -38,10 +38,10 @@ This CMS provides two main modules:
 
 ### 1. Copy Files
 
-Copy the entire `app/cms-portable/` directory to your Next.js project:
+Copy the entire CMS directory to your Next.js project:
 
 ```bash
-cp -r app/cms-portable /path/to/your/project/app/
+cp -r cms-portable /path/to/your/project/app/
 ```
 
 ### 2. Install Dependencies
@@ -130,10 +130,11 @@ Initialize the JSON files:
 
 ### Accessing the CMS
 
-Navigate to `/cms-portable` in your application. You'll be prompted to log in with the password set in `CMS_PASSWORD`.
+Navigate to the CMS landing page in your application. You'll be prompted to log in with the password set in `CMS_PASSWORD`.
 
 ### Routes
 
+Routes are based on your directory structure. If placed in `app/cms-portable/`:
 - `/cms-portable` - Landing page with links to both CMS modules
 - `/cms-portable/events` - Events Management CMS
 - `/cms-portable/promo` - Promotional Content Manager
@@ -144,7 +145,7 @@ Navigate to `/cms-portable` in your application. You'll be prompted to log in wi
 
 Default colors are generic (white/black). To customize:
 
-1. **Promo Popup Colors**: Edit `app/cms-portable/actions/promoPopup.ts`
+1. **Promo Popup Colors**: Edit the `actions/promoPopup.ts` file
    - Default `popupBgColor`: `#FFFFFF` (line 66)
    - Default `buttonColor`: `#000000` (line 67)
 
@@ -164,7 +165,7 @@ Customize storage paths via environment variables (see Environment Variables sec
 ## File Structure
 
 ```
-app/cms-portable/
+app/[your-cms-directory]/
 ├── page.tsx                    # Landing page
 ├── README.md                   # This file
 ├── actions/                    # Server actions
@@ -204,14 +205,14 @@ app/cms-portable/
 5. **Update imports** if your project structure differs:
    - UI components path (`@/components/ui/...`)
    - Utils path (`@/lib/utils` for `cn` function)
-6. **Test the CMS** by navigating to `/cms-portable`
+6. **Test the CMS** by navigating to your CMS routes
 
 ## Customization Guide
 
 ### Changing Default Colors
 
 1. **Promo Popup Default Colors**:
-   - Edit `app/cms-portable/actions/promoPopup.ts`
+   - Edit `actions/promoPopup.ts`
    - Change `popupBgColor` default (line 66)
    - Change `buttonColor` default (line 67)
 
@@ -231,7 +232,7 @@ Search and replace in component files:
 
 The CMS uses Vercel Blob Storage by default. To use a different storage solution:
 
-1. Edit `app/cms-portable/actions/events.ts` and `promoPopup.ts`
+1. Edit `actions/events.ts` and `promoPopup.ts`
 2. Replace `@vercel/blob` imports with your storage solution
 3. Update `put()`, `del()`, and `list()` calls accordingly
 

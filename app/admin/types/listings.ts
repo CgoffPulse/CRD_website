@@ -63,6 +63,7 @@ export interface CommercialPropertyDetails {
   details?: {
     parcelNumber?: string;
     specialConditions?: string;
+    subdivision?: string;
   };
   construction?: {
     homeType?: string;
@@ -83,7 +84,6 @@ export interface ResidentialListing {
   price: string;
   location: string;
   imageSrc: string | null;
-  summary?: string;
   description?: string;
   bullets: string[];
   href: string;
@@ -102,7 +102,6 @@ export interface CommercialListing {
   leaseRate?: string;
   location: string;
   imageSrc: string | null;
-  summary?: string;
   description?: string;
   bullets: string[];
   href: string;
@@ -110,4 +109,5 @@ export interface CommercialListing {
   galleryImages?: string[];
   propertyDetails?: CommercialPropertyDetails;
   isLease?: boolean;
+  pdfFlyer?: string;
 }

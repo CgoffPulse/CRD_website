@@ -1,78 +1,233 @@
+"use client";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-
-export const metadata = {
-  title: "Real Estate Development Strategy and Site Selection Services | CRD Real Estate & Development",
-  description: "Real estate development consulting services focused on site selection, market feasibility and early stage planning. Supporting landowners, investors and organizations navigating complex real estate decisions.",
-};
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 export default function DevelopmentPage() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [showBlur, setShowBlur] = useState(false);
+  const [showText, setShowText] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Set mobile-specific attributes for better autoplay support
+    video.setAttribute('playsinline', 'true');
+    video.setAttribute('webkit-playsinline', 'true');
+    video.muted = true;
+    
+    // Optimize loading for mobile
+    video.load();
+
+    const playVideo = () => {
+      if (video.readyState >= 2) {
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Autoplay was prevented
+          });
+        }
+      }
+    };
+
+    const handleCanPlay = () => {
+      setIsLoading(false);
+      playVideo();
+      // Fade in blur 1 second after video can play (reduced from 2 seconds)
+      setTimeout(() => {
+        setShowBlur(true);
+        // Fade in text after blur appears
+        setTimeout(() => {
+          setShowText(true);
+        }, 300);
+      }, 1000);
+    };
+
+    const handleLoadedData = () => {
+      setIsLoading(false);
+      playVideo();
+      // Fade in blur 1 second after video loads (reduced from 2 seconds)
+      setTimeout(() => {
+        setShowBlur(true);
+        // Fade in text after blur appears
+        setTimeout(() => {
+          setShowText(true);
+        }, 300);
+      }, 1000);
+    };
+
+    const handleError = () => {
+      setIsLoading(false);
+      setHasError(true);
+    };
+
+    // Handle user interaction to start video on mobile
+    const handleUserInteraction = () => {
+      playVideo();
+    };
+
+    video.addEventListener("canplay", handleCanPlay);
+    video.addEventListener("loadeddata", handleLoadedData);
+    video.addEventListener("error", handleError);
+
+    // Add event listeners for user interaction (mobile autoplay workaround)
+    const events = ['touchstart', 'touchend', 'click', 'scroll'];
+    events.forEach(event => {
+      document.addEventListener(event, handleUserInteraction, { once: true, passive: true });
+    });
+
+    // Check if video is already loaded
+    if (video.readyState >= 3) {
+      setIsLoading(false);
+      playVideo();
+      setTimeout(() => {
+        setShowBlur(true);
+        setTimeout(() => {
+          setShowText(true);
+        }, 300);
+      }, 1000);
+    }
+
+    return () => {
+      video.removeEventListener("canplay", handleCanPlay);
+      video.removeEventListener("loadeddata", handleLoadedData);
+      video.removeEventListener("error", handleError);
+      events.forEach(event => {
+        document.removeEventListener(event, handleUserInteraction);
+      });
+    };
+  }, []);
+
   return (
     <>
       <Header />
       <main className="min-h-screen bg-white">
         {/* Hero Section */}
         <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+          {/* Fallback Background */}
+          <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
+          
           {/* Video Background */}
           <div className="absolute inset-0 w-full h-full overflow-hidden">
             <video
+              ref={videoRef}
               autoPlay
               loop
               muted
               playsInline
-              preload="auto"
-              className="absolute top-1/2 left-1/2 w-full h-full object-cover"
+              preload="metadata"
+              className={`absolute top-1/2 left-1/2 w-full h-full object-cover transition-all duration-1000 ${
+                isLoading ? 'opacity-0' : 'opacity-100'
+              }`}
               style={{
                 transform: 'translate(-50%, -50%)',
                 minWidth: '100%',
                 minHeight: '100%',
+                filter: showBlur ? 'blur(2px)' : 'blur(0px)',
               }}
             >
               <source
-                src="/images/South edge of building to east edge of building drone is facing downtown.MP4"
+                src={process.env.NEXT_PUBLIC_DRONE_DOWNTOWN_VIDEO_URL || "/images/South edge of building to east edge of building drone is facing downtown.MP4"}
                 type="video/mp4"
               />
             </video>
+            
+            {/* Loading Spinner */}
+            <AnimatePresence>
+              {isLoading && !hasError && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 flex items-center justify-center bg-black/30 z-20"
+                >
+                  <div className="relative">
+                    <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-8 h-8 border-4 border-brand-red-700/30 border-t-brand-red-700 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            
             {/* Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+            <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-10 transition-opacity duration-500 ${
+              isLoading ? 'opacity-0' : 'opacity-100'
+            }`}></div>
           </div>
           
-          {/* Content */}
-          <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl text-center pt-24 sm:pt-32">
-            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 sm:mb-8 leading-tight drop-shadow-2xl">
-              Development
-            </h1>
-            {/* Divider with red accent */}
-            <div className="flex items-center justify-center mb-6 sm:mb-10">
-              <div className="w-16 sm:w-24 h-1 bg-white relative">
-                <div className="absolute inset-0 bg-brand-red-700 opacity-60"></div>
-              </div>
-              <div className="w-2 h-2 bg-white mx-1.5 sm:mx-2 relative">
-                <div className="absolute inset-0 bg-brand-red-700 opacity-70"></div>
-              </div>
-              <div className="w-16 sm:w-24 h-1 bg-white relative">
-                <div className="absolute inset-0 bg-brand-red-700 opacity-60"></div>
-              </div>
-            </div>
-            <p className="text-base sm:text-lg md:text-2xl lg:text-3xl text-white max-w-5xl mx-auto mb-8 sm:mb-10 leading-relaxed drop-shadow-lg px-2">
-              Real Estate Development Strategy and Site Selection Services
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link 
-                href="/contact" 
-                className="btn-primary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm"
+          {/* Content - fades in after blur */}
+          <AnimatePresence mode="wait">
+            {showText && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
+                className="relative z-10 container mx-auto px-4 sm:px-6 max-w-6xl text-center pt-24 md:pt-32"
               >
-                Discuss a Project
-              </Link>
-              <Link 
-                href="/contact" 
-                className="btn-secondary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm bg-white text-black hover:bg-gray-100 border-2 border-white"
-              >
-                Contact Us
-              </Link>
-            </div>
-          </div>
+                <motion.h1 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 md:mb-8 leading-tight drop-shadow-2xl"
+                >
+                  Development
+                </motion.h1>
+                {/* Divider with red accent */}
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="flex items-center justify-center mb-6 md:mb-10"
+                >
+                  <motion.div className="w-16 md:w-24 h-1 bg-white relative">
+                    <div className="absolute inset-0 bg-brand-red-700 opacity-60"></div>
+                  </motion.div>
+                  <div className="w-2 h-2 bg-white mx-1.5 md:mx-2 relative">
+                    <div className="absolute inset-0 bg-brand-red-700 opacity-70"></div>
+                  </div>
+                  <motion.div className="w-16 md:w-24 h-1 bg-white relative">
+                    <div className="absolute inset-0 bg-brand-red-700 opacity-60"></div>
+                  </motion.div>
+                </motion.div>
+                <motion.p 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="text-lg md:text-2xl lg:text-3xl text-white max-w-5xl mx-auto mb-8 md:mb-10 leading-relaxed drop-shadow-lg px-2"
+                >
+                  Real Estate Development Strategy<span className="md:hidden">{' // '}</span><br className="md:hidden" /><span className="hidden md:inline"> </span>and Site Selection Services
+                </motion.p>
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  className="flex flex-col sm:flex-row justify-center gap-4"
+                >
+                  <Link 
+                    href="/contact" 
+                    className="btn-primary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm"
+                  >
+                    Discuss a Project
+                  </Link>
+                  <Link 
+                    href="/contact" 
+                    className="btn-secondary inline-flex items-center justify-center px-8 py-3 rounded-none text-sm bg-white text-black hover:bg-gray-100 border-2 border-white"
+                  >
+                    Contact Us
+                  </Link>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </section>
 
         {/* Intro Section - Flowing text without boxes */}
@@ -120,9 +275,15 @@ export default function DevelopmentPage() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <motion.div 
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              layout
+            >
               {/* Site Selection and Market Evaluation Services */}
-              <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
+              <motion.div 
+                className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 relative overflow-hidden hover:scale-[1.02]"
+                layout
+              >
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
                 <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
@@ -145,10 +306,13 @@ export default function DevelopmentPage() {
                     We regularly support organizations evaluating opportunities across multiple markets, providing consistent analysis and clear recommendations tailored to each location.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Feasibility and Development Strategy */}
-              <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
+              <motion.div 
+                className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 relative overflow-hidden hover:scale-[1.02]"
+                layout
+              >
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
                 <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
@@ -171,10 +335,13 @@ export default function DevelopmentPage() {
                     Our team helps clients determine where projects make sense, how they should be positioned and what risks should be addressed early in the process.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Strategic Development Advisory Services */}
-              <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
+              <motion.div 
+                className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 relative overflow-hidden hover:scale-[1.02]"
+                layout
+              >
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
                 <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
@@ -197,10 +364,10 @@ export default function DevelopmentPage() {
                     This advisory role allows us to bring structure and clarity to complex initiatives without extending beyond what the project requires.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Entitlement and Permitting Support */}
-              <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
+              <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 relative overflow-hidden hover:scale-[1.02]">
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
                 <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
@@ -223,7 +390,10 @@ export default function DevelopmentPage() {
               </div>
 
               {/* Design Coordination and Project Oversight */}
-              <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
+              <motion.div 
+                className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 relative overflow-hidden hover:scale-[1.02]"
+                layout
+              >
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
                 <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
@@ -243,10 +413,10 @@ export default function DevelopmentPage() {
                     CRD coordinates with architects, engineers and project partners to ensure design decisions align with development strategy, budgets and timelines. Our involvement helps keep projects organized and aligned as they move from planning into execution.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Redevelopment and Adaptive Reuse */}
-              <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden hover:scale-[1.02]">
+              <div className="group bg-white border-2 border-black shadow-lg p-6 md:p-8 hover:shadow-2xl transition-all duration-300 relative overflow-hidden hover:scale-[1.02]">
                 {/* Hover effect background */}
                 <div className="absolute inset-0 bg-brand-red-700 opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
                 <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-black opacity-20 group-hover:opacity-100 group-hover:border-brand-red-700 transition-all duration-300"></div>
@@ -267,7 +437,7 @@ export default function DevelopmentPage() {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -474,7 +644,7 @@ export default function DevelopmentPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Pillar 1 */}
-              <div className="group relative pb-8 border-b-2 md:border-b-0 md:border-r-2 border-black/10 md:pr-8 last:border-r-0 hover:border-brand-red-700 transition-colors duration-300 cursor-pointer">
+              <div className="group relative pb-8 border-b-2 md:border-b-0 md:border-r-2 border-black/10 md:pr-8 last:border-r-0 hover:border-brand-red-700 transition-colors duration-300">
                 <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
                   <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                 </div>
@@ -487,7 +657,10 @@ export default function DevelopmentPage() {
               </div>
 
               {/* Pillar 2 */}
-              <div className="group relative pb-8 border-b-2 md:border-b-0 md:border-r-2 border-black/10 md:pr-8 last:border-r-0 hover:border-brand-red-700 transition-colors duration-300 cursor-pointer">
+              <motion.div 
+                className="group relative pb-8 border-b-2 md:border-b-0 md:border-r-2 border-black/10 md:pr-8 last:border-r-0 hover:border-brand-red-700 transition-colors duration-300"
+                layout
+              >
                 <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
                   <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                 </div>
@@ -497,10 +670,10 @@ export default function DevelopmentPage() {
                 <p className="text-gray-700 leading-relaxed text-lg md:text-xl transition-colors duration-300">
                   Our approach is built on real world development experience applied thoughtfully across markets.
                 </p>
-              </div>
+              </motion.div>
 
               {/* Pillar 3 */}
-              <div className="group relative pb-8 hover:border-brand-red-700 transition-colors duration-300 cursor-pointer">
+              <div className="group relative pb-8 hover:border-brand-red-700 transition-colors duration-300">
                 <div className="w-12 h-1 bg-black mb-6 group-hover:w-20 transition-all duration-300 relative overflow-hidden">
                   <div className="absolute inset-0 bg-brand-red-700 opacity-50"></div>
                 </div>
