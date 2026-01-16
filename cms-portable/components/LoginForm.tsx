@@ -1,26 +1,31 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { loginAction } from '../actions/events';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useRef } from "react";
+import { useFormStatus } from "react-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { loginAction } from "../actions/events";
 
-type LoginState = {
+interface LoginState {
   success?: boolean;
   error?: string;
-};
+}
 
 // React 19 pattern: useFormStatus in child component
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="w-full cursor-pointer">
-      {pending ? 'Logging in...' : 'Login'}
+    <Button className="w-full cursor-pointer" disabled={pending} type="submit">
+      {pending ? "Logging in..." : "Login"}
     </Button>
   );
 }
@@ -40,26 +45,28 @@ export function LoginForm() {
   }, [state, router]);
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="mx-auto w-full max-w-md">
       <CardHeader>
         <CardTitle>Admin Login</CardTitle>
         <CardDescription>Enter your password to access the CMS</CardDescription>
       </CardHeader>
       <CardContent>
-        <form ref={formRef} action={formAction} className="space-y-4">
+        <form action={formAction} className="space-y-4" ref={formRef}>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input
+              className="bg-background text-foreground"
               id="password"
               name="password"
-              type="password"
               placeholder="Enter password"
               required
-              className="bg-background text-foreground"
+              type="password"
             />
           </div>
           {state?.error && (
-            <p className="text-sm text-destructive font-medium">{state.error}</p>
+            <p className="font-medium text-destructive text-sm">
+              {state.error}
+            </p>
           )}
           <SubmitButton />
         </form>

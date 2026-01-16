@@ -30,13 +30,16 @@ const itemVariants = {
   },
 };
 
-export default function PageTransition({ children, className = "" }: PageTransitionProps) {
+export default function PageTransition({
+  children,
+  className = "",
+}: PageTransitionProps) {
   return (
     <motion.div
-      variants={containerVariants}
-      initial="hidden"
       animate="visible"
       className={className}
+      initial="hidden"
+      variants={containerVariants}
     >
       {children}
     </motion.div>

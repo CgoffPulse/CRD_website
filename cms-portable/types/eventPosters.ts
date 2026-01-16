@@ -24,7 +24,7 @@ export function groupEventPosters(
 
   // Group posters by their base ID (removing numeric suffix)
   for (const poster of posters) {
-    const baseId = poster.id.replace(NUMERIC_SUFFIX_REGEX, '');
+    const baseId = poster.id.replace(NUMERIC_SUFFIX_REGEX, "");
     if (!groups.has(baseId)) {
       groups.set(baseId, []);
     }
@@ -35,10 +35,12 @@ export function groupEventPosters(
   return Array.from(groups.entries()).map(([baseId, groupPosters]) => {
     const sortedPosters = groupPosters.sort((a, b) => {
       const aNum = Number.parseInt(
-        a.id.match(NUMERIC_SUFFIX_REGEX)?.[0] || '0'
+        a.id.match(NUMERIC_SUFFIX_REGEX)?.[0] || "0",
+        10
       );
       const bNum = Number.parseInt(
-        b.id.match(NUMERIC_SUFFIX_REGEX)?.[0] || '0'
+        b.id.match(NUMERIC_SUFFIX_REGEX)?.[0] || "0",
+        10
       );
       return aNum - bNum;
     });

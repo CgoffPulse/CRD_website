@@ -1,33 +1,50 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useActionState, useOptimistic } from 'react';
-import { useFormStatus } from 'react-dom';
-import { useDropzone } from 'react-dropzone';
-import { createResidentialListing } from '../actions/residentialListings';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import {
+  useActionState,
+  useEffect,
+  useOptimistic,
+  useRef,
+  useState,
+} from "react";
+import { useFormStatus } from "react-dom";
+import { useDropzone } from "react-dropzone";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { createResidentialListing } from "../actions/residentialListings";
+import { PropertyDetailsForm } from "../components/PropertyDetailsForm";
 
-type UploadState = {
+interface UploadState {
   success?: boolean;
   error?: string;
   listingId?: string;
-};
+}
 
-type OptimisticListing = {
+interface OptimisticListing {
   id: string;
   title: string;
-};
+}
 
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="w-full cursor-pointer">
-      {pending ? 'Creating...' : 'Create Listing'}
+    <Button
+      className="w-full cursor-pointer bg-black text-white hover:bg-gray-900"
+      disabled={pending}
+      type="submit"
+    >
+      {pending ? "Creating..." : "Create Listing"}
     </Button>
   );
 }
@@ -40,17 +57,30 @@ export function ResidentialListingUploadForm() {
   );
   const [optimisticListings, updateOptimisticListings] = useOptimistic<
     OptimisticListing[],
-    { type: 'add'; listing: OptimisticListing } | { type: 'clear' }
+    { type: "add"; listing: OptimisticListing } | { type: "clear" }
   >([], (current, action) => {
-    if (action.type === 'clear') {
+    if (action.type === "clear") {
       return [];
     }
     return [...current, action.listing];
   });
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
-  const [bullets, setBullets] = useState<string[]>(['']);
-  const [agents, setAgents] = useState<Array<{ name: string; email?: string; phone?: string }>>([{ name: '' }]);
+  const [templateFields, setTemplateFields] = useState({
+    squareFootage: "",
+    propertyType: "",
+    yearBuilt: "",
+    lotSize: "",
+    communityFeatures: "",
+    specialFeatures: "",
+    pricePerSqft: "",
+  });
+  const [additionalBullets, setAdditionalBullets] = useState<string[]>([""]);
+  const [agents, setAgents] = useState<
+    Array<{ name: string; email?: string; phone?: string }>
+  >([{ name: "" }]);
+  const [mlsNumber, setMlsNumber] = useState<string>("");
+  const [_propertyDetailsJson, setPropertyDetailsJson] = useState<string>("{}");
   const formRef = useRef<HTMLFormElement>(null);
 
   const {
@@ -68,7 +98,7 @@ export function ResidentialListingUploadForm() {
       }
     },
     multiple: false,
-    accept: { 'image/*': ['.jpg', '.jpeg', '.png', '.webp'] },
+    accept: { "image/*": [".jpg", ".jpeg", ".png", ".webp"] },
     maxSize: 10 * 1024 * 1024,
   });
 
@@ -90,7 +120,7 @@ export function ResidentialListingUploadForm() {
       });
     },
     multiple: true,
-    accept: { 'image/*': ['.jpg', '.jpeg', '.png', '.webp'] },
+    accept: { "image/*": [".jpg", ".jpeg", ".png", ".webp"] },
     maxSize: 10 * 1024 * 1024,
   });
 
@@ -99,36 +129,93 @@ export function ResidentialListingUploadForm() {
       formRef.current?.reset();
       setCoverPreview(null);
       setGalleryPreviews([]);
-      setBullets(['']);
-      setAgents([{ name: '' }]);
-      updateOptimisticListings({ type: 'clear' });
+      setTemplateFields({
+        squareFootage: "",
+        propertyType: "",
+        yearBuilt: "",
+        lotSize: "",
+        communityFeatures: "",
+        specialFeatures: "",
+        pricePerSqft: "",
+      });
+      setAdditionalBullets([""]);
+      setAgents([{ name: "" }]);
+      setMlsNumber("");
+      updateOptimisticListings({ type: "clear" });
       router.refresh();
     }
   }, [state, router, updateOptimisticListings]);
 
-  const addBullet = () => {
-    setBullets([...bullets, '']);
+  const addAdditionalBullet = () => {
+    setAdditionalBullets([...additionalBullets, ""]);
   };
 
-  const removeBullet = (index: number) => {
-    setBullets(bullets.filter((_, i) => i !== index));
+  const removeAdditionalBullet = (index: number) => {
+    setAdditionalBullets(additionalBullets.filter((_, i) => i !== index));
   };
 
-  const updateBullet = (index: number, value: string) => {
-    const newBullets = [...bullets];
+  const updateAdditionalBullet = (index: number, value: string) => {
+    const newBullets = [...additionalBullets];
     newBullets[index] = value;
-    setBullets(newBullets);
+    setAdditionalBullets(newBullets);
+  };
+
+  const handleMlsNumberChange = (value: string) => {
+    setMlsNumber(value);
+  };
+
+  // Build final bullets array from template fields + MLS# + additional bullets
+  const buildBulletsArray = (): string[] => {
+    const bullets: string[] = [];
+
+    if (templateFields.squareFootage.trim()) {
+      bullets.push(templateFields.squareFootage.trim());
+    }
+    if (templateFields.propertyType.trim()) {
+      bullets.push(templateFields.propertyType.trim());
+    }
+    if (templateFields.yearBuilt.trim()) {
+      bullets.push(templateFields.yearBuilt.trim());
+    }
+    if (templateFields.lotSize.trim()) {
+      bullets.push(templateFields.lotSize.trim());
+    }
+    if (templateFields.communityFeatures.trim()) {
+      bullets.push(templateFields.communityFeatures.trim());
+    }
+    if (templateFields.specialFeatures.trim()) {
+      bullets.push(templateFields.specialFeatures.trim());
+    }
+    if (mlsNumber.trim()) {
+      bullets.push(`MLS#: ${mlsNumber.trim()}`);
+    }
+    if (templateFields.pricePerSqft.trim()) {
+      bullets.push(templateFields.pricePerSqft.trim());
+    }
+
+    // Add additional bullets
+    additionalBullets.forEach((bullet) => {
+      if (bullet.trim()) {
+        bullets.push(bullet.trim());
+      }
+    });
+
+    return bullets;
   };
 
   const addAgent = () => {
-    setAgents([...agents, { name: '' }]);
+    setAgents([...agents, { name: "" }]);
   };
 
   const removeAgent = (index: number) => {
     setAgents(agents.filter((_, i) => i !== index));
   };
 
-  const updateAgent = (index: number, field: 'name' | 'email' | 'phone', value: string) => {
+  const updateAgent = (
+    index: number,
+    field: "name" | "email" | "phone",
+    value: string
+  ) => {
     const newAgents = [...agents];
     newAgents[index] = { ...newAgents[index], [field]: value };
     setAgents(newAgents);
@@ -145,11 +232,18 @@ export function ResidentialListingUploadForm() {
       <CardContent>
         {optimisticListings.length > 0 && (
           <div className="mb-6 rounded border border-gray-200 bg-gray-50 p-4">
-            <p className="text-sm font-semibold text-black mb-2">Pending uploads</p>
-            <ul className="space-y-1 text-sm text-gray-700">
+            <p className="mb-2 font-semibold text-black text-sm">
+              Pending uploads
+            </p>
+            <ul className="space-y-1 text-gray-700 text-sm">
               {optimisticListings.map((listing) => (
-                <li key={listing.id} className="flex items-center justify-between">
-                  <span className="font-medium text-black">{listing.title}</span>
+                <li
+                  className="flex items-center justify-between"
+                  key={listing.id}
+                >
+                  <span className="font-medium text-black">
+                    {listing.title}
+                  </span>
                   <span className="text-gray-600">Residential</span>
                 </li>
               ))}
@@ -157,113 +251,279 @@ export function ResidentialListingUploadForm() {
           </div>
         )}
         <form
-          ref={formRef}
           action={async (formData: FormData) => {
-            const title = (formData.get('title') as string) || 'New Listing';
-            updateOptimisticListings({
-              type: 'add',
-              listing: {
-                id: String(Date.now()),
-                title,
-              },
-            });
-            formData.set('bullets', JSON.stringify(bullets.filter((b) => b.trim())));
-            formData.set('agents', JSON.stringify(agents.filter((a) => a.name.trim())));
-            await formAction(formData);
+            try {
+              const title = (formData.get("title") as string) || "New Listing";
+              updateOptimisticListings({
+                type: "add",
+                listing: {
+                  id: String(Date.now()),
+                  title,
+                },
+              });
+              formData.set("bullets", JSON.stringify(buildBulletsArray()));
+              formData.set(
+                "agents",
+                JSON.stringify(agents.filter((a) => a.name.trim()))
+              );
+              await formAction(formData);
+            } catch (error) {
+              console.error("Error submitting form:", error);
+              updateOptimisticListings({ type: "clear" });
+            }
           }}
           className="space-y-6"
+          ref={formRef}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="title">Title *</Label>
-              <Input id="title" name="title" required className="bg-background text-foreground" />
+              <Input
+                className="bg-background text-foreground"
+                id="title"
+                name="title"
+                required
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="price">Price *</Label>
-              <Input id="price" name="price" placeholder="$160,000" required className="bg-background text-foreground" />
+              <Input
+                className="bg-background text-foreground"
+                id="price"
+                name="price"
+                placeholder="$160,000"
+                required
+              />
             </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="location">Location *</Label>
-            <Input id="location" name="location" placeholder="21548 Walnut St, Garfield, AR 72732" required className="bg-background text-foreground" />
+            <Input
+              className="bg-background text-foreground"
+              id="location"
+              name="location"
+              placeholder="21548 Walnut St, Garfield, AR 72732"
+              required
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Textarea id="description" name="description" rows={6} className="bg-background text-foreground" />
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="mlsNumber">MLS Number</Label>
-              <Input id="mlsNumber" name="mlsNumber" className="bg-background text-foreground" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="office">Office</Label>
-              <Input id="office" name="office" className="bg-background text-foreground" />
-            </div>
+            <Textarea
+              className="bg-background text-foreground"
+              id="description"
+              name="description"
+              rows={6}
+            />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="officePhone">Office Phone</Label>
-            <Input id="officePhone" name="officePhone" className="bg-background text-foreground" />
+            <Label htmlFor="mlsNumber">MLS Number</Label>
+            <Input
+              className="bg-background text-foreground"
+              id="mlsNumber"
+              name="mlsNumber"
+              onChange={(e) => handleMlsNumberChange(e.target.value)}
+              value={mlsNumber}
+            />
+            <p className="text-muted-foreground text-xs">
+              MLS# will automatically be added to key features
+            </p>
           </div>
 
-          <div className="space-y-2">
-            <Label>Bullets</Label>
-            {bullets.map((bullet, index) => (
-              <div key={`${index}-${bullet}`} className="flex gap-2">
-                <Input
-                  value={bullet}
-                  onChange={(e) => updateBullet(index, e.target.value)}
-                  placeholder={`Bullet point ${index + 1}`}
-                  className="bg-background text-foreground"
-                />
-                {bullets.length > 1 && (
-                  <Button type="button" variant="outline" onClick={() => removeBullet(index)}>
-                    Remove
-                  </Button>
-                )}
-              </div>
-            ))}
-            <Button type="button" variant="outline" onClick={addBullet}>
-              Add Bullet
-            </Button>
+          <div className="space-y-4 border-t pt-6">
+            <Label className="text-base">Key Features</Label>
+
+            <div className="space-y-2">
+              <Label htmlFor="squareFootage">Square Footage</Label>
+              <Input
+                className="bg-background text-foreground"
+                id="squareFootage"
+                onChange={(e) =>
+                  setTemplateFields({
+                    ...templateFields,
+                    squareFootage: e.target.value,
+                  })
+                }
+                placeholder="850 sq ft"
+                value={templateFields.squareFootage}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="propertyType">Property Type</Label>
+              <Input
+                className="bg-background text-foreground"
+                id="propertyType"
+                onChange={(e) =>
+                  setTemplateFields({
+                    ...templateFields,
+                    propertyType: e.target.value,
+                  })
+                }
+                placeholder="Manufactured Home, Single Family Residence"
+                value={templateFields.propertyType}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="yearBuilt">Year Built</Label>
+              <Input
+                className="bg-background text-foreground"
+                id="yearBuilt"
+                onChange={(e) =>
+                  setTemplateFields({
+                    ...templateFields,
+                    yearBuilt: e.target.value,
+                  })
+                }
+                placeholder="Built in 1970"
+                value={templateFields.yearBuilt}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="lotSize">Lot Size</Label>
+              <Input
+                className="bg-background text-foreground"
+                id="lotSize"
+                onChange={(e) =>
+                  setTemplateFields({
+                    ...templateFields,
+                    lotSize: e.target.value,
+                  })
+                }
+                placeholder="5,662.8 sq ft lot"
+                value={templateFields.lotSize}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="communityFeatures">Community/Features</Label>
+              <Input
+                className="bg-background text-foreground"
+                id="communityFeatures"
+                onChange={(e) =>
+                  setTemplateFields({
+                    ...templateFields,
+                    communityFeatures: e.target.value,
+                  })
+                }
+                placeholder="Lost Bridge Village community"
+                value={templateFields.communityFeatures}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="specialFeatures">Special Features</Label>
+              <Input
+                className="bg-background text-foreground"
+                id="specialFeatures"
+                onChange={(e) =>
+                  setTemplateFields({
+                    ...templateFields,
+                    specialFeatures: e.target.value,
+                  })
+                }
+                placeholder="Fully furnished, Screened-in porch"
+                value={templateFields.specialFeatures}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="pricePerSqft">Price per sqft</Label>
+              <Input
+                className="bg-background text-foreground"
+                id="pricePerSqft"
+                onChange={(e) =>
+                  setTemplateFields({
+                    ...templateFields,
+                    pricePerSqft: e.target.value,
+                  })
+                }
+                placeholder="$188/sqft"
+                value={templateFields.pricePerSqft}
+              />
+            </div>
+
+            <div className="space-y-2 border-t pt-4">
+              <Label>Additional Features</Label>
+              <p className="text-muted-foreground text-xs">
+                Add any additional bullet point features below.{" "}
+              </p>
+              {additionalBullets.map((bullet, index) => (
+                <div className="flex gap-2" key={`${index}-${bullet}`}>
+                  <Input
+                    className="bg-background text-foreground"
+                    onChange={(e) =>
+                      updateAdditionalBullet(index, e.target.value)
+                    }
+                    placeholder={`Additional feature ${index + 1}`}
+                    value={bullet}
+                  />
+                  {additionalBullets.length > 1 && (
+                    <Button
+                      onClick={() => removeAdditionalBullet(index)}
+                      type="button"
+                      variant="outline"
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </div>
+              ))}
+              <Button
+                onClick={addAdditionalBullet}
+                type="button"
+                variant="outline"
+              >
+                Add Feature
+              </Button>
+            </div>
           </div>
 
           <div className="space-y-2">
             <Label>Agents</Label>
             {agents.map((agent, index) => (
-              <div key={`${index}-${agent.name}`} className="grid gap-2 md:grid-cols-3 border p-2 rounded">
+              <div
+                className="grid gap-2 rounded border p-2 md:grid-cols-3"
+                key={`${index}-${agent.name}`}
+              >
                 <Input
+                  className="bg-background text-foreground"
+                  onChange={(e) => updateAgent(index, "name", e.target.value)}
                   placeholder="Name"
                   value={agent.name}
-                  onChange={(e) => updateAgent(index, 'name', e.target.value)}
-                  className="bg-background text-foreground"
                 />
                 <Input
-                  placeholder="Email"
-                  value={agent.email || ''}
-                  onChange={(e) => updateAgent(index, 'email', e.target.value)}
                   className="bg-background text-foreground"
+                  onChange={(e) => updateAgent(index, "email", e.target.value)}
+                  placeholder="Email"
+                  value={agent.email || ""}
                 />
                 <div className="flex gap-2">
                   <Input
-                    placeholder="Phone"
-                    value={agent.phone || ''}
-                    onChange={(e) => updateAgent(index, 'phone', e.target.value)}
                     className="bg-background text-foreground"
+                    onChange={(e) =>
+                      updateAgent(index, "phone", e.target.value)
+                    }
+                    placeholder="Phone"
+                    value={agent.phone || ""}
                   />
                   {agents.length > 1 && (
-                    <Button type="button" variant="outline" onClick={() => removeAgent(index)}>
+                    <Button
+                      onClick={() => removeAgent(index)}
+                      type="button"
+                      variant="outline"
+                    >
                       Remove
                     </Button>
                   )}
                 </div>
               </div>
             ))}
-            <Button type="button" variant="outline" onClick={addAgent}>
+            <Button onClick={addAgent} type="button" variant="outline">
               Add Agent
             </Button>
           </div>
@@ -272,15 +532,27 @@ export function ResidentialListingUploadForm() {
             <Label htmlFor="coverImage">Cover Image *</Label>
             <div
               {...getCoverRootProps()}
-              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer ${
-                isCoverDragActive ? 'border-primary bg-primary/10' : 'border-muted-foreground/25'
+              className={`cursor-pointer rounded-lg border-2 border-dashed p-8 text-center ${
+                isCoverDragActive
+                  ? "border-primary bg-primary/10"
+                  : "border-muted-foreground/25"
               }`}
             >
-              <input {...getCoverInputProps({ id: 'coverImage', name: 'coverImage', required: true })} />
+              <input
+                {...getCoverInputProps({
+                  id: "coverImage",
+                  name: "coverImage",
+                  required: true,
+                })}
+              />
               {coverPreview ? (
-                <img src={coverPreview} alt="Preview" className="max-h-48 mx-auto rounded" />
+                <img
+                  alt="Preview"
+                  className="mx-auto max-h-48 rounded"
+                  src={coverPreview}
+                />
               ) : (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Drag and drop cover image here, or click to select
                 </p>
               )}
@@ -291,43 +563,55 @@ export function ResidentialListingUploadForm() {
             <Label htmlFor="galleryImages">Gallery Images</Label>
             <div
               {...getGalleryRootProps()}
-              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer ${
-                isGalleryDragActive ? 'border-primary bg-primary/10' : 'border-muted-foreground/25'
+              className={`cursor-pointer rounded-lg border-2 border-dashed p-8 text-center ${
+                isGalleryDragActive
+                  ? "border-primary bg-primary/10"
+                  : "border-muted-foreground/25"
               }`}
             >
-              <input {...getGalleryInputProps({ id: 'galleryImages', name: 'galleryImages' })} />
-              <p className="text-sm text-muted-foreground">
+              <input
+                {...getGalleryInputProps({
+                  id: "galleryImages",
+                  name: "galleryImages",
+                })}
+              />
+              <p className="text-muted-foreground text-sm">
                 Drag and drop gallery images here, or click to select (multiple)
               </p>
             </div>
             {galleryPreviews.length > 0 && (
-              <div className="grid grid-cols-3 gap-2 mt-2">
+              <div className="mt-2 grid grid-cols-3 gap-2">
                 {galleryPreviews.map((preview, index) => (
-                  <img key={preview} src={preview} alt={`Preview ${index + 1}`} className="rounded" />
+                  <div className="relative aspect-square w-full" key={preview}>
+                    <Image
+                      alt={`Preview ${index + 1}`}
+                      className="rounded object-cover"
+                      fill
+                      src={preview}
+                      unoptimized
+                    />
+                  </div>
                 ))}
               </div>
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="propertyDetails">Property Details (JSON)</Label>
-            <Textarea
-              id="propertyDetails"
-              name="propertyDetails"
-              rows={10}
-              placeholder='{"interior": {"heating": "Central"}, "property": {"levels": "Two"}}'
-              className="bg-background text-foreground font-mono text-sm"
-            />
-            <p className="text-xs text-muted-foreground">
-              Enter property details as JSON. Leave empty if not needed.
-            </p>
-          </div>
+          <PropertyDetailsForm
+            onChange={(json) => {
+              setPropertyDetailsJson(json);
+            }}
+            type="residential"
+          />
 
           {state?.error && (
-            <p className="text-sm text-destructive font-medium">{state.error}</p>
+            <p className="font-medium text-destructive text-sm">
+              {state.error}
+            </p>
           )}
           {state?.success && (
-            <p className="text-sm text-green-600 font-medium">Listing created successfully!</p>
+            <p className="font-medium text-green-600 text-sm">
+              Listing created successfully!
+            </p>
           )}
 
           <SubmitButton />

@@ -4,48 +4,48 @@
   /* Colors */
   --color-background: #ffffff;
   --color-foreground: #000000;
-  
+
   /* Leather Brown Palette */
-  --color-leather-900: #2C1810;
-  --color-leather-800: #3D2417;
-  --color-leather-700: #4E2F1E;
-  --color-leather-600: #6B3410;
-  --color-leather-500: #8B4513;
-  --color-leather-400: #A0522D;
-  --color-leather-300: #BC8F8F;
-  --color-leather-200: #D2B48C;
-  --color-leather-100: #E8D5C4;
-  --color-leather-50: #F5E6D3;
-  
+  --color-leather-900: #2c1810;
+  --color-leather-800: #3d2417;
+  --color-leather-700: #4e2f1e;
+  --color-leather-600: #6b3410;
+  --color-leather-500: #8b4513;
+  --color-leather-400: #a0522d;
+  --color-leather-300: #bc8f8f;
+  --color-leather-200: #d2b48c;
+  --color-leather-100: #e8d5c4;
+  --color-leather-50: #f5e6d3;
+
   /* Cream Palette */
-  --color-cream-50: #FAF7F2;
-  --color-cream-100: #F5F0E8;
-  --color-cream-200: #F1E9DC;
-  --color-cream-300: #E8DCC8;
-  --color-cream-400: #D9C9AD;
-  
+  --color-cream-50: #faf7f2;
+  --color-cream-100: #f5f0e8;
+  --color-cream-200: #f1e9dc;
+  --color-cream-300: #e8dcc8;
+  --color-cream-400: #d9c9ad;
+
   /* Accent Colors */
-  --color-accent-rust: #A0522D;
-  --color-accent-gold: #D4A574;
-  --color-accent-sage: #8B9E7D;
-  
+  --color-accent-rust: #a0522d;
+  --color-accent-gold: #d4a574;
+  --color-accent-sage: #8b9e7d;
+
   /* Navy Colors */
   --color-navy-900: #1a2332;
   --color-navy-800: #243447;
   --color-navy-700: #2d405c;
-  
+
   /* Brand Colors */
   --color-brand-black: #000000;
-  --color-brand-red: #DC2626;
-  --color-brand-red-900: #991B1B;
-  --color-brand-red-800: #B91C1C;
-  --color-brand-red-700: #DC2626;
-  --color-brand-red-600: #EF4444;
-  --color-brand-red-500: #F87171;
-  --color-brand-red-400: #FCA5A5;
-  --color-brand-red-300: #FECACA;
-  --color-brand-red-200: #FEE2E2;
-  --color-brand-red-100: #FEF2F2;
+  --color-brand-red: #dc2626;
+  --color-brand-red-900: #991b1b;
+  --color-brand-red-800: #b91c1c;
+  --color-brand-red-700: #dc2626;
+  --color-brand-red-600: #ef4444;
+  --color-brand-red-500: #f87171;
+  --color-brand-red-400: #fca5a5;
+  --color-brand-red-300: #fecaca;
+  --color-brand-red-200: #fee2e2;
+  --color-brand-red-100: #fef2f2;
   --color-brand-gray-900: #0a0a0a;
   --color-brand-gray-800: #1a1a1a;
   --color-brand-gray-700: #2a2a2a;
@@ -55,12 +55,16 @@
   --color-brand-gray-300: #9a9a9a;
   --color-brand-gray-200: #bababa;
   --color-brand-gray-100: #dadada;
-  
+
   /* Font Families */
   --font-sans: Arial, Helvetica, sans-serif;
   --font-serif: Georgia, "Times New Roman", serif;
-  --font-display: var(--font-playfair), Georgia, serif;
-  
+  --font-display:
+    var(--font-copperplate-bold), "Copperplate", "Copperplate Gothic Bold",
+    serif;
+  --font-medium:
+    var(--font-copperplate-medium), "Copperplate", "Copperplate Gothic", serif;
+
   /* Letter Spacing */
   --tracking-wider-xl: 0.15em;
 }
@@ -69,19 +73,19 @@
   width: 100%;
   margin-inline: auto;
   padding-inline: 1.5rem;
-  
+
   @variant sm {
     padding-inline: 2rem;
   }
-  
+
   @variant lg {
     padding-inline: 4rem;
   }
-  
+
   @variant xl {
     padding-inline: 5rem;
   }
-  
+
   @variant 2xl {
     padding-inline: 6rem;
   }
@@ -122,6 +126,9 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .font-copperplate-medium {
+    font-family: var(--font-medium);
+  }
 }
 
 @layer components {
@@ -130,48 +137,59 @@ body {
     background: #000000;
     border: 2px solid #000000;
     color: #ffffff;
-    font-weight: 600;
+    font-family: var(--font-medium);
+    font-weight: 500;
     font-size: 14px;
     letter-spacing: 0.05em;
     padding: 12px 24px;
     min-height: 44px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.15),
+      0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     line-height: 1.5;
     position: relative;
     overflow: hidden;
     cursor: pointer;
   }
-  
+
   @media (min-width: 640px) {
     .btn-primary {
       font-size: 16px;
       padding: 14px 32px;
     }
   }
-  
+
   .btn-primary::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
     transition: left 0.5s ease;
   }
-  
+
   .btn-primary:hover::before {
     left: 100%;
   }
-  
+
   .btn-primary:hover {
     background: #1a1a1a;
     border-color: #1a1a1a;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(220, 38, 38, 0.2);
+    box-shadow:
+      0 6px 12px rgba(0, 0, 0, 0.25),
+      0 4px 8px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(220, 38, 38, 0.2);
     transform: translateY(-2px);
   }
-  
+
   .btn-primary:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
@@ -181,7 +199,8 @@ body {
     background: transparent;
     border: 2px solid #000000;
     color: #000000;
-    font-weight: 600;
+    font-family: var(--font-medium);
+    font-weight: 500;
     font-size: 14px;
     letter-spacing: 0.05em;
     padding: 12px 24px;
@@ -192,16 +211,16 @@ body {
     overflow: hidden;
     cursor: pointer;
   }
-  
+
   @media (min-width: 640px) {
     .btn-secondary {
       font-size: 16px;
       padding: 14px 32px;
     }
   }
-  
+
   .btn-secondary::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -211,17 +230,19 @@ body {
     transition: width 0.3s ease;
     z-index: -1;
   }
-  
+
   .btn-secondary:hover::before {
     width: 100%;
   }
-  
+
   .btn-secondary:hover {
     color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(220, 38, 38, 0.15);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(220, 38, 38, 0.15);
     transform: translateY(-2px);
   }
-  
+
   .btn-secondary:active {
     transform: translateY(0);
   }
@@ -246,4 +267,3 @@ body {
     transform: scale(1);
   }
 }
-

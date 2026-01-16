@@ -1,14 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import Image from 'next/image';
-import { reinstatePromoImage } from '../actions/promoPopup';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useActionState, useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -16,20 +12,23 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import type { PromoImage } from '../actions/promoPopup';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { PromoImage } from "../actions/promoPopup";
+import { reinstatePromoImage } from "../actions/promoPopup";
 
-type ReinstateState = {
+interface ReinstateState {
   success?: boolean;
   error?: string;
-};
+}
 
 // React 19 pattern: useFormStatus in child component
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="cursor-pointer">
-      {pending ? 'Reinstating...' : 'Reinstate Promo'}
+    <Button className="cursor-pointer" disabled={pending} type="submit">
+      {pending ? "Reinstating..." : "Reinstate Promo"}
     </Button>
   );
 }
@@ -51,7 +50,9 @@ export function ReinstatePromoDialog({
   const formRef = useRef<HTMLFormElement>(null);
   const [durationDays, setDurationDays] = useState<number>(7);
 
-  const reinstateAction = async (prevState: ReinstateState): Promise<ReinstateState> => {
+  const reinstateAction = async (
+    _prevState: ReinstateState
+  ): Promise<ReinstateState> => {
     const result = await reinstatePromoImage(imageId, durationDays);
     if (result.success) {
       formRef.current?.reset();
@@ -62,7 +63,10 @@ export function ReinstatePromoDialog({
     return { success: false, error: result.error };
   };
 
-  const [state, formAction] = useActionState<ReinstateState, void>(reinstateAction, {});
+  const [state, formAction] = useActionState<ReinstateState, void>(
+    reinstateAction,
+    {}
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,30 +81,31 @@ export function ReinstatePromoDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Reinstate Promo</DialogTitle>
           <DialogDescription>
-            Set how many days this promo should be active. It will automatically expire after this duration.
+            Set how many days this promo should be active. It will automatically
+            expire after this duration.
           </DialogDescription>
         </DialogHeader>
-        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit} ref={formRef}>
           <div className="space-y-4">
-            <div className="relative aspect-[3/4] w-full max-w-xs mx-auto overflow-hidden rounded-lg border">
-              {image.src.startsWith('https://') ? (
+            <div className="relative mx-auto aspect-[3/4] w-full max-w-xs overflow-hidden rounded-lg border">
+              {image.src.startsWith("https://") ? (
                 <Image
-                  src={image.src}
                   alt={image.alt}
-                  fill
                   className="object-cover"
+                  fill
                   sizes="(max-width: 500px) 100vw, 500px"
+                  src={image.src}
                 />
               ) : (
                 <img
-                  src={image.src}
                   alt={image.alt}
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
+                  src={image.src}
                 />
               )}
             </div>
@@ -108,30 +113,31 @@ export function ReinstatePromoDialog({
               <Label htmlFor="duration">Duration (days)</Label>
               <Input
                 id="duration"
-                type="number"
                 min="1"
-                value={durationDays}
                 onChange={(e) => {
                   setDurationDays(Number.parseInt(e.target.value, 10) || 1);
                 }}
                 required
+                type="number"
+                value={durationDays}
               />
-              <p className="text-xs text-muted-foreground">
-                This promo will be active for {durationDays} day{durationDays !== 1 ? 's' : ''} and will automatically expire.
+              <p className="text-muted-foreground text-xs">
+                This promo will be active for {durationDays} day
+                {durationDays !== 1 ? "s" : ""} and will automatically expire.
               </p>
             </div>
             {state.error && (
-              <p className="text-sm text-destructive">{state.error}</p>
+              <p className="text-destructive text-sm">{state.error}</p>
             )}
           </div>
           <DialogFooter>
             <Button
-              type="button"
-              variant="outline"
+              className="cursor-pointer"
               onClick={() => {
                 onOpenChange(false);
               }}
-              className="cursor-pointer"
+              type="button"
+              variant="outline"
             >
               Cancel
             </Button>

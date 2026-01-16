@@ -1,25 +1,36 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { importResidentialListingsFromJson } from '../actions/residentialListings';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useActionState, useEffect, useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { importResidentialListingsFromJson } from "../actions/residentialListings";
 
-type ImportState = {
+interface ImportState {
   success?: boolean;
   error?: string;
   importedCount?: number;
-};
+}
 
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="w-full cursor-pointer" variant="outline">
-      {pending ? 'Importing...' : 'Import Listings from JSON'}
+    <Button
+      className="w-full cursor-pointer"
+      disabled={pending}
+      type="submit"
+      variant="outline"
+    >
+      {pending ? "Importing..." : "Import Listings from JSON"}
     </Button>
   );
 }
@@ -29,100 +40,129 @@ export function JsonImportForm() {
     importResidentialListingsFromJson,
     {}
   );
-  const [jsonText, setJsonText] = useState<string>('');
+  const [jsonText, setJsonText] = useState<string>("");
+  const [isExpanded, setIsExpanded] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleLoadExample = async () => {
     try {
-      const response = await fetch('/data/hardcoded-residential-listings.json');
+      const response = await fetch("/data/hardcoded-residential-listings.json");
       if (response.ok) {
         const data = await response.json();
         setJsonText(JSON.stringify(data, null, 2));
       } else {
-        alert('Could not load example JSON file');
+        alert("Could not load example JSON file");
       }
     } catch (error) {
-      alert('Error loading example JSON: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      alert(
+        "Error loading example JSON: " +
+          (error instanceof Error ? error.message : "Unknown error")
+      );
     }
   };
 
   const handleClear = () => {
-    setJsonText('');
+    setJsonText("");
     formRef.current?.reset();
   };
 
   useEffect(() => {
     if (state?.success) {
-      setJsonText('');
+      setJsonText("");
       formRef.current?.reset();
     }
   }, [state?.success]);
 
   return (
-    <Card className="w-full border-orange-500 border-2">
-      <CardHeader>
-        <CardTitle className="text-orange-600">🔧 Dev Tool: Import from JSON</CardTitle>
-        <CardDescription>
-          Import one or more residential listings from JSON format. Useful for bulk imports or restoring hardcoded listings.
-        </CardDescription>
+    <Card className="w-full border border-orange-300">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <CardTitle className="text-orange-600 text-sm">
+              🔧 Dev Tool: Import from JSON
+            </CardTitle>
+            <CardDescription className="text-xs">
+              Bulk import residential listings from JSON
+            </CardDescription>
+          </div>
+          <Button
+            className="cursor-pointer"
+            onClick={() => {
+              setIsExpanded(!isExpanded);
+            }}
+            size="sm"
+            type="button"
+            variant="ghost"
+          >
+            {isExpanded ? (
+              <ChevronUp className="h-4 w-4" />
+            ) : (
+              <ChevronDown className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
       </CardHeader>
-      <CardContent>
+      {isExpanded && (
+        <CardContent className="pt-0">
         <form
-          ref={formRef}
           action={async (formData: FormData) => {
-            formData.set('jsonData', jsonText);
+            formData.set("jsonData", jsonText);
             await formAction(formData);
           }}
           className="space-y-4"
+          ref={formRef}
         >
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="jsonData">JSON Data</Label>
               <div className="flex gap-2">
                 <Button
+                  className="cursor-pointer"
+                  onClick={handleLoadExample}
+                  size="sm"
                   type="button"
                   variant="outline"
-                  size="sm"
-                  onClick={handleLoadExample}
-                  className="cursor-pointer"
                 >
                   Load Example
                 </Button>
                 <Button
+                  className="cursor-pointer"
+                  onClick={handleClear}
+                  size="sm"
                   type="button"
                   variant="outline"
-                  size="sm"
-                  onClick={handleClear}
-                  className="cursor-pointer"
                 >
                   Clear
                 </Button>
               </div>
             </div>
             <Textarea
+              className="bg-background font-mono text-foreground text-sm"
               id="jsonData"
               name="jsonData"
-              rows={15}
-              value={jsonText}
               onChange={(e) => setJsonText(e.target.value)}
               placeholder='[{"id": "123", "title": "Example Listing", "price": "$100,000", "location": "123 Main St", "bullets": [], "href": "/residential/listings/123", ...}]'
-              className="bg-background text-foreground font-mono text-sm"
               required
+              rows={8}
+              value={jsonText}
             />
-            <p className="text-xs text-muted-foreground">
-              Paste JSON array of residential listings. Each listing should match the ResidentialListing type structure.
-              Use "Load Example" to see the format of the hardcoded listings.
+            <p className="text-muted-foreground text-xs">
+              Paste JSON array of residential listings. Each listing should
+              match the ResidentialListing type structure. Use "Load Example" to
+              see the format of the hardcoded listings.
             </p>
           </div>
 
           {state?.error && (
-            <div className="p-3 bg-destructive/10 border border-destructive rounded-md">
-              <p className="text-sm text-destructive font-medium">{state.error}</p>
+            <div className="rounded-md border border-destructive bg-destructive/10 p-3">
+              <p className="font-medium text-destructive text-sm">
+                {state.error}
+              </p>
             </div>
           )}
           {state?.success && (
-            <div className="p-3 bg-green-100 border border-green-500 rounded-md">
-              <p className="text-sm text-green-700 font-medium">
+            <div className="rounded-md border border-green-500 bg-green-100 p-3">
+              <p className="font-medium text-green-700 text-sm">
                 Successfully imported {state.importedCount || 0} listing(s)!
               </p>
             </div>
@@ -131,6 +171,7 @@ export function JsonImportForm() {
           <SubmitButton />
         </form>
       </CardContent>
+      )}
     </Card>
   );
 }

@@ -1,49 +1,71 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { useActionState, useTransition } from 'react';
-import { useFormStatus } from 'react-dom';
-import { useDropzone } from 'react-dropzone';
-import { z } from 'zod';
-import { uploadEventFlyer } from '../actions/events';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useRouter } from "next/navigation";
+import {
+  useActionState,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
+import { useFormStatus } from "react-dom";
+import { useDropzone } from "react-dropzone";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { uploadEventFlyer } from "../actions/events";
 
 const eventUploadSchema = z.object({
-  name: z.string({ error: (issue) => issue.input === undefined ? 'Event name is required' : 'Invalid value' }).min(1),
-  eventDate: z.string({ error: (issue) => issue.input === undefined ? 'Event date is required' : 'Invalid value' }).regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+  name: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined ? "Event name is required" : "Invalid value",
+    })
+    .min(1),
+  eventDate: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined ? "Event date is required" : "Invalid value",
+    })
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
   goLiveDays: z.string().optional(),
 });
 
-type UploadState = {
+interface UploadState {
   success?: boolean;
   error?: string;
   eventId?: string;
-};
+}
 
 // React 19 pattern: useFormStatus in child component
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="w-full cursor-pointer">
-      {pending ? 'Uploading...' : 'Upload Event Flyer'}
+    <Button className="w-full cursor-pointer" disabled={pending} type="submit">
+      {pending ? "Uploading..." : "Upload Event Flyer"}
     </Button>
   );
 }
 
 export function EventUploadForm() {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [_isPending, _startTransition] = useTransition();
   const [state, formAction] = useActionState<UploadState, FormData>(
     uploadEventFlyer,
     {
       success: false,
     }
   );
-  const [flyerType, setFlyerType] = useState<'single' | 'multi'>('single');
+  const [flyerType, setFlyerType] = useState<"single" | "multi">("single");
   const [preview, setPreview] = useState<string | null>(null);
   const [previews, setPreviews] = useState<string[]>([]);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
@@ -52,79 +74,78 @@ export function EventUploadForm() {
   const formRef = useRef<HTMLFormElement>(null);
 
   // Use react-dropzone for file handling
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    setClientError(null);
-    
-    // Validate files
-    for (const file of acceptedFiles) {
-      if (!file.type.startsWith('image/')) {
-        setClientError('All files must be images');
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      setClientError(null);
+
+      // Validate files
+      for (const file of acceptedFiles) {
+        if (!file.type.startsWith("image/")) {
+          setClientError("All files must be images");
+          return;
+        }
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+          setClientError("Each image size must be less than 10MB");
+          return;
+        }
+      }
+
+      // Check single-page constraint
+      if (flyerType === "single" && acceptedFiles.length > 1) {
+        setClientError("Please select only one image for single-page flyer");
         return;
       }
-      const maxSize = 10 * 1024 * 1024; // 10MB
-      if (file.size > maxSize) {
-        setClientError('Each image size must be less than 10MB');
-        return;
-      }
-    }
 
-    // Check single-page constraint
-    if (flyerType === 'single' && acceptedFiles.length > 1) {
-      setClientError('Please select only one image for single-page flyer');
-      return;
-    }
-
-    // Update previews
-    if (flyerType === 'single') {
-      const file = acceptedFiles[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPreview(reader.result as string);
-          setPreviews([]);
-        };
-        reader.readAsDataURL(file);
-      }
-    } else {
-      // Multi-page: read all files
-      const readers = acceptedFiles.map((file) => {
-        return new Promise<string>((resolve) => {
+      // Update previews
+      if (flyerType === "single") {
+        const file = acceptedFiles[0];
+        if (file) {
           const reader = new FileReader();
           reader.onloadend = () => {
-            resolve(reader.result as string);
+            setPreview(reader.result as string);
+            setPreviews([]);
           };
           reader.readAsDataURL(file);
+        }
+      } else {
+        // Multi-page: read all files
+        const readers = acceptedFiles.map((file) => {
+          return new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              resolve(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+          });
         });
-      });
 
-      Promise.all(readers).then((results) => {
-        setPreviews(results);
-        setPreview(null);
-      });
-    }
-  }, [flyerType]);
-
-  const {
-    getRootProps,
-    getInputProps,
-    acceptedFiles,
-    isDragActive,
-  } = useDropzone({
-    onDrop,
-    multiple: flyerType === 'multi',
-    accept: {
-      'image/*': ['.jpg', '.jpeg', '.png', '.webp', '.gif'],
+        Promise.all(readers).then((results) => {
+          setPreviews(results);
+          setPreview(null);
+        });
+      }
     },
-    maxSize: 10 * 1024 * 1024, // 10MB
-  });
+    [flyerType]
+  );
+
+  const { getRootProps, getInputProps, acceptedFiles, isDragActive } =
+    useDropzone({
+      onDrop,
+      multiple: flyerType === "multi",
+      accept: {
+        "image/*": [".jpg", ".jpeg", ".png", ".webp", ".gif"],
+      },
+      maxSize: 10 * 1024 * 1024, // 10MB
+    });
 
   // Handle successful upload
   useEffect(() => {
     if (state?.success) {
       // Show uploaded image preview(s)
-      if (flyerType === 'single' && preview) {
+      if (flyerType === "single" && preview) {
         setUploadedImageUrl(preview);
-      } else if (flyerType === 'multi' && previews.length > 0) {
+      } else if (flyerType === "multi" && previews.length > 0) {
         setUploadedImageUrls(previews);
       }
       // Reset form
@@ -148,24 +169,23 @@ export function EventUploadForm() {
     }
   }, [state]);
 
-
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle>Upload New Event Flyer</CardTitle>
         <CardDescription>
-          Upload a flyer image with a name and event date. The flyer will automatically appear in
-          the upcoming events section and move to past events when the date passes.
+          Upload a flyer image with a name and event date. The flyer will
+          automatically appear in the upcoming events section and move to past
+          events when the date passes.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form 
-          ref={formRef} 
+        <form
           action={async (formData: FormData) => {
             // Client-side validation with Zod v4
-            const name = formData.get('name') as string;
-            const eventDate = formData.get('eventDate') as string;
-            const goLiveDays = formData.get('goLiveDays') as string;
+            const name = formData.get("name") as string;
+            const eventDate = formData.get("eventDate") as string;
+            const goLiveDays = formData.get("goLiveDays") as string;
 
             const result = eventUploadSchema.safeParse({
               name,
@@ -176,7 +196,7 @@ export function EventUploadForm() {
             if (!result.success) {
               const firstError = result.error.issues[0];
               if (firstError) {
-                setClientError(firstError.message || 'Validation failed');
+                setClientError(firstError.message || "Validation failed");
               }
               return;
             }
@@ -185,19 +205,20 @@ export function EventUploadForm() {
             await formAction(formData);
           }}
           className="space-y-4"
+          ref={formRef}
         >
-          <input type="hidden" name="flyerType" value={flyerType} />
+          <input name="flyerType" type="hidden" value={flyerType} />
           <div className="space-y-2">
             <Label htmlFor="name">Event Name (Alt Text)</Label>
             <Input
+              className="bg-background text-foreground"
               id="name"
               name="name"
-              type="text"
               placeholder="e.g., Summer Event 2025"
               required
-              className="bg-background text-foreground"
+              type="text"
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               This will be used as the alt text for accessibility
             </p>
           </div>
@@ -205,13 +226,13 @@ export function EventUploadForm() {
           <div className="space-y-2">
             <Label htmlFor="eventDate">Event Date</Label>
             <Input
+              className="bg-background text-foreground"
               id="eventDate"
               name="eventDate"
-              type="date"
               required
-              className="bg-background text-foreground"
+              type="date"
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Events will automatically move to past events after this date
             </p>
           </div>
@@ -219,166 +240,188 @@ export function EventUploadForm() {
           <div className="space-y-2">
             <Label htmlFor="goLiveDays">When to Go Live (# of Days)</Label>
             <Input
+              className="bg-background text-foreground"
+              defaultValue="15"
               id="goLiveDays"
+              min="1"
               name="goLiveDays"
               type="number"
-              min="1"
-              defaultValue="15"
-              className="bg-background text-foreground"
             />
-            <p className="text-xs text-muted-foreground">
-              Number of days before the event date to show the flyer (default: 15 days)
+            <p className="text-muted-foreground text-xs">
+              Number of days before the event date to show the flyer (default:
+              15 days)
             </p>
           </div>
 
           <div className="space-y-2">
             <Label>Flyer Type</Label>
             <div className="flex gap-6">
-              <label className="flex items-center gap-2 cursor-pointer">
+              <label className="flex cursor-pointer items-center gap-2">
                 <input
-                  type="radio"
+                  checked={flyerType === "single"}
+                  className="h-4 w-4"
                   name="flyerType"
-                  value="single"
-                  checked={flyerType === 'single'}
                   onChange={(e) => {
-                    setFlyerType(e.target.value as 'single' | 'multi');
+                    setFlyerType(e.target.value as "single" | "multi");
                     setPreview(null);
                     setPreviews([]);
                   }}
-                  className="w-4 h-4"
+                  type="radio"
+                  value="single"
                 />
                 <span className="text-sm">Single-page</span>
               </label>
-              <label className="flex items-center gap-2 cursor-pointer">
+              <label className="flex cursor-pointer items-center gap-2">
                 <input
-                  type="radio"
+                  checked={flyerType === "multi"}
+                  className="h-4 w-4"
                   name="flyerType"
-                  value="multi"
-                  checked={flyerType === 'multi'}
                   onChange={(e) => {
-                    setFlyerType(e.target.value as 'single' | 'multi');
+                    setFlyerType(e.target.value as "single" | "multi");
                     setPreview(null);
                     setPreviews([]);
                   }}
-                  className="w-4 h-4"
+                  type="radio"
+                  value="multi"
                 />
                 <span className="text-sm">Multi-page (carousel)</span>
               </label>
             </div>
-            <p className="text-xs text-muted-foreground">
-              {flyerType === 'single'
-                ? 'Upload a single image flyer'
-                : 'Upload multiple images that will be displayed in a carousel'}
+            <p className="text-muted-foreground text-xs">
+              {flyerType === "single"
+                ? "Upload a single image flyer"
+                : "Upload multiple images that will be displayed in a carousel"}
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="image">Flyer Image{flyerType === 'multi' ? 's' : ''}</Label>
+            <Label htmlFor="image">
+              Flyer Image{flyerType === "multi" ? "s" : ""}
+            </Label>
             <div
               {...getRootProps()}
-              className={`
-                border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200
-                ${isDragActive ? 'border-primary bg-primary/10 scale-[1.02]' : 'border-muted-foreground/25'}
-                cursor-pointer hover:border-primary/50 hover:bg-muted/50
-              `}
+              className={`rounded-lg border-2 border-dashed p-8 text-center transition-all duration-200 ${isDragActive ? "scale-[1.02] border-primary bg-primary/10" : "border-muted-foreground/25"}cursor-pointer hover:border-primary/50 hover:bg-muted/50`}
             >
-              <input {...getInputProps({ id: 'image', name: 'image', required: true })} />
+              <input
+                {...getInputProps({
+                  id: "image",
+                  name: "image",
+                  required: true,
+                })}
+              />
               <div className="space-y-2">
-                <p className="text-sm font-medium">
+                <p className="font-medium text-sm">
                   {isDragActive ? (
                     <span className="text-primary">
-                      Drop {flyerType === 'multi' ? 'images' : 'image'} here
+                      Drop {flyerType === "multi" ? "images" : "image"} here
                     </span>
                   ) : (
-                    `Drag and drop ${flyerType === 'multi' ? 'images' : 'an image'} here, or click to select`
+                    `Drag and drop ${flyerType === "multi" ? "images" : "an image"} here, or click to select`
                   )}
                 </p>
-                <p className="text-xs text-muted-foreground">
-                  Maximum file size: 10MB per image. Supported formats: JPG, PNG, WebP
-                  {flyerType === 'multi' && ' (Select multiple images)'}
+                <p className="text-muted-foreground text-xs">
+                  Maximum file size: 10MB per image. Supported formats: JPG,
+                  PNG, WebP
+                  {flyerType === "multi" && " (Select multiple images)"}
                 </p>
               </div>
             </div>
           </div>
 
-          {flyerType === 'single' && preview && !uploadedImageUrl && (
+          {flyerType === "single" && preview && !uploadedImageUrl && (
             <div className="space-y-2">
               <Label>Preview</Label>
-              <div className="border rounded-lg overflow-hidden max-w-md">
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="w-full h-auto"
-                />
+              <div className="max-w-md overflow-hidden rounded-lg border">
+                <img alt="Preview" className="h-auto w-full" src={preview} />
               </div>
             </div>
           )}
 
-          {flyerType === 'multi' && previews.length > 0 && uploadedImageUrls.length === 0 && (
-            <div className="space-y-2">
-              <Label>Preview ({previews.length} image{previews.length > 1 ? 's' : ''})</Label>
-              <div className="grid grid-cols-2 gap-4 max-w-2xl">
-                {previews.map((previewUrl, index) => {
-                  return (
-                    <div key={index} className="border rounded-lg overflow-hidden">
-                      <img
-                        src={previewUrl}
-                        alt={`Preview ${index + 1}`}
-                        className="w-full h-auto"
-                      />
-                      <p className="text-xs text-center p-2 text-muted-foreground">
-                        Page {index + 1}
-                      </p>
-                    </div>
-                  );
-                })}
+          {flyerType === "multi" &&
+            previews.length > 0 &&
+            uploadedImageUrls.length === 0 && (
+              <div className="space-y-2">
+                <Label>
+                  Preview ({previews.length} image
+                  {previews.length > 1 ? "s" : ""})
+                </Label>
+                <div className="grid max-w-2xl grid-cols-2 gap-4">
+                  {previews.map((previewUrl, index) => {
+                    return (
+                      <div
+                        className="overflow-hidden rounded-lg border"
+                        key={index}
+                      >
+                        <img
+                          alt={`Preview ${index + 1}`}
+                          className="h-auto w-full"
+                          src={previewUrl}
+                        />
+                        <p className="p-2 text-center text-muted-foreground text-xs">
+                          Page {index + 1}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {flyerType === 'single' && uploadedImageUrl && state?.success && (
+          {flyerType === "single" && uploadedImageUrl && state?.success && (
             <div className="space-y-2">
               <Label>Successfully Uploaded!</Label>
-              <div className="border-2 border-green-500 rounded-lg overflow-hidden max-w-md">
+              <div className="max-w-md overflow-hidden rounded-lg border-2 border-green-500">
                 <img
-                  src={uploadedImageUrl}
                   alt="Uploaded"
-                  className="w-full h-auto"
+                  className="h-auto w-full"
+                  src={uploadedImageUrl}
                 />
               </div>
             </div>
           )}
 
-          {flyerType === 'multi' && uploadedImageUrls.length > 0 && state?.success && (
-            <div className="space-y-2">
-              <Label>Successfully Uploaded! ({uploadedImageUrls.length} image{uploadedImageUrls.length > 1 ? 's' : ''})</Label>
-              <div className="grid grid-cols-2 gap-4 max-w-2xl">
-                {uploadedImageUrls.map((url, index) => {
-                  return (
-                    <div key={index} className="border-2 border-green-500 rounded-lg overflow-hidden">
-                      <img
-                        src={url}
-                        alt={`Uploaded ${index + 1}`}
-                        className="w-full h-auto"
-                      />
-                      <p className="text-xs text-center p-2 text-green-600 font-medium">
-                        Page {index + 1}
-                      </p>
-                    </div>
-                  );
-                })}
+          {flyerType === "multi" &&
+            uploadedImageUrls.length > 0 &&
+            state?.success && (
+              <div className="space-y-2">
+                <Label>
+                  Successfully Uploaded! ({uploadedImageUrls.length} image
+                  {uploadedImageUrls.length > 1 ? "s" : ""})
+                </Label>
+                <div className="grid max-w-2xl grid-cols-2 gap-4">
+                  {uploadedImageUrls.map((url, index) => {
+                    return (
+                      <div
+                        className="overflow-hidden rounded-lg border-2 border-green-500"
+                        key={index}
+                      >
+                        <img
+                          alt={`Uploaded ${index + 1}`}
+                          className="h-auto w-full"
+                          src={url}
+                        />
+                        <p className="p-2 text-center font-medium text-green-600 text-xs">
+                          Page {index + 1}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {clientError && (
-            <p className="text-sm text-destructive font-medium">{clientError}</p>
+            <p className="font-medium text-destructive text-sm">
+              {clientError}
+            </p>
           )}
           {state?.error && (
-            <p className="text-sm text-destructive font-medium">{state.error}</p>
+            <p className="font-medium text-destructive text-sm">
+              {state.error}
+            </p>
           )}
           {state?.success && (
-            <p className="text-sm text-green-600 font-medium">
+            <p className="font-medium text-green-600 text-sm">
               Event uploaded successfully!
             </p>
           )}

@@ -93,6 +93,7 @@ export interface ResidentialListing {
   officePhone?: string;
   galleryImages?: string[];
   propertyDetails?: ResidentialPropertyDetails;
+  archived?: boolean;
 }
 
 export interface CommercialListing {
@@ -110,4 +111,5 @@ export interface CommercialListing {
   propertyDetails?: CommercialPropertyDetails;
   isLease?: boolean;
   pdfFlyer?: string;
+  archived?: boolean;
 }

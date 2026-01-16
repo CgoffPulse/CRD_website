@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { permanentlyDeletePromoImage } from '../actions/promoPopup';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import type { PromoImage } from '../actions/promoPopup';
-import { ReinstatePromoDialog } from './ReinstatePromoDialog';
-import { EditPromoDialog } from './EditPromoDialog';
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import type { PromoImage } from "../actions/promoPopup";
+import { permanentlyDeletePromoImage } from "../actions/promoPopup";
+import { EditPromoDialog } from "./EditPromoDialog";
+import { ReinstatePromoDialog } from "./ReinstatePromoDialog";
 
 interface PastPromosListProps {
   pastPromos: PromoImage[];
@@ -16,14 +16,22 @@ interface PastPromosListProps {
   linkText?: string | null;
 }
 
-export function PastPromosList({ pastPromos, linkUrl, linkText }: PastPromosListProps) {
+export function PastPromosList({
+  pastPromos,
+  linkUrl,
+  linkText,
+}: PastPromosListProps) {
   const router = useRouter();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [reinstatingId, setReinstatingId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const handlePermanentDelete = async (imageId: string) => {
-    if (!confirm('Are you sure you want to permanently delete this promo image? This action cannot be undone and will delete the image file.')) {
+    if (
+      !confirm(
+        "Are you sure you want to permanently delete this promo image? This action cannot be undone and will delete the image file."
+      )
+    ) {
       return;
     }
 
@@ -34,11 +42,11 @@ export function PastPromosList({ pastPromos, linkUrl, linkText }: PastPromosList
       if (result.success) {
         router.refresh();
       } else {
-        alert(result.error || 'Failed to delete promo image');
+        alert(result.error || "Failed to delete promo image");
         setDeletingId(null);
       }
-    } catch (error) {
-      alert('An error occurred while deleting the promo image');
+    } catch (_error) {
+      alert("An error occurred while deleting the promo image");
       setDeletingId(null);
     }
   };
@@ -47,7 +55,9 @@ export function PastPromosList({ pastPromos, linkUrl, linkText }: PastPromosList
     return (
       <Card>
         <CardContent className="pt-6">
-          <p className="text-center text-muted-foreground">No past promos archived yet.</p>
+          <p className="text-center text-muted-foreground">
+            No past promos archived yet.
+          </p>
         </CardContent>
       </Card>
     );
@@ -59,67 +69,71 @@ export function PastPromosList({ pastPromos, linkUrl, linkText }: PastPromosList
         {pastPromos.map((image) => {
           return (
             <Card key={image.id}>
-              <CardContent className="pt-6 space-y-4">
+              <CardContent className="space-y-4 pt-6">
                 <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg border">
-                  {image.src.startsWith('https://') ? (
+                  {image.src.startsWith("https://") ? (
                     <Image
-                      src={image.src}
                       alt={image.alt}
-                      fill
                       className="object-cover"
+                      fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      src={image.src}
                     />
                   ) : (
                     <img
-                      src={image.src}
                       alt={image.alt}
-                      className="w-full h-full object-cover"
+                      className="h-full w-full object-cover"
+                      src={image.src}
                     />
                   )}
                 </div>
                 <div className="space-y-2">
-                  <p className="text-sm font-medium">{image.alt}</p>
+                  <p className="font-medium text-sm">{image.alt}</p>
                   {image.createdDate && (
-                    <p className="text-xs text-muted-foreground">
-                      Created: {new Date(image.createdDate).toLocaleDateString()}
+                    <p className="text-muted-foreground text-xs">
+                      Created:{" "}
+                      {new Date(image.createdDate).toLocaleDateString()}
                     </p>
                   )}
                   {image.lastUsedDate && (
-                    <p className="text-xs text-muted-foreground">
-                      Last used: {new Date(image.lastUsedDate).toLocaleDateString()}
+                    <p className="text-muted-foreground text-xs">
+                      Last used:{" "}
+                      {new Date(image.lastUsedDate).toLocaleDateString()}
                     </p>
                   )}
                   <div className="flex flex-col gap-2">
                     <Button
-                      variant="default"
-                      size="sm"
+                      className="w-full cursor-pointer"
                       onClick={() => {
                         setEditingId(image.id);
                       }}
-                      className="w-full cursor-pointer"
+                      size="sm"
+                      variant="default"
                     >
                       Edit
                     </Button>
                     <Button
-                      variant="default"
-                      size="sm"
+                      className="w-full cursor-pointer"
                       onClick={() => {
                         setReinstatingId(image.id);
                       }}
-                      className="w-full cursor-pointer"
+                      size="sm"
+                      variant="default"
                     >
                       Reinstate
                     </Button>
                     <Button
-                      variant="destructive"
-                      size="sm"
+                      className="w-full cursor-pointer"
+                      disabled={deletingId === image.id}
                       onClick={() => {
                         handlePermanentDelete(image.id);
                       }}
-                      disabled={deletingId === image.id}
-                      className="w-full cursor-pointer"
+                      size="sm"
+                      variant="destructive"
                     >
-                      {deletingId === image.id ? 'Deleting...' : 'Delete Permanently'}
+                      {deletingId === image.id
+                        ? "Deleting..."
+                        : "Delete Permanently"}
                     </Button>
                   </div>
                 </div>
@@ -131,33 +145,33 @@ export function PastPromosList({ pastPromos, linkUrl, linkText }: PastPromosList
 
       {reinstatingId && (
         <ReinstatePromoDialog
-          imageId={reinstatingId}
           image={pastPromos.find((img) => {
             return img.id === reinstatingId;
           })}
-          open={reinstatingId !== null}
+          imageId={reinstatingId}
           onOpenChange={(open) => {
             if (!open) {
               setReinstatingId(null);
             }
           }}
+          open={reinstatingId !== null}
         />
       )}
 
       {editingId && (
         <EditPromoDialog
-          imageId={editingId}
           image={pastPromos.find((img) => {
             return img.id === editingId;
           })}
-          linkUrl={linkUrl}
+          imageId={editingId}
           linkText={linkText}
-          open={editingId !== null}
+          linkUrl={linkUrl}
           onOpenChange={(open) => {
             if (!open) {
               setEditingId(null);
             }
           }}
+          open={editingId !== null}
         />
       )}
     </>

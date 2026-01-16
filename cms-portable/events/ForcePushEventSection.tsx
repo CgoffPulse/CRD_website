@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { forcePushEvent, toggleForceGoLive } from '../actions/events';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { groupEventPosters } from '../types/eventPosters';
-import type { EventPoster } from '../types/eventPosters';
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { forcePushEvent, toggleForceGoLive } from "../actions/events";
+import type { EventPoster } from "../types/eventPosters";
+import { groupEventPosters } from "../types/eventPosters";
 
 interface ForcePushEventSectionProps {
   events: EventPoster[];
@@ -15,7 +15,7 @@ interface ForcePushEventSectionProps {
 
 export function ForcePushEventSection({ events }: ForcePushEventSectionProps) {
   const router = useRouter();
-  const [selectedEventId, setSelectedEventId] = useState<string>('');
+  const [selectedEventId, setSelectedEventId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
 
   // Group events and get unique event groups
@@ -26,7 +26,7 @@ export function ForcePushEventSection({ events }: ForcePushEventSectionProps) {
 
   const handleForcePush = async () => {
     if (!selectedEventId) {
-      alert('Please select an event to force push.');
+      alert("Please select an event to force push.");
       return;
     }
 
@@ -35,12 +35,12 @@ export function ForcePushEventSection({ events }: ForcePushEventSectionProps) {
       const result = await forcePushEvent(selectedEventId);
       if (result.success) {
         router.refresh();
-        setSelectedEventId('');
+        setSelectedEventId("");
       } else {
-        alert(result.error || 'Failed to force push event');
+        alert(result.error || "Failed to force push event");
       }
-    } catch (error) {
-      alert('An error occurred while force pushing the event');
+    } catch (_error) {
+      alert("An error occurred while force pushing the event");
     } finally {
       setIsLoading(false);
     }
@@ -53,10 +53,10 @@ export function ForcePushEventSection({ events }: ForcePushEventSectionProps) {
       if (result.success) {
         router.refresh();
       } else {
-        alert(result.error || 'Failed to disable force push');
+        alert(result.error || "Failed to disable force push");
       }
-    } catch (error) {
-      alert('An error occurred while disabling force push');
+    } catch (_error) {
+      alert("An error occurred while disabling force push");
     } finally {
       setIsLoading(false);
     }
@@ -73,13 +73,16 @@ export function ForcePushEventSection({ events }: ForcePushEventSectionProps) {
         <CardTitle>Force Push Event</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <p className="text-sm text-muted-foreground">
-          Force push an event flyer to display immediately, bypassing the normal go-live date logic.
+        <p className="text-muted-foreground text-sm">
+          Force push an event flyer to display immediately, bypassing the normal
+          go-live date logic.
         </p>
 
         {forcePushedEvents.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-medium">Currently Force-Pushed Events:</p>
+            <p className="font-medium text-sm">
+              Currently Force-Pushed Events:
+            </p>
             {forcePushedEvents.map((group) => {
               const event = group.posters[0];
               if (!event) {
@@ -87,20 +90,20 @@ export function ForcePushEventSection({ events }: ForcePushEventSectionProps) {
               }
               return (
                 <div
+                  className="flex items-center justify-between rounded-md border p-2"
                   key={event.id}
-                  className="flex items-center justify-between p-2 border rounded-md"
                 >
-                  <span className="text-sm font-medium">{event.alt}</span>
+                  <span className="font-medium text-sm">{event.alt}</span>
                   <Button
-                    variant="destructive"
-                    size="sm"
+                    className="cursor-pointer"
+                    disabled={isLoading}
                     onClick={() => {
                       handleDisableForcePush(event.id);
                     }}
-                    disabled={isLoading}
-                    className="cursor-pointer"
+                    size="sm"
+                    variant="destructive"
                   >
-                    {isLoading ? 'Disabling...' : 'Disable'}
+                    {isLoading ? "Disabling..." : "Disable"}
                   </Button>
                 </div>
               );
@@ -111,17 +114,17 @@ export function ForcePushEventSection({ events }: ForcePushEventSectionProps) {
         {availableEvents.length > 0 && (
           <div className="space-y-2">
             <select
-              value={selectedEventId}
+              className={cn(
+                "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
+                "ring-offset-background file:border-0 file:bg-transparent file:font-medium file:text-sm",
+                "placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2",
+                "focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                "cursor-pointer"
+              )}
               onChange={(e) => {
                 setSelectedEventId(e.target.value);
               }}
-              className={cn(
-                'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm',
-                'ring-offset-background file:border-0 file:bg-transparent file:font-medium file:text-sm',
-                'placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2',
-                'focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-                'cursor-pointer'
-              )}
+              value={selectedEventId}
             >
               <option value="">Select an event to force push</option>
               {availableEvents.map((group) => {
@@ -137,17 +140,17 @@ export function ForcePushEventSection({ events }: ForcePushEventSectionProps) {
               })}
             </select>
             <Button
-              onClick={handleForcePush}
-              disabled={isLoading || !selectedEventId}
               className="w-full cursor-pointer"
+              disabled={isLoading || !selectedEventId}
+              onClick={handleForcePush}
             >
-              {isLoading ? 'Force Pushing...' : 'Force Push Event Now'}
+              {isLoading ? "Force Pushing..." : "Force Push Event Now"}
             </Button>
           </div>
         )}
 
         {availableEvents.length === 0 && forcePushedEvents.length === 0 && (
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             No events available to force push.
           </p>
         )}

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { forcePushPromo, togglePromoForceGoLive } from '../actions/promoPopup';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { PromoPopupConfig } from '../actions/promoPopup';
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { PromoPopupConfig } from "../actions/promoPopup";
+import { forcePushPromo, togglePromoForceGoLive } from "../actions/promoPopup";
 
 interface ForcePushPromoSectionProps {
   promoPopup: PromoPopupConfig;
@@ -21,7 +21,7 @@ export function ForcePushPromoSection({
 
   const handleForcePush = async () => {
     if (!promoPopup.enabled || promoPopup.images.length === 0) {
-      alert('Please enable the promo popup and add at least one image first.');
+      alert("Please enable the promo popup and add at least one image first.");
       return;
     }
 
@@ -31,10 +31,10 @@ export function ForcePushPromoSection({
       if (result.success) {
         router.refresh();
       } else {
-        alert(result.error || 'Failed to force push promo');
+        alert(result.error || "Failed to force push promo");
       }
-    } catch (error) {
-      alert('An error occurred while force pushing the promo');
+    } catch (_error) {
+      alert("An error occurred while force pushing the promo");
     } finally {
       setIsLoading(false);
     }
@@ -47,10 +47,10 @@ export function ForcePushPromoSection({
       if (result.success) {
         router.refresh();
       } else {
-        alert(result.error || 'Failed to disable force push');
+        alert(result.error || "Failed to disable force push");
       }
-    } catch (error) {
-      alert('An error occurred while disabling force push');
+    } catch (_error) {
+      alert("An error occurred while disabling force push");
     } finally {
       setIsLoading(false);
     }
@@ -62,36 +62,42 @@ export function ForcePushPromoSection({
         <CardTitle>Force Push Promo</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <p className="text-sm text-muted-foreground">
-          Force push the promo popup to display immediately, overriding any active events.
+        <p className="text-muted-foreground text-sm">
+          Force push the promo popup to display immediately, overriding any
+          active events.
         </p>
         {promoPopup.forceGoLive ? (
           <div className="space-y-2">
-            <p className="text-sm font-medium text-green-600 dark:text-green-400">
-              ✓ Promo is currently force-pushed and will display on the homepage.
+            <p className="font-medium text-green-600 text-sm dark:text-green-400">
+              ✓ Promo is currently force-pushed and will display on the
+              homepage.
             </p>
             <Button
-              variant="destructive"
-              onClick={handleDisableForcePush}
-              disabled={isLoading}
               className="cursor-pointer"
+              disabled={isLoading}
+              onClick={handleDisableForcePush}
+              variant="destructive"
             >
-              {isLoading ? 'Disabling...' : 'Disable Force Push'}
+              {isLoading ? "Disabling..." : "Disable Force Push"}
             </Button>
           </div>
         ) : (
           <div className="space-y-2">
             {hasActiveEvents && (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Note: There are active events. Force pushing will override them.
               </p>
             )}
             <Button
-              onClick={handleForcePush}
-              disabled={isLoading || !promoPopup.enabled || promoPopup.images.length === 0}
               className="cursor-pointer"
+              disabled={
+                isLoading ||
+                !promoPopup.enabled ||
+                promoPopup.images.length === 0
+              }
+              onClick={handleForcePush}
             >
-              {isLoading ? 'Force Pushing...' : 'Force Push Promo Now'}
+              {isLoading ? "Force Pushing..." : "Force Push Promo Now"}
             </Button>
           </div>
         )}

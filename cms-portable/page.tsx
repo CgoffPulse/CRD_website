@@ -1,33 +1,40 @@
-import type { Metadata } from 'next';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import type { Metadata } from "next";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export const metadata: Metadata = {
-	title: 'CMS Portal | Admin',
-	description: 'Content Management System portal',
-	robots: {
-		index: false,
-		follow: false,
-	},
+  title: "CMS Portal | Admin",
+  description: "Content Management System portal",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function CMSPortalPage() {
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold">Content Management System</h1>
-          <p className="text-muted-foreground text-lg">
+      <div className="mx-auto max-w-4xl space-y-8">
+        <div className="space-y-4 text-center">
+          <h1 className="font-bold text-4xl">Content Management System</h1>
+          <p className="text-lg text-muted-foreground">
             Manage your website content and promotional materials
           </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className="hover:shadow-lg transition-shadow">
+          <Card className="transition-shadow hover:shadow-lg">
             <CardHeader>
               <CardTitle>Events Management</CardTitle>
               <CardDescription>
-                Upload and manage event flyers, set go-live dates, and control when events appear on your website.
+                Upload and manage event flyers, set go-live dates, and control
+                when events appear on your website.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -37,11 +44,12 @@ export default function CMSPortalPage() {
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow">
+          <Card className="transition-shadow hover:shadow-lg">
             <CardHeader>
               <CardTitle>Promotional Content</CardTitle>
               <CardDescription>
-                Manage promotional popups, configure display settings, and control when promotional content appears.
+                Manage promotional popups, configure display settings, and
+                control when promotional content appears.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -57,7 +65,7 @@ export default function CMSPortalPage() {
             <CardTitle>Features</CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <ul className="space-y-2 text-muted-foreground text-sm">
               <li>• Upload single or multi-page event flyers</li>
               <li>• Set automatic go-live dates for events</li>
               <li>• Force push events or promos to display immediately</li>

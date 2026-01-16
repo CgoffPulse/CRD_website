@@ -1,8 +1,8 @@
 "use client";
 
-import { Suspense } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 
 const pageVariants = {
   initial: {
@@ -29,15 +29,15 @@ function TemplateContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence initial={false} mode="wait">
       <motion.div
-        key={pathname}
-        initial="initial"
         animate="animate"
         exit="exit"
-        variants={pageVariants}
-        transition={pageTransition}
+        initial="initial"
+        key={pathname}
         style={{ willChange: "opacity, transform" }}
+        transition={pageTransition}
+        variants={pageVariants}
       >
         {children}
       </motion.div>

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 
 export default function Footer() {
   const [year, setYear] = useState<number>(2025);
@@ -10,24 +10,29 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-black border-t border-gray-800 py-6 sm:py-8 md:py-10">
-      <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+    <footer className="border-gray-800 border-t bg-black py-6 sm:py-8 md:py-10">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 mb-6">
+        <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-4 md:gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-white text-base sm:text-lg md:text-xl font-bold mb-2 sm:mb-3">CRD Real Estate & Development</h3>
-            <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
+            <h3 className="mb-2 font-bold font-display text-base text-white sm:mb-3 sm:text-lg md:text-xl">
+              CRD Real Estate & Development
+            </h3>
+            <p className="font-copperplate-medium text-gray-400 text-xs leading-relaxed sm:text-sm">
               Community Focused Results Driven
             </p>
           </div>
 
           {/* Address */}
           <div>
-            <h4 className="text-white text-sm sm:text-base font-bold mb-2 sm:mb-3">Address</h4>
+            <h4 className="mb-2 font-copperplate-medium font-semibold text-sm text-white sm:mb-3 sm:text-base">
+              Address
+            </h4>
             <div className="space-y-1.5 text-gray-400 text-xs sm:text-sm">
               <p>
-                115 S 2nd St<br />
+                115 S 2nd St
+                <br />
                 Rogers, AR 72756
               </p>
             </div>
@@ -35,17 +40,19 @@ export default function Footer() {
 
           {/* Commercial & Development Social */}
           <div>
-            <h4 className="text-white text-sm sm:text-base font-bold mb-2 sm:mb-3">Commercial & Development</h4>
+            <h4 className="mb-2 font-copperplate-medium font-semibold text-sm text-white sm:mb-3 sm:text-base">
+              Commercial & Development
+            </h4>
             <div className="flex space-x-3">
               <a
-                href="https://instagram.com/crdcommercial"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors duration-200"
                 aria-label="Commercial & Development Instagram"
+                className="text-gray-400 transition-colors duration-200 hover:text-white"
+                href="https://instagram.com/crdcommercial"
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 <svg
-                  className="w-5 h-5"
+                  className="h-5 w-5"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -54,14 +61,14 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://facebook.com/crdcommercial"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors duration-200"
                 aria-label="Commercial & Development Facebook"
+                className="inline-block text-gray-400 transition-all duration-200 hover:scale-105 hover:text-white"
+                href="https://facebook.com/crdcommercial"
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 <svg
-                  className="w-5 h-5"
+                  className="h-5 w-5"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -74,17 +81,19 @@ export default function Footer() {
 
           {/* Residential Social */}
           <div>
-            <h4 className="text-white text-sm sm:text-base font-bold mb-2 sm:mb-3">Residential</h4>
+            <h4 className="mb-2 font-copperplate-medium font-semibold text-sm text-white sm:mb-3 sm:text-base">
+              Residential
+            </h4>
             <div className="flex space-x-3">
               <a
-                href="https://instagram.com/crdresidential"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors duration-200"
                 aria-label="Residential Branch Instagram"
+                className="text-gray-400 transition-colors duration-200 hover:text-white"
+                href="https://instagram.com/crdresidential"
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 <svg
-                  className="w-5 h-5"
+                  className="h-5 w-5"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -93,14 +102,14 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://facebook.com/crdresidential"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors duration-200"
                 aria-label="Residential Branch Facebook"
+                className="inline-block text-gray-400 transition-all duration-200 hover:scale-105 hover:text-white"
+                href="https://facebook.com/crdresidential"
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 <svg
-                  className="w-5 h-5"
+                  className="h-5 w-5"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -113,23 +122,47 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-4 sm:pt-6 mt-4 sm:mt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-            <p className="text-gray-400 text-xs sm:text-sm text-center md:text-left">
+        <div className="mt-4 border-gray-800 border-t pt-4 sm:mt-6 sm:pt-6">
+          <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
+            <p className="text-center font-copperplate-medium text-gray-400 text-xs sm:text-sm md:text-left">
               © {year} CRD Real Estate & Development. All rights reserved.
             </p>
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 text-gray-400 text-xs sm:text-sm">
-              <a href="/about" className="hover:text-white transition-colors">About</a>
+            <div className="flex flex-wrap justify-center gap-2 font-copperplate-medium text-gray-400 text-xs sm:gap-3 sm:text-sm">
+              <a className="transition-colors hover:text-white" href="/about">
+                About
+              </a>
               <span className="text-gray-600">•</span>
-              <a href="/commercial" className="hover:text-white transition-colors">Commercial</a>
+              <a
+                className="transition-colors hover:text-white"
+                href="/commercial"
+              >
+                Commercial
+              </a>
               <span className="text-gray-600">•</span>
-              <a href="/residential" className="hover:text-white transition-colors">Residential</a>
+              <a
+                className="transition-colors hover:text-white"
+                href="/residential"
+              >
+                Residential
+              </a>
               <span className="text-gray-600">•</span>
-              <a href="/development" className="hover:text-white transition-colors">Development</a>
+              <a
+                className="transition-colors hover:text-white"
+                href="/development"
+              >
+                Development
+              </a>
               <span className="text-gray-600">•</span>
-              <a href="/services" className="hover:text-white transition-colors">Services</a>
+              <a
+                className="transition-colors hover:text-white"
+                href="/services"
+              >
+                Services
+              </a>
               <span className="text-gray-600">•</span>
-              <a href="/team" className="hover:text-white transition-colors">Team</a>
+              <a className="transition-colors hover:text-white" href="/team">
+                Team
+              </a>
             </div>
           </div>
         </div>
@@ -137,4 +170,3 @@ export default function Footer() {
     </footer>
   );
 }
-

@@ -1,32 +1,32 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Link from "next/link";
 import Navigation from "./Navigation";
-import { motion } from "framer-motion";
 
 export default function Header() {
   return (
-    <motion.header 
-      className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-gray-800"
-      layout
+    <motion.header
+      className="fixed top-0 right-0 left-0 z-50 border-gray-800 border-b bg-black"
       initial={false}
+      layout
     >
       <div className="container mx-auto px-6">
         {/* Social Media Links */}
-        <motion.div 
-          className="flex justify-end py-2 border-b border-gray-800"
+        <motion.div
+          className="flex justify-end border-gray-800 border-b py-2"
           layout
         >
           <div className="flex space-x-4">
             <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors duration-200"
               aria-label="Instagram"
+              className="inline-block text-gray-400 transition-all duration-200 hover:scale-105 hover:text-white"
+              href="https://instagram.com"
+              rel="noopener noreferrer"
+              target="_blank"
             >
               <svg
-                className="w-5 h-5"
+                className="h-5 w-5"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
@@ -35,14 +35,14 @@ export default function Header() {
               </svg>
             </a>
             <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors duration-200"
               aria-label="Facebook"
+              className="inline-block text-gray-400 transition-all duration-200 hover:scale-105 hover:text-white"
+              href="https://facebook.com"
+              rel="noopener noreferrer"
+              target="_blank"
             >
               <svg
-                className="w-5 h-5"
+                className="h-5 w-5"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
@@ -54,19 +54,21 @@ export default function Header() {
         </motion.div>
 
         {/* Logo and Navigation */}
-        <motion.div 
-          className="flex items-center justify-between gap-4 py-3 sm:py-4 relative"
+        <motion.div
+          className="relative flex flex-row items-center justify-between gap-3 py-3 sm:gap-4 sm:py-4 lg:flex-col lg:items-center lg:justify-center lg:py-6"
           layout
         >
-          <motion.div layout className="flex-shrink-0">
+          <motion.div className="flex-shrink-0" layout>
             <Link
+              className="text-center font-bold font-display text-white tracking-wide transition-opacity duration-200 hover:opacity-80 sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl"
               href="/"
-              className="text-white text-lg sm:text-xl md:text-2xl font-bold tracking-wide hover:opacity-80 transition-opacity duration-200 whitespace-nowrap"
             >
-              {/* Show full name on mobile (< 768px) and desktop (>= 1024px) */}
-              <span className="md:hidden lg:inline">CRD Real Estate & Development</span>
-              {/* Show CRD RED only on tablet (768px - 1023px) */}
-              <span className="hidden md:inline lg:hidden">CRD RED</span>
+              {/* Show CRD RED on mobile and tablet (< 1024px) */}
+              <span className="whitespace-nowrap lg:hidden">CRD RED</span>
+              {/* Show full name on desktop (>= 1024px) */}
+              <span className="hidden lg:inline-block">
+                CRD Real Estate & Development
+              </span>
             </Link>
           </motion.div>
           <Navigation />
@@ -75,4 +77,3 @@ export default function Header() {
     </motion.header>
   );
 }
-

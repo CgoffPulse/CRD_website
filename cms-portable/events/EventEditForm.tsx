@@ -1,15 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { z } from 'zod';
-import Image from 'next/image';
-import { updateEvent } from '../actions/events';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -17,28 +13,41 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import type { EventPoster } from '../types/eventPosters';
-import { groupEventPosters } from '../types/eventPosters';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { updateEvent } from "../actions/events";
+import type { EventPoster } from "../types/eventPosters";
+import { groupEventPosters } from "../types/eventPosters";
 
 const eventEditSchema = z.object({
-  name: z.string({ error: (issue) => issue.input === undefined ? 'Event name is required' : 'Invalid value' }).min(1),
-  eventDate: z.string({ error: (issue) => issue.input === undefined ? 'Event date is required' : 'Invalid value' }).regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+  name: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined ? "Event name is required" : "Invalid value",
+    })
+    .min(1),
+  eventDate: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined ? "Event date is required" : "Invalid value",
+    })
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
   goLiveDays: z.string().optional(),
 });
 
-type UpdateState = {
+interface UpdateState {
   success?: boolean;
   error?: string;
   eventId?: string;
-};
+}
 
 // React 19 pattern: useFormStatus in child component
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="w-full cursor-pointer">
-      {pending ? 'Updating...' : 'Update Event'}
+    <Button className="w-full cursor-pointer" disabled={pending} type="submit">
+      {pending ? "Updating..." : "Update Event"}
     </Button>
   );
 }
@@ -50,23 +59,30 @@ interface EventEditFormProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEditFormProps) {
+export function EventEditForm({
+  event,
+  allEvents,
+  open,
+  onOpenChange,
+}: EventEditFormProps) {
   const router = useRouter();
   const [state, formAction] = useActionState<UpdateState, FormData>(
     updateEvent,
     {}
   );
-  
+
   // Determine if this is a multi-page event
   const NUMERIC_SUFFIX_REGEX = /\d+$/;
-  const baseId = event.id.replace(NUMERIC_SUFFIX_REGEX, '');
+  const baseId = event.id.replace(NUMERIC_SUFFIX_REGEX, "");
   const groupedEvents = groupEventPosters(allEvents);
   const eventGroup = groupedEvents.find((g) => {
     return g.baseId === baseId;
   });
   const isMultiPage = eventGroup ? eventGroup.posters.length > 1 : false;
-  
-  const [flyerType, setFlyerType] = useState<'single' | 'multi'>(isMultiPage ? 'multi' : 'single');
+
+  const [flyerType, setFlyerType] = useState<"single" | "multi">(
+    isMultiPage ? "multi" : "single"
+  );
   const [replaceImages, setReplaceImages] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -84,11 +100,11 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
       setPreviews([]);
       setClientError(null);
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
-      setFlyerType(isMultiPage ? 'multi' : 'single');
+      setFlyerType(isMultiPage ? "multi" : "single");
     }
-  }, [open, event.id, isMultiPage]);
+  }, [open, isMultiPage]);
 
   // Handle success/error states
   useEffect(() => {
@@ -113,21 +129,21 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
 
     // Validate all files
     for (const file of fileArray) {
-      if (!file.type.startsWith('image/')) {
-        setClientError('All files must be images');
+      if (!file.type.startsWith("image/")) {
+        setClientError("All files must be images");
         return;
       }
 
       // Check file size (max 10MB)
       const maxSize = 10 * 1024 * 1024;
       if (file.size > maxSize) {
-        setClientError('Each image size must be less than 10MB');
+        setClientError("Each image size must be less than 10MB");
         return;
       }
     }
 
     // Read all files
-    if (flyerType === 'single') {
+    if (flyerType === "single") {
       const file = fileArray[0];
       if (file) {
         const reader = new FileReader();
@@ -159,8 +175,8 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      if (flyerType === 'single' && files.length > 1) {
-        setClientError('Please select only one image for single-page flyer');
+      if (flyerType === "single" && files.length > 1) {
+        setClientError("Please select only one image for single-page flyer");
         return;
       }
       handleFiles(files);
@@ -173,11 +189,11 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
 
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
-      if (flyerType === 'single' && files.length > 1) {
-        setClientError('Please drop only one image for single-page flyer');
+      if (flyerType === "single" && files.length > 1) {
+        setClientError("Please drop only one image for single-page flyer");
         return;
       }
-      
+
       // Set files to the input
       if (fileInputRef.current) {
         try {
@@ -187,10 +203,10 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
           });
           fileInputRef.current.files = dataTransfer.files;
         } catch (error) {
-          console.warn('Could not set file input value:', error);
+          console.warn("Could not set file input value:", error);
         }
       }
-      
+
       handleFiles(files);
     }
   };
@@ -205,26 +221,24 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
     setIsDragging(false);
   };
 
-
   // Get current images for display
   const currentImages = eventGroup ? eventGroup.posters : [event];
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+    <Dialog onOpenChange={onOpenChange} open={open}>
+      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Event</DialogTitle>
           <DialogDescription>
             Update event details. You can optionally replace the images.
           </DialogDescription>
         </DialogHeader>
-        <form 
-          ref={formRef} 
+        <form
           action={async (formData: FormData) => {
             // Client-side validation with Zod v4
-            const name = formData.get('name') as string;
-            const eventDate = formData.get('eventDate') as string;
-            const goLiveDays = formData.get('goLiveDays') as string;
+            const name = formData.get("name") as string;
+            const eventDate = formData.get("eventDate") as string;
+            const goLiveDays = formData.get("goLiveDays") as string;
 
             const result = eventEditSchema.safeParse({
               name,
@@ -235,7 +249,7 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
             if (!result.success) {
               const firstError = result.error.issues[0];
               if (firstError) {
-                setClientError(firstError.message || 'Validation failed');
+                setClientError(firstError.message || "Validation failed");
               }
               return;
             }
@@ -244,69 +258,78 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
             await formAction(formData);
           }}
           className="space-y-4"
+          ref={formRef}
         >
-          <input type="hidden" name="eventId" value={event.id} />
-          <input type="hidden" name="flyerType" value={flyerType} />
-          <input type="hidden" name="hasNewImages" value={replaceImages ? 'true' : 'false'} />
+          <input name="eventId" type="hidden" value={event.id} />
+          <input name="flyerType" type="hidden" value={flyerType} />
+          <input
+            name="hasNewImages"
+            type="hidden"
+            value={replaceImages ? "true" : "false"}
+          />
           <div className="space-y-2">
             <Label htmlFor="edit-name">Event Name (Alt Text)</Label>
             <Input
+              className="bg-background text-foreground"
+              defaultValue={event.alt}
               id="edit-name"
               name="name"
-              type="text"
-              defaultValue={event.alt}
               required
-              className="bg-background text-foreground"
+              type="text"
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="edit-eventDate">Event Date</Label>
             <Input
+              className="bg-background text-foreground"
+              defaultValue={event.eventDate}
               id="edit-eventDate"
               name="eventDate"
-              type="date"
-              defaultValue={event.eventDate}
               required
-              className="bg-background text-foreground"
+              type="date"
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="edit-goLiveDays">Go Live Days</Label>
             <Input
+              className="bg-background text-foreground"
+              defaultValue={event.goLiveDays || 15}
               id="edit-goLiveDays"
+              min="1"
               name="goLiveDays"
               type="number"
-              min="1"
-              defaultValue={event.goLiveDays || 15}
-              className="bg-background text-foreground"
             />
-            <p className="text-xs text-muted-foreground">
-              Number of days before the event date to show the flyer (default: 15 days)
+            <p className="text-muted-foreground text-xs">
+              Number of days before the event date to show the flyer (default:
+              15 days)
             </p>
           </div>
 
           {/* Current Images Display */}
           <div className="space-y-2">
             <Label>Current Images</Label>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
               {currentImages.map((img) => {
                 return (
-                  <div key={img.id} className="relative aspect-[3/4] w-full overflow-hidden rounded-lg border">
-                    {img.src.startsWith('https://') ? (
+                  <div
+                    className="relative aspect-[3/4] w-full overflow-hidden rounded-lg border"
+                    key={img.id}
+                  >
+                    {img.src.startsWith("https://") ? (
                       <Image
-                        src={img.src}
                         alt={img.alt}
-                        fill
                         className="object-cover"
+                        fill
                         sizes="(max-width: 768px) 50vw, 33vw"
+                        src={img.src}
                       />
                     ) : (
                       <img
-                        src={img.src}
                         alt={img.alt}
-                        className="w-full h-full object-cover"
+                        className="h-full w-full object-cover"
+                        src={img.src}
                       />
                     )}
                   </div>
@@ -317,21 +340,21 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
 
           {/* Replace Images Checkbox */}
           <div className="space-y-2">
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex cursor-pointer items-center gap-2">
               <input
-                type="checkbox"
                 checked={replaceImages}
+                className="h-4 w-4"
                 onChange={(e) => {
                   setReplaceImages(e.target.checked);
                   if (!e.target.checked) {
                     setPreview(null);
                     setPreviews([]);
                     if (fileInputRef.current) {
-                      fileInputRef.current.value = '';
+                      fileInputRef.current.value = "";
                     }
                   }
                 }}
-                className="w-4 h-4"
+                type="checkbox"
               />
               <span className="text-sm">Replace images</span>
             </label>
@@ -343,39 +366,39 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
               <div className="space-y-2">
                 <Label>Flyer Type</Label>
                 <div className="flex gap-6">
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex cursor-pointer items-center gap-2">
                     <input
-                      type="radio"
+                      checked={flyerType === "single"}
+                      className="h-4 w-4"
                       name="edit-flyerType"
-                      value="single"
-                      checked={flyerType === 'single'}
                       onChange={(e) => {
-                        setFlyerType(e.target.value as 'single' | 'multi');
+                        setFlyerType(e.target.value as "single" | "multi");
                         setPreview(null);
                         setPreviews([]);
                         if (fileInputRef.current) {
-                          fileInputRef.current.value = '';
+                          fileInputRef.current.value = "";
                         }
                       }}
-                      className="w-4 h-4"
+                      type="radio"
+                      value="single"
                     />
                     <span className="text-sm">Single-page</span>
                   </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex cursor-pointer items-center gap-2">
                     <input
-                      type="radio"
+                      checked={flyerType === "multi"}
+                      className="h-4 w-4"
                       name="edit-flyerType"
-                      value="multi"
-                      checked={flyerType === 'multi'}
                       onChange={(e) => {
-                        setFlyerType(e.target.value as 'single' | 'multi');
+                        setFlyerType(e.target.value as "single" | "multi");
                         setPreview(null);
                         setPreviews([]);
                         if (fileInputRef.current) {
-                          fileInputRef.current.value = '';
+                          fileInputRef.current.value = "";
                         }
                       }}
-                      className="w-4 h-4"
+                      type="radio"
+                      value="multi"
                     />
                     <span className="text-sm">Multi-page</span>
                   </label>
@@ -384,48 +407,45 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
 
               <div className="space-y-2">
                 <Label htmlFor="edit-image">
-                  {flyerType === 'single' ? 'Image' : 'Images'}
+                  {flyerType === "single" ? "Image" : "Images"}
                 </Label>
                 <div
-                  ref={dropZoneRef}
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+                  className={`rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
                     isDragging
-                      ? 'border-primary bg-primary/10'
-                      : 'border-muted-foreground/50'
+                      ? "border-primary bg-primary/10"
+                      : "border-muted-foreground/50"
                   }`}
+                  onDragLeave={handleDragLeave}
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  ref={dropZoneRef}
                 >
                   <input
-                    ref={fileInputRef}
-                    id="edit-image"
-                    name="image"
-                    type="file"
                     accept="image/*"
-                    multiple={flyerType === 'multi'}
-                    onChange={handleFileChange}
                     className="hidden"
+                    id="edit-image"
+                    multiple={flyerType === "multi"}
+                    name="image"
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                    type="file"
                   />
-                  <label
-                    htmlFor="edit-image"
-                    className="cursor-pointer block"
-                  >
-                    <p className="text-sm text-muted-foreground mb-2">
-                      {flyerType === 'single'
-                        ? 'Click to upload or drag and drop'
-                        : 'Click to upload multiple images or drag and drop'}
+                  <label className="block cursor-pointer" htmlFor="edit-image">
+                    <p className="mb-2 text-muted-foreground text-sm">
+                      {flyerType === "single"
+                        ? "Click to upload or drag and drop"
+                        : "Click to upload multiple images or drag and drop"}
                     </p>
                     <Button
-                      type="button"
-                      variant="outline"
+                      className="cursor-pointer"
                       onClick={(e) => {
                         e.preventDefault();
                         fileInputRef.current?.click();
                       }}
-                      className="cursor-pointer"
+                      type="button"
+                      variant="outline"
                     >
-                      Select {flyerType === 'single' ? 'Image' : 'Images'}
+                      Select {flyerType === "single" ? "Image" : "Images"}
                     </Button>
                   </label>
                 </div>
@@ -434,11 +454,11 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
                 {preview && (
                   <div className="mt-4">
                     <Label>Preview</Label>
-                    <div className="relative aspect-[3/4] w-full max-w-xs overflow-hidden rounded-lg border mt-2">
+                    <div className="relative mt-2 aspect-[3/4] w-full max-w-xs overflow-hidden rounded-lg border">
                       <img
-                        src={preview}
                         alt="Preview"
-                        className="w-full h-full object-cover"
+                        className="h-full w-full object-cover"
+                        src={preview}
                       />
                     </div>
                   </div>
@@ -447,17 +467,17 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
                 {previews.length > 0 && (
                   <div className="mt-4">
                     <Label>Previews ({previews.length})</Label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
+                    <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-3">
                       {previews.map((previewUrl, index) => {
                         return (
                           <div
-                            key={index}
                             className="relative aspect-[3/4] w-full overflow-hidden rounded-lg border"
+                            key={index}
                           >
                             <img
-                              src={previewUrl}
                               alt={`Preview ${index + 1}`}
-                              className="w-full h-full object-cover"
+                              className="h-full w-full object-cover"
+                              src={previewUrl}
                             />
                           </div>
                         );
@@ -470,19 +490,19 @@ export function EventEditForm({ event, allEvents, open, onOpenChange }: EventEdi
           )}
 
           {clientError && (
-            <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">
+            <div className="rounded-md bg-destructive/10 p-3 text-destructive text-sm">
               {clientError}
             </div>
           )}
 
           <DialogFooter>
             <Button
-              type="button"
-              variant="outline"
+              className="cursor-pointer"
               onClick={() => {
                 onOpenChange(false);
               }}
-              className="cursor-pointer"
+              type="button"
+              variant="outline"
             >
               Cancel
             </Button>

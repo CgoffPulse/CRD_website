@@ -1,20 +1,19 @@
-import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
-import { verifyAuth, getEvents } from '../actions/events';
-import { LoginForm } from '../components/LoginForm';
-import { EventUploadForm } from './EventUploadForm';
-import { EventsList } from './EventsList';
-import { ForcePushEventSection } from './ForcePushEventSection';
-import { Button } from '@/components/ui/button';
-import { logout } from '../actions/events';
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { getEvents, logout, verifyAuth } from "../actions/events";
+import { LoginForm } from "../components/LoginForm";
+import { EventsList } from "./EventsList";
+import { EventUploadForm } from "./EventUploadForm";
+import { ForcePushEventSection } from "./ForcePushEventSection";
 
 export const metadata: Metadata = {
-	title: 'Events CMS | Admin',
-	description: 'Admin panel for managing event flyers and promotions',
-	robots: {
-		index: false,
-		follow: false,
-	},
+  title: "Events CMS | Admin",
+  description: "Admin panel for managing event flyers and promotions",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function AdminEventsPage() {
@@ -22,7 +21,7 @@ export default async function AdminEventsPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <div className="flex min-h-screen items-center justify-center bg-background p-4">
         <LoginForm />
       </div>
     );
@@ -32,26 +31,30 @@ export default async function AdminEventsPage() {
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="mx-auto max-w-7xl space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Content Management System</h1>
-            <p className="text-muted-foreground mt-2">
+            <h1 className="font-bold text-3xl">Content Management System</h1>
+            <p className="mt-2 text-muted-foreground">
               Manage event flyers and promotional content
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" asChild className="cursor-pointer">
+            <Button asChild className="cursor-pointer" variant="outline">
               <a href="/promo">Promo CMS</a>
             </Button>
             <form
               action={async () => {
-                'use server';
+                "use server";
                 await logout();
-                redirect('/cms-portable/events');
+                redirect("/cms-portable/events");
               }}
             >
-              <Button type="submit" variant="outline" className="cursor-pointer">
+              <Button
+                className="cursor-pointer"
+                type="submit"
+                variant="outline"
+              >
                 Logout
               </Button>
             </form>
@@ -66,7 +69,7 @@ export default async function AdminEventsPage() {
           </div>
           <div>
             <div className="space-y-4">
-              <h2 className="text-2xl font-semibold">Existing Events</h2>
+              <h2 className="font-semibold text-2xl">Existing Events</h2>
               <EventsList events={events} />
             </div>
           </div>

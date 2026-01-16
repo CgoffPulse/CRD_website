@@ -1,39 +1,43 @@
-'use server';
+"use server";
 
-import { put, del } from '@vercel/blob';
-import { cookies } from 'next/headers';
-import { unstable_noStore } from 'next/cache';
-import { z } from 'zod';
-import { readFile, writeFile } from 'fs/promises';
-import { join } from 'path';
-import sharp from 'sharp';
-import type { EventPoster } from '../types/eventPosters';
+import { readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import { del, put } from "@vercel/blob";
+import { unstable_noStore } from "next/cache";
+import { cookies } from "next/headers";
+import sharp from "sharp";
+import { z } from "zod";
+import type { EventPoster } from "../types/eventPosters";
 
 // Configurable paths - can be overridden via environment variables
-const EVENTS_FILE_PATH = process.env.CMS_EVENTS_FILE_PATH || join(process.cwd(), 'app/data/events.json');
-const EVENTS_BLOB_PATH = process.env.CMS_EVENTS_BLOB_PATH || 'data/events.json';
+const EVENTS_FILE_PATH =
+  process.env.CMS_EVENTS_FILE_PATH ||
+  join(process.cwd(), "app/data/events.json");
+const EVENTS_BLOB_PATH = process.env.CMS_EVENTS_BLOB_PATH || "data/events.json";
 
 const eventSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  eventDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
-  image: z.instanceof(File, { message: 'Image is required' }),
+  name: z.string().min(1, "Name is required"),
+  eventDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
+  image: z.instanceof(File, { message: "Image is required" }),
 });
 
-type EventActionState = {
+interface EventActionState {
   success?: boolean;
   error?: string;
   eventId?: string;
-};
+}
 
 // Authentication helper
 export async function verifyAuth(): Promise<boolean> {
   const cookieStore = await cookies();
-  const authCookie = cookieStore.get('cms-auth');
+  const authCookie = cookieStore.get("cms-auth");
   const expectedPassword = process.env.CMS_PASSWORD?.trim();
 
   if (!expectedPassword || expectedPassword.length === 0) {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('CMS_PASSWORD is not set in environment variables');
+    if (process.env.NODE_ENV === "development") {
+      console.warn("CMS_PASSWORD is not set in environment variables");
     }
     return false;
   }
@@ -47,58 +51,69 @@ export async function verifyAuth(): Promise<boolean> {
 }
 
 const loginSchema = z.object({
-  password: z.string({ error: (issue) => issue.input === undefined ? 'Password is required' : 'Invalid value' }).min(1),
+  password: z
+    .string({
+      error: (issue) =>
+        issue.input === undefined ? "Password is required" : "Invalid value",
+    })
+    .min(1),
 });
 
-type LoginState = {
+interface LoginState {
   success?: boolean;
   error?: string;
-};
+}
 
 export async function loginAction(
-  prevState: LoginState,
+  _prevState: LoginState,
   formData: FormData
 ): Promise<LoginState> {
-  const password = formData.get('password') as string;
-  
+  const password = formData.get("password") as string;
+
   const validatedFields = loginSchema.safeParse({ password });
   if (!validatedFields.success) {
     return {
       success: false,
-      error: 'Password is required',
+      error: "Password is required",
     };
   }
 
   return await login(password);
 }
 
-export async function login(password: string): Promise<{ success: boolean; error?: string }> {
+export async function login(
+  password: string
+): Promise<{ success: boolean; error?: string }> {
   // Ensure we're not using cached values
   unstable_noStore();
-  
+
   const expectedPassword = process.env.CMS_PASSWORD?.trim();
 
   if (!expectedPassword || expectedPassword.length === 0) {
     // Log in production to help debug (without exposing the actual value)
-    console.error('[CMS Auth] CMS_PASSWORD is not set or is empty. Env var exists:', !!process.env.CMS_PASSWORD);
+    console.error(
+      "[CMS Auth] CMS_PASSWORD is not set or is empty. Env var exists:",
+      !!process.env.CMS_PASSWORD
+    );
     return {
       success: false,
-      error: 'CMS password not configured. Please set CMS_PASSWORD in your environment variables and redeploy.',
+      error:
+        "CMS password not configured. Please set CMS_PASSWORD in your environment variables and redeploy.",
     };
   }
 
   if (password.trim() !== expectedPassword) {
     return {
       success: false,
-      error: 'Invalid password',
+      error: "Invalid password",
     };
   }
 
   const cookieStore = await cookies();
-  cookieStore.set('cms-auth', password, {
+  cookieStore.set("cms-auth", password, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
 
@@ -109,27 +124,30 @@ export async function login(password: string): Promise<{ success: boolean; error
 
 export async function logout(): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.delete('cms-auth');
+  cookieStore.delete("cms-auth");
 }
 
 // Read events from JSON file or Blob Storage
 export async function getEvents(): Promise<EventPoster[]> {
   // Disable caching to ensure fresh data in development
   unstable_noStore();
-  
+
   // In production, use Blob Storage with fallback and merge with committed JSON file
-  if (process.env.NODE_ENV === 'production' && process.env.BLOB_READ_WRITE_TOKEN) {
+  if (
+    process.env.NODE_ENV === "production" &&
+    process.env.BLOB_READ_WRITE_TOKEN
+  ) {
     let blobEvents: EventPoster[] = [];
     let fileEvents: EventPoster[] = [];
-    
+
     // Try to read from blob storage
     try {
-      const { list } = await import('@vercel/blob');
+      const { list } = await import("@vercel/blob");
       const blobs = await list({
         prefix: EVENTS_BLOB_PATH,
         token: process.env.BLOB_READ_WRITE_TOKEN,
       });
-      
+
       if (blobs.blobs.length > 0) {
         const blob = blobs.blobs[0];
         const response = await fetch(blob.url);
@@ -137,63 +155,71 @@ export async function getEvents(): Promise<EventPoster[]> {
         blobEvents = JSON.parse(fileContents) as EventPoster[];
       }
     } catch (error) {
-      console.error('Error reading events from blob:', error);
+      console.error("Error reading events from blob:", error);
     }
-    
+
     // Try to read from committed JSON file
     try {
-      const fileContents = await readFile(EVENTS_FILE_PATH, 'utf-8');
+      const fileContents = await readFile(EVENTS_FILE_PATH, "utf-8");
       fileEvents = JSON.parse(fileContents) as EventPoster[];
     } catch (fileError) {
       // File doesn't exist or can't be read - that's okay
-      if (!(fileError instanceof Error && 'code' in fileError && fileError.code === 'ENOENT')) {
-        console.error('Error reading events from file:', fileError);
+      if (
+        !(
+          fileError instanceof Error &&
+          "code" in fileError &&
+          fileError.code === "ENOENT"
+        )
+      ) {
+        console.error("Error reading events from file:", fileError);
       }
     }
-    
+
     // Merge events: combine blob and file events, removing duplicates by ID
     const allEventsMap = new Map<string, EventPoster>();
-    
+
     // First add file events (these are the source of truth for existing data)
     for (const event of fileEvents) {
       allEventsMap.set(event.id, event);
     }
-    
+
     // Then add/override with blob events (these have the latest updates)
     for (const event of blobEvents) {
       allEventsMap.set(event.id, event);
     }
-    
+
     const mergedEvents = Array.from(allEventsMap.values());
-    
+
     // Always ensure blob is up to date with merged data (if we have any events)
     if (mergedEvents.length > 0) {
       // Only migrate if blob is empty or has fewer events than merged
       if (blobEvents.length === 0 || mergedEvents.length > blobEvents.length) {
         try {
           await saveEvents(mergedEvents);
-          console.log(`Migrated/updated ${mergedEvents.length} events to blob storage (file: ${fileEvents.length}, blob: ${blobEvents.length})`);
+          console.log(
+            `Migrated/updated ${mergedEvents.length} events to blob storage (file: ${fileEvents.length}, blob: ${blobEvents.length})`
+          );
         } catch (migrationError) {
-          console.error('Error migrating events to blob:', migrationError);
+          console.error("Error migrating events to blob:", migrationError);
           // Continue anyway - return merged events
         }
       }
     }
-    
+
     return mergedEvents;
   }
-  
+
   // In development, use local file system
   try {
-    const fileContents = await readFile(EVENTS_FILE_PATH, 'utf-8');
+    const fileContents = await readFile(EVENTS_FILE_PATH, "utf-8");
     const events = JSON.parse(fileContents) as EventPoster[];
     return events;
   } catch (error) {
     // If file doesn't exist or is invalid, return empty array
-    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") {
       return [];
     }
-    console.error('Error reading events:', error);
+    console.error("Error reading events:", error);
     return [];
   }
 }
@@ -201,41 +227,46 @@ export async function getEvents(): Promise<EventPoster[]> {
 // Write events to JSON file or Blob Storage
 async function saveEvents(events: EventPoster[]): Promise<void> {
   const eventsJson = JSON.stringify(events, null, 2);
-  
+
   // In production, use Blob Storage
-  if (process.env.NODE_ENV === 'production' && process.env.BLOB_READ_WRITE_TOKEN) {
+  if (
+    process.env.NODE_ENV === "production" &&
+    process.env.BLOB_READ_WRITE_TOKEN
+  ) {
     try {
       // Convert JSON string to Buffer for blob storage
-      const buffer = Buffer.from(eventsJson, 'utf-8');
+      const buffer = Buffer.from(eventsJson, "utf-8");
       await put(EVENTS_BLOB_PATH, buffer, {
-        access: 'public',
+        access: "public",
         token: process.env.BLOB_READ_WRITE_TOKEN,
-        contentType: 'application/json',
+        contentType: "application/json",
         allowOverwrite: true,
       });
       return;
     } catch (error) {
-      console.error('Error saving events to blob:', error);
+      console.error("Error saving events to blob:", error);
       // Log the actual error for debugging
       if (error instanceof Error) {
-        console.error('Blob save error details:', error.message, error.stack);
+        console.error("Blob save error details:", error.message, error.stack);
       }
-      throw new Error(`Failed to save events to blob storage: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to save events to blob storage: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     }
   }
-  
+
   // In development, use local file system
   try {
-    await writeFile(EVENTS_FILE_PATH, eventsJson, 'utf-8');
+    await writeFile(EVENTS_FILE_PATH, eventsJson, "utf-8");
   } catch (error) {
-    console.error('Error saving events:', error);
-    throw new Error('Failed to save events');
+    console.error("Error saving events:", error);
+    throw new Error("Failed to save events");
   }
 }
 
 // Upload event flyer
 export async function uploadEventFlyer(
-  prevState: EventActionState,
+  _prevState: EventActionState,
   formData: FormData
 ): Promise<EventActionState> {
   // Check authentication
@@ -243,7 +274,7 @@ export async function uploadEventFlyer(
   if (!isAuthenticated) {
     return {
       success: false,
-      error: 'Unauthorized. Please log in.',
+      error: "Unauthorized. Please log in.",
     };
   }
 
@@ -251,29 +282,30 @@ export async function uploadEventFlyer(
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     return {
       success: false,
-      error: 'Blob storage is not configured. Please set BLOB_READ_WRITE_TOKEN.',
+      error:
+        "Blob storage is not configured. Please set BLOB_READ_WRITE_TOKEN.",
     };
   }
 
   try {
-    const name = formData.get('name') as string;
-    const eventDate = formData.get('eventDate') as string;
-    const flyerType = (formData.get('flyerType') as string) || 'single';
-    const goLiveDaysStr = formData.get('goLiveDays') as string;
+    const name = formData.get("name") as string;
+    const eventDate = formData.get("eventDate") as string;
+    const flyerType = (formData.get("flyerType") as string) || "single";
+    const goLiveDaysStr = formData.get("goLiveDays") as string;
     const goLiveDays = goLiveDaysStr ? Number.parseInt(goLiveDaysStr, 10) : 15;
 
     // Get all images from FormData
     // When file input has multiple attribute, browser submits all files with same name "image"
     // Use getAll to get all files, or get for single file
     const images: File[] = [];
-    
-    if (flyerType === 'multi') {
+
+    if (flyerType === "multi") {
       // Multi-page: try getAll('image') first (natural form submission)
-      const allImages = formData.getAll('image');
+      const allImages = formData.getAll("image");
       const validImages = allImages.filter((img) => {
         return img instanceof File && img.size > 0;
       }) as File[];
-      
+
       if (validImages.length > 0) {
         images.push(...validImages);
       } else {
@@ -281,7 +313,7 @@ export async function uploadEventFlyer(
         let index = 0;
         while (true) {
           const image = formData.get(`image${index}`) as File | null;
-          if (!image || !(image instanceof File) || image.size === 0) {
+          if (!(image && image instanceof File) || image.size === 0) {
             break;
           }
           images.push(image);
@@ -290,7 +322,7 @@ export async function uploadEventFlyer(
       }
     } else {
       // Single-page: get single image
-      const image = formData.get('image') as File;
+      const image = formData.get("image") as File;
       if (image && image instanceof File && image.size > 0) {
         images.push(image);
       }
@@ -299,24 +331,24 @@ export async function uploadEventFlyer(
     if (images.length === 0) {
       return {
         success: false,
-        error: 'Please select at least one image',
+        error: "Please select at least one image",
       };
     }
 
     // Validate all images
     const maxSize = 10 * 1024 * 1024; // 10MB
     for (const image of images) {
-      if (!image.type.startsWith('image/')) {
+      if (!image.type.startsWith("image/")) {
         return {
           success: false,
-          error: 'All files must be images',
+          error: "All files must be images",
         };
       }
 
       if (image.size > maxSize) {
         return {
           success: false,
-          error: 'Each image size must be less than 10MB',
+          error: "Each image size must be less than 10MB",
         };
       }
     }
@@ -331,7 +363,7 @@ export async function uploadEventFlyer(
     if (!validation.success) {
       return {
         success: false,
-        error: validation.error.issues[0]?.message || 'Invalid form data',
+        error: validation.error.issues[0]?.message || "Invalid form data",
       };
     }
 
@@ -348,13 +380,14 @@ export async function uploadEventFlyer(
 
     for (let i = 0; i < images.length; i++) {
       const image = images[i];
-      
+
       // Generate ID with numeric suffix for multi-page (for grouping)
       // Single-page: event-123-abc (no suffix)
       // Multi-page: event-123-abc1, event-123-abc2, etc. (with numeric suffix)
-      const eventId = flyerType === 'multi' && images.length > 1
-        ? `${baseId}${i + 1}`
-        : baseId;
+      const eventId =
+        flyerType === "multi" && images.length > 1
+          ? `${baseId}${i + 1}`
+          : baseId;
 
       let width = 1200;
       let height = 1600;
@@ -374,11 +407,17 @@ export async function uploadEventFlyer(
         width = metadata.width || 1200;
         height = metadata.height || 1600;
       } catch (sharpError) {
-        console.error(`Error processing image ${i + 1} with sharp:`, sharpError);
+        console.error(
+          `Error processing image ${i + 1} with sharp:`,
+          sharpError
+        );
         // If sharp fails, use default dimensions and continue
         // The image will still be uploaded, just with default dimensions
         // Only fail if it's a critical error (not just dimension extraction)
-        if (sharpError instanceof Error && sharpError.message.includes('Input buffer')) {
+        if (
+          sharpError instanceof Error &&
+          sharpError.message.includes("Input buffer")
+        ) {
           return {
             success: false,
             error: `Image ${i + 1} could not be processed. The file may be corrupted or in an unsupported format.`,
@@ -387,11 +426,11 @@ export async function uploadEventFlyer(
       }
 
       // Upload image to Vercel Blob
-      const blobPrefix = process.env.CMS_BLOB_PREFIX || 'events';
+      const blobPrefix = process.env.CMS_BLOB_PREFIX || "events";
       let blob;
       try {
         blob = await put(`${blobPrefix}/${eventId}`, image, {
-          access: 'public',
+          access: "public",
           token: process.env.BLOB_READ_WRITE_TOKEN,
         });
       } catch (blobError) {
@@ -399,7 +438,7 @@ export async function uploadEventFlyer(
         // Return error immediately instead of throwing
         return {
           success: false,
-          error: `Failed to upload image ${i + 1}: ${blobError instanceof Error ? blobError.message : 'Unknown error'}`,
+          error: `Failed to upload image ${i + 1}: ${blobError instanceof Error ? blobError.message : "Unknown error"}`,
         };
       }
 
@@ -428,18 +467,21 @@ export async function uploadEventFlyer(
       eventId: baseId,
     };
   } catch (error) {
-    console.error('Error uploading event:', error);
+    console.error("Error uploading event:", error);
     // Provide more specific error messages
-    let errorMessage = 'Failed to upload event';
+    let errorMessage = "Failed to upload event";
     if (error instanceof Error) {
       errorMessage = error.message;
       // Check for specific error types
-      if (error.message.includes('sharp')) {
-        errorMessage = 'Error processing image. The image file may be corrupted or in an unsupported format.';
-      } else if (error.message.includes('blob')) {
-        errorMessage = 'Error uploading image to storage. Please try again or check your connection.';
-      } else if (error.message.includes('timeout')) {
-        errorMessage = 'Upload timed out. The image may be too large. Please try a smaller file.';
+      if (error.message.includes("sharp")) {
+        errorMessage =
+          "Error processing image. The image file may be corrupted or in an unsupported format.";
+      } else if (error.message.includes("blob")) {
+        errorMessage =
+          "Error uploading image to storage. Please try again or check your connection.";
+      } else if (error.message.includes("timeout")) {
+        errorMessage =
+          "Upload timed out. The image may be too large. Please try a smaller file.";
       }
     }
     // Ensure we always return a valid response object
@@ -459,7 +501,7 @@ export async function deleteEvent(
   if (!isAuthenticated) {
     return {
       success: false,
-      error: 'Unauthorized. Please log in.',
+      error: "Unauthorized. Please log in.",
     };
   }
 
@@ -469,23 +511,23 @@ export async function deleteEvent(
 
     // Find all events with matching base ID (handles multi-page events)
     const NUMERIC_SUFFIX_REGEX = /\d+$/;
-    const baseId = eventId.replace(NUMERIC_SUFFIX_REGEX, '');
+    const baseId = eventId.replace(NUMERIC_SUFFIX_REGEX, "");
     const eventsToDelete = events.filter((e) => {
-      const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, '');
+      const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, "");
       return eBaseId === baseId;
     });
 
     if (eventsToDelete.length === 0) {
       return {
         success: false,
-        error: 'Event not found',
+        error: "Event not found",
       };
     }
 
     // Delete all blob images for this event group
     if (process.env.BLOB_READ_WRITE_TOKEN) {
       for (const eventToDelete of eventsToDelete) {
-        if (eventToDelete.src.startsWith('https://')) {
+        if (eventToDelete.src.startsWith("https://")) {
           try {
             // Extract blob pathname from URL
             const url = new URL(eventToDelete.src);
@@ -495,7 +537,7 @@ export async function deleteEvent(
             });
           } catch (blobError) {
             // Log but don't fail if blob deletion fails
-            console.error('Error deleting blob:', blobError);
+            console.error("Error deleting blob:", blobError);
           }
         }
       }
@@ -503,7 +545,7 @@ export async function deleteEvent(
 
     // Remove all events in the group from array
     const filteredEvents = events.filter((e) => {
-      const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, '');
+      const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, "");
       return eBaseId === baseId;
     });
 
@@ -514,17 +556,17 @@ export async function deleteEvent(
       success: true,
     };
   } catch (error) {
-    console.error('Error deleting event:', error);
+    console.error("Error deleting event:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to delete event',
+      error: error instanceof Error ? error.message : "Failed to delete event",
     };
   }
 }
 
 // Update event
 export async function updateEvent(
-  prevState: EventActionState,
+  _prevState: EventActionState,
   formData: FormData
 ): Promise<EventActionState> {
   // Check authentication
@@ -532,40 +574,49 @@ export async function updateEvent(
   if (!isAuthenticated) {
     return {
       success: false,
-      error: 'Unauthorized. Please log in.',
+      error: "Unauthorized. Please log in.",
     };
   }
 
   // Check for Vercel Blob token if images are being updated
-  const hasNewImages = formData.get('hasNewImages') === 'true';
+  const hasNewImages = formData.get("hasNewImages") === "true";
   if (hasNewImages && !process.env.BLOB_READ_WRITE_TOKEN) {
     return {
       success: false,
-      error: 'Blob storage is not configured. Please set BLOB_READ_WRITE_TOKEN.',
+      error:
+        "Blob storage is not configured. Please set BLOB_READ_WRITE_TOKEN.",
     };
   }
 
   try {
-    const eventId = formData.get('eventId') as string;
-    const name = formData.get('name') as string;
-    const eventDate = formData.get('eventDate') as string;
-    const goLiveDaysStr = formData.get('goLiveDays') as string;
+    const eventId = formData.get("eventId") as string;
+    const name = formData.get("name") as string;
+    const eventDate = formData.get("eventDate") as string;
+    const goLiveDaysStr = formData.get("goLiveDays") as string;
     const goLiveDays = goLiveDaysStr ? Number.parseInt(goLiveDaysStr, 10) : 15;
-    const flyerType = (formData.get('flyerType') as string) || 'single';
+    const flyerType = (formData.get("flyerType") as string) || "single";
 
-    if (!eventId || !name || !eventDate) {
+    if (!(eventId && name && eventDate)) {
       return {
         success: false,
-        error: 'Missing required fields',
+        error: "Missing required fields",
       };
     }
 
     // Validate date format
-    const dateValidation = z.string({ error: (issue) => issue.input === undefined ? 'Event date is required' : 'Invalid value' }).regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format').safeParse(eventDate);
+    const dateValidation = z
+      .string({
+        error: (issue) =>
+          issue.input === undefined
+            ? "Event date is required"
+            : "Invalid value",
+      })
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format")
+      .safeParse(eventDate);
     if (!dateValidation.success) {
       return {
         success: false,
-        error: 'Date must be in YYYY-MM-DD format',
+        error: "Date must be in YYYY-MM-DD format",
       };
     }
 
@@ -576,16 +627,16 @@ export async function updateEvent(
     // For single events, baseId = eventId
     // For multi-page, baseId = eventId without numeric suffix
     const NUMERIC_SUFFIX_REGEX = /\d+$/;
-    const baseId = eventId.replace(NUMERIC_SUFFIX_REGEX, '');
+    const baseId = eventId.replace(NUMERIC_SUFFIX_REGEX, "");
     const eventsToUpdate = events.filter((e) => {
-      const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, '');
+      const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, "");
       return eBaseId === baseId;
     });
 
     if (eventsToUpdate.length === 0) {
       return {
         success: false,
-        error: 'Event not found',
+        error: "Event not found",
       };
     }
 
@@ -594,29 +645,31 @@ export async function updateEvent(
       // Get all new images from FormData
       // Try indexed images first (image0, image1, etc.), then getAll('image'), then single 'image'
       const newImages: File[] = [];
-      
-      if (flyerType === 'multi') {
+
+      if (flyerType === "multi") {
         // Multi-page: try to get indexed images first
         let index = 0;
         while (true) {
           const image = formData.get(`image${index}`) as File | null;
-          if (!image || !(image instanceof File) || image.size === 0) {
+          if (!(image && image instanceof File) || image.size === 0) {
             break;
           }
           newImages.push(image);
           index++;
         }
-        
+
         // If no indexed images found, try getAll('image') for multiple files with same name
         if (newImages.length === 0) {
-          const allImages = formData.getAll('image') as File[];
-          newImages.push(...allImages.filter((img) => {
-            return img instanceof File && img.size > 0;
-          }));
+          const allImages = formData.getAll("image") as File[];
+          newImages.push(
+            ...allImages.filter((img) => {
+              return img instanceof File && img.size > 0;
+            })
+          );
         }
       } else {
         // Single-page: get single image
-        const image = formData.get('image') as File;
+        const image = formData.get("image") as File;
         if (image && image instanceof File && image.size > 0) {
           newImages.push(image);
         }
@@ -625,24 +678,24 @@ export async function updateEvent(
       if (newImages.length === 0) {
         return {
           success: false,
-          error: 'Please select at least one image to replace',
+          error: "Please select at least one image to replace",
         };
       }
 
       // Validate all images
       const maxSize = 10 * 1024 * 1024; // 10MB
       for (const image of newImages) {
-        if (!image.type.startsWith('image/')) {
+        if (!image.type.startsWith("image/")) {
           return {
             success: false,
-            error: 'All files must be images',
+            error: "All files must be images",
           };
         }
 
         if (image.size > maxSize) {
           return {
             success: false,
-            error: 'Each image size must be less than 10MB',
+            error: "Each image size must be less than 10MB",
           };
         }
       }
@@ -650,7 +703,7 @@ export async function updateEvent(
       // Delete old blob images
       for (const oldEvent of eventsToUpdate) {
         if (
-          oldEvent.src.startsWith('https://') &&
+          oldEvent.src.startsWith("https://") &&
           process.env.BLOB_READ_WRITE_TOKEN
         ) {
           try {
@@ -660,7 +713,7 @@ export async function updateEvent(
               token: process.env.BLOB_READ_WRITE_TOKEN,
             });
           } catch (blobError) {
-            console.error('Error deleting old blob:', blobError);
+            console.error("Error deleting old blob:", blobError);
             // Continue even if deletion fails
           }
         }
@@ -668,21 +721,22 @@ export async function updateEvent(
 
       // Remove old events from array
       const updatedEvents = events.filter((e) => {
-        const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, '');
+        const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, "");
         return eBaseId === baseId;
       });
 
       // Upload new images and create updated event objects
       const newEvents: EventPoster[] = [];
-      const blobPrefix = process.env.CMS_BLOB_PREFIX || 'events';
+      const blobPrefix = process.env.CMS_BLOB_PREFIX || "events";
 
       for (let i = 0; i < newImages.length; i++) {
         const image = newImages[i];
-        
+
         // Generate ID with numeric suffix for multi-page (for grouping)
-        const newEventId = flyerType === 'multi' && newImages.length > 1
-          ? `${baseId}${i + 1}`
-          : baseId;
+        const newEventId =
+          flyerType === "multi" && newImages.length > 1
+            ? `${baseId}${i + 1}`
+            : baseId;
 
         let width = 1200;
         let height = 1600;
@@ -702,10 +756,16 @@ export async function updateEvent(
           width = metadata.width || 1200;
           height = metadata.height || 1600;
         } catch (sharpError) {
-          console.error(`Error processing image ${i + 1} with sharp:`, sharpError);
+          console.error(
+            `Error processing image ${i + 1} with sharp:`,
+            sharpError
+          );
           // If sharp fails, use default dimensions and continue
           // Only fail if it's a critical error (not just dimension extraction)
-          if (sharpError instanceof Error && sharpError.message.includes('Input buffer')) {
+          if (
+            sharpError instanceof Error &&
+            sharpError.message.includes("Input buffer")
+          ) {
             return {
               success: false,
               error: `Image ${i + 1} could not be processed. The file may be corrupted or in an unsupported format.`,
@@ -717,7 +777,7 @@ export async function updateEvent(
         let blob;
         try {
           blob = await put(`${blobPrefix}/${newEventId}`, image, {
-            access: 'public',
+            access: "public",
             token: process.env.BLOB_READ_WRITE_TOKEN!,
           });
         } catch (blobError) {
@@ -725,7 +785,7 @@ export async function updateEvent(
           // Return error immediately instead of throwing
           return {
             success: false,
-            error: `Failed to upload image ${i + 1}: ${blobError instanceof Error ? blobError.message : 'Unknown error'}`,
+            error: `Failed to upload image ${i + 1}: ${blobError instanceof Error ? blobError.message : "Unknown error"}`,
           };
         }
 
@@ -751,7 +811,7 @@ export async function updateEvent(
     } else {
       // No new images, just update metadata
       const updatedEvents = events.map((e) => {
-        const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, '');
+        const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, "");
         if (eBaseId === baseId) {
           return {
             ...e,
@@ -772,18 +832,21 @@ export async function updateEvent(
       eventId: baseId,
     };
   } catch (error) {
-    console.error('Error updating event:', error);
+    console.error("Error updating event:", error);
     // Provide more specific error messages
-    let errorMessage = 'Failed to update event';
+    let errorMessage = "Failed to update event";
     if (error instanceof Error) {
       errorMessage = error.message;
       // Check for specific error types
-      if (error.message.includes('sharp')) {
-        errorMessage = 'Error processing image. The image file may be corrupted or in an unsupported format.';
-      } else if (error.message.includes('blob')) {
-        errorMessage = 'Error uploading image to storage. Please try again or check your connection.';
-      } else if (error.message.includes('timeout')) {
-        errorMessage = 'Upload timed out. The image may be too large. Please try a smaller file.';
+      if (error.message.includes("sharp")) {
+        errorMessage =
+          "Error processing image. The image file may be corrupted or in an unsupported format.";
+      } else if (error.message.includes("blob")) {
+        errorMessage =
+          "Error uploading image to storage. Please try again or check your connection.";
+      } else if (error.message.includes("timeout")) {
+        errorMessage =
+          "Upload timed out. The image may be too large. Please try a smaller file.";
       }
     }
     return {
@@ -794,27 +857,35 @@ export async function updateEvent(
 }
 
 // Migrate events from JSON file to Blob Storage (manual migration)
-export async function migrateEventsToBlob(): Promise<{ success: boolean; error?: string; migrated?: number }> {
+export async function migrateEventsToBlob(): Promise<{
+  success: boolean;
+  error?: string;
+  migrated?: number;
+}> {
   // Check authentication
   const isAuthenticated = await verifyAuth();
   if (!isAuthenticated) {
     return {
       success: false,
-      error: 'Unauthorized. Please log in.',
+      error: "Unauthorized. Please log in.",
     };
   }
 
   // Only run in production
-  if (process.env.NODE_ENV !== 'production' || !process.env.BLOB_READ_WRITE_TOKEN) {
+  if (
+    process.env.NODE_ENV !== "production" ||
+    !process.env.BLOB_READ_WRITE_TOKEN
+  ) {
     return {
       success: false,
-      error: 'Migration only works in production with BLOB_READ_WRITE_TOKEN set',
+      error:
+        "Migration only works in production with BLOB_READ_WRITE_TOKEN set",
     };
   }
 
   try {
     // Check if blob already exists
-    const { list } = await import('@vercel/blob');
+    const { list } = await import("@vercel/blob");
     const blobs = await list({
       prefix: EVENTS_BLOB_PATH,
       token: process.env.BLOB_READ_WRITE_TOKEN,
@@ -823,18 +894,18 @@ export async function migrateEventsToBlob(): Promise<{ success: boolean; error?:
     if (blobs.blobs.length > 0) {
       return {
         success: false,
-        error: 'Events already migrated to blob storage',
+        error: "Events already migrated to blob storage",
       };
     }
 
     // Read from JSON file
-    const fileContents = await readFile(EVENTS_FILE_PATH, 'utf-8');
+    const fileContents = await readFile(EVENTS_FILE_PATH, "utf-8");
     const events = JSON.parse(fileContents) as EventPoster[];
 
     if (events.length === 0) {
       return {
         success: false,
-        error: 'No events found to migrate',
+        error: "No events found to migrate",
       };
     }
 
@@ -846,10 +917,11 @@ export async function migrateEventsToBlob(): Promise<{ success: boolean; error?:
       migrated: events.length,
     };
   } catch (error) {
-    console.error('Error migrating events:', error);
+    console.error("Error migrating events:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to migrate events',
+      error:
+        error instanceof Error ? error.message : "Failed to migrate events",
     };
   }
 }
@@ -864,7 +936,7 @@ export async function toggleForceGoLive(
   if (!isAuthenticated) {
     return {
       success: false,
-      error: 'Unauthorized. Please log in.',
+      error: "Unauthorized. Please log in.",
     };
   }
 
@@ -874,11 +946,11 @@ export async function toggleForceGoLive(
 
     // Find all events with matching base ID (handles multi-page events)
     const NUMERIC_SUFFIX_REGEX = /\d+$/;
-    const baseId = eventId.replace(NUMERIC_SUFFIX_REGEX, '');
-    
+    const baseId = eventId.replace(NUMERIC_SUFFIX_REGEX, "");
+
     // Update all events in the group
     const updatedEvents = events.map((e) => {
-      const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, '');
+      const eBaseId = e.id.replace(NUMERIC_SUFFIX_REGEX, "");
       if (eBaseId === baseId) {
         return {
           ...e,
@@ -895,10 +967,13 @@ export async function toggleForceGoLive(
       success: true,
     };
   } catch (error) {
-    console.error('Error toggling force go live:', error);
+    console.error("Error toggling force go live:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to toggle force go live',
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to toggle force go live",
     };
   }
 }

@@ -1,30 +1,33 @@
-import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
-import { verifyAuth } from '../actions/events';
-import { getPromoPopup } from '../actions/promoPopup';
-import { getEvents as getEventsData } from '../actions/events';
-import { getUpcomingEventsForPopup, getGroupedEventsWithinGoLivePeriod } from '../lib/eventUtils';
-import { groupEventPosters } from '../types/eventPosters';
-import { LoginForm } from '../components/LoginForm';
-import { PromoImageUploadForm } from './PromoImageUploadForm';
-import { PromoImagesList } from './PromoImagesList';
-import { PromoConfigForm } from './PromoConfigForm';
-import { PromoQueuedSection } from './PromoQueuedSection';
-import { CurrentPromoSection } from './CurrentPromoSection';
-import { PastPromosList } from './PastPromosList';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { logout } from '../actions/events';
-import { forcePushPromo, togglePromoForceGoLive } from '../actions/promoPopup';
-import { ForcePushPromoSection } from './ForcePushPromoSection';
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  getEvents as getEventsData,
+  logout,
+  verifyAuth,
+} from "../actions/events";
+import { getPromoPopup } from "../actions/promoPopup";
+import { LoginForm } from "../components/LoginForm";
+import {
+  getGroupedEventsWithinGoLivePeriod,
+  getUpcomingEventsForPopup,
+} from "../lib/eventUtils";
+import { groupEventPosters } from "../types/eventPosters";
+import { CurrentPromoSection } from "./CurrentPromoSection";
+import { ForcePushPromoSection } from "./ForcePushPromoSection";
+import { PastPromosList } from "./PastPromosList";
+import { PromoConfigForm } from "./PromoConfigForm";
+import { PromoImagesList } from "./PromoImagesList";
+import { PromoImageUploadForm } from "./PromoImageUploadForm";
+import { PromoQueuedSection } from "./PromoQueuedSection";
 
 export const metadata: Metadata = {
-	title: 'Promo Popup CMS | Admin',
-	description: 'Admin panel for managing promotional popup content',
-	robots: {
-		index: false,
-		follow: false,
-	},
+  title: "Promo Popup CMS | Admin",
+  description: "Admin panel for managing promotional popup content",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function AdminPromoPage() {
@@ -32,7 +35,7 @@ export default async function AdminPromoPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <div className="flex min-h-screen items-center justify-center bg-background p-4">
         <LoginForm />
       </div>
     );
@@ -43,42 +46,53 @@ export default async function AdminPromoPage() {
   const activeEvents = getUpcomingEventsForPopup(events);
   const groupedEvents = groupEventPosters(events);
   const activeGroupedEvents = getGroupedEventsWithinGoLivePeriod(groupedEvents);
-  
+
   // Check if promo is queued (not currently showing)
-  const isPromoQueued = !promoPopup.enabled || 
+  const isPromoQueued =
+    !promoPopup.enabled ||
     (activeEvents.length > 0 && !promoPopup.forceGoLive) ||
     promoPopup.images.length === 0;
-  
+
   // Determine what's currently showing
   // Priority: 1) Force-pushed promo, 2) Active events, 3) Promo popup
-  const isShowingPromoForce = promoPopup.forceGoLive && promoPopup.enabled && promoPopup.images.length > 0;
+  const isShowingPromoForce =
+    promoPopup.forceGoLive &&
+    promoPopup.enabled &&
+    promoPopup.images.length > 0;
   const isShowingEvents = activeEvents.length > 0 && !isShowingPromoForce;
-  const isShowingPromoNormal = !isShowingPromoForce && !isShowingEvents && promoPopup.enabled && promoPopup.images.length > 0;
+  const isShowingPromoNormal =
+    !(isShowingPromoForce || isShowingEvents) &&
+    promoPopup.enabled &&
+    promoPopup.images.length > 0;
   const isShowingPromo = isShowingPromoForce || isShowingPromoNormal;
   const isCurrentlyShowing = isShowingPromo || isShowingEvents;
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="mx-auto max-w-7xl space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Promotional Content Manager</h1>
-            <p className="text-muted-foreground mt-2">
+            <h1 className="font-bold text-3xl">Promotional Content Manager</h1>
+            <p className="mt-2 text-muted-foreground">
               Manage promotional popup content for the homepage
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" asChild className="cursor-pointer">
+            <Button asChild className="cursor-pointer" variant="outline">
               <a href="/events">Events CMS</a>
             </Button>
             <form
               action={async () => {
-                'use server';
+                "use server";
                 await logout();
-                redirect('/cms-portable/promo');
+                redirect("/cms-portable/promo");
               }}
             >
-              <Button type="submit" variant="outline" className="cursor-pointer">
+              <Button
+                className="cursor-pointer"
+                type="submit"
+                variant="outline"
+              >
                 Logout
               </Button>
             </form>
@@ -86,24 +100,24 @@ export default async function AdminPromoPage() {
         </div>
 
         {isCurrentlyShowing && (
-          <CurrentPromoSection 
-            promoPopup={promoPopup} 
-            hasActiveEvents={activeEvents.length > 0}
+          <CurrentPromoSection
             activeGroupedEvents={activeGroupedEvents}
-            isShowingPromo={isShowingPromo || isShowingPromoNormal}
+            hasActiveEvents={activeEvents.length > 0}
             isShowingEvents={isShowingEvents}
+            isShowingPromo={isShowingPromo || isShowingPromoNormal}
+            promoPopup={promoPopup}
           />
         )}
 
-        <ForcePushPromoSection 
-          promoPopup={promoPopup}
+        <ForcePushPromoSection
           hasActiveEvents={activeEvents.length > 0}
+          promoPopup={promoPopup}
         />
 
         {isPromoQueued && (
-          <PromoQueuedSection 
-            promoPopup={promoPopup} 
+          <PromoQueuedSection
             hasActiveEvents={activeEvents.length > 0}
+            promoPopup={promoPopup}
           />
         )}
 
@@ -115,19 +129,19 @@ export default async function AdminPromoPage() {
           <div>
             <div className="space-y-4">
               <div>
-                <h2 className="text-2xl font-semibold mb-2">Promo Images</h2>
-                <p className="text-sm text-muted-foreground mb-4">
+                <h2 className="mb-2 font-semibold text-2xl">Promo Images</h2>
+                <p className="mb-4 text-muted-foreground text-sm">
                   {promoPopup.images.length === 0
-                    ? 'Upload images to create a promo popup. Single image shows as one popup, multiple images show as a carousel.'
+                    ? "Upload images to create a promo popup. Single image shows as one popup, multiple images show as a carousel."
                     : promoPopup.images.length === 1
-                      ? 'Single image mode: One image will be displayed'
+                      ? "Single image mode: One image will be displayed"
                       : `Carousel mode: ${promoPopup.images.length} images will be displayed in a carousel`}
                 </p>
               </div>
-              <PromoImagesList 
-                images={promoPopup.images} 
-                linkUrl={promoPopup.linkUrl}
+              <PromoImagesList
+                images={promoPopup.images}
                 linkText={promoPopup.linkText}
+                linkUrl={promoPopup.linkUrl}
               />
             </div>
           </div>
@@ -135,15 +149,16 @@ export default async function AdminPromoPage() {
 
         <div className="space-y-4">
           <div>
-            <h2 className="text-2xl font-semibold mb-2">Past Promos</h2>
-            <p className="text-sm text-muted-foreground mb-4">
-              Archived promotional images that can be reinstated or permanently deleted.
+            <h2 className="mb-2 font-semibold text-2xl">Past Promos</h2>
+            <p className="mb-4 text-muted-foreground text-sm">
+              Archived promotional images that can be reinstated or permanently
+              deleted.
             </p>
           </div>
-          <PastPromosList 
-            pastPromos={promoPopup.pastPromos || []}
-            linkUrl={promoPopup.linkUrl}
+          <PastPromosList
             linkText={promoPopup.linkText}
+            linkUrl={promoPopup.linkUrl}
+            pastPromos={promoPopup.pastPromos || []}
           />
         </div>
       </div>

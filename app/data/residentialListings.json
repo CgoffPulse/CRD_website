@@ -7,19 +7,19 @@
     "imageSrc": "/images/21548_walnut_st_garfield_ar_72732.webp",
     "description": "Enjoy the lake life and charm of Lost Bridge Village! You will love this cozy, updated cabin that is being sold fully furnished. Park your boat out front, unload your bikes & lake toys, and make yourself at home as you enjoy the peace and nostalgia of Lost Bridge Village. This adorable cabin features an open kitchen and living area with a dining nook & island seating. Relax in the bright and open living room after a day on the water. There are two bedrooms and a large (newly added) bunkroom for sleeping. Enjoy dinners outside in the screened-in porch as you watch the sun set and deer graze. Stroll down to the park, pool, & community center and enjoy the lake from there or the shoreline behind the community center. Play pickleball or tennis on our brand-new courts! Got a plane? Fly in and land on the LBV airstrip. Only 3 miles to Lost Bridge Marina. Short drive to Rogers, Pea Ridge, & Eureka Springs. Don't miss this great opportunity- they don't come around very often at this price!",
     "bullets": [
-      "3 bedrooms / 1 bathroom",
       "850 sq ft",
       "Manufactured Home, Single Family Residence",
       "Built in 1970",
       "5,662.8 sq ft lot",
       "Lost Bridge Village community",
       "Fully furnished",
+      "MLS#: 1316127",
+      "$188/sqft",
+      "3 bedrooms / 1 bathroom",
       "Screened-in porch",
       "Community pool, park, and recreation center",
       "Pickleball and tennis courts",
       "Near Beaver Lake",
-      "MLS#: 1316127",
-      "$188/sqft",
       "HOA: $160 annually"
     ],
     "href": "/residential/listings/1316127",
@@ -73,8 +73,7 @@
         "features": "Near Park, Sloped"
       },
       "details": {
-        "parcelNumber": "1505163000",
-        "specialConditions": "None"
+        "parcelNumber": "1505163000"
       },
       "construction": {
         "homeType": "MobileManufactured",
